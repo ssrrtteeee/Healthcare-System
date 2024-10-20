@@ -1,4 +1,4 @@
-package edu.westga.cs3230.healthcare.dal;
+package edu.westga.cs3230.healthcare_system.dal;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -31,10 +31,10 @@ public class DBAccessor {
 		return String.format("jdbc:mysql://%s:%s/%s?user=%s&password=%s", DB_SERVER_HOST_NAME, DB_PORT, DB_NAME, DB_USERNAME, DB_PASSWORD);
 	}
 		
-	private void sendQueryToDatabase() {
+	public void sendQueryToDatabase() {
         try (Connection con = DriverManager.getConnection(this.getConnectionString()); 
         		Statement stmt = con.createStatement();
-        		ResultSet rs = stmt.executeQuery("select lname,DNO from employee")
+        		ResultSet rs = stmt.executeQuery("select l_name, id from nurse")
         ) {
         	//TODO: add functionality here
             while (rs.next()) {
