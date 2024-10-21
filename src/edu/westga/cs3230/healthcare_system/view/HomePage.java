@@ -80,6 +80,23 @@ public class HomePage {
     
     @FXML
     void editPatient(ActionEvent event) throws IOException {
+    	FXMLLoader loader = new FXMLLoader();
+    	loader.setLocation(Main.class.getResource(Main.EDIT_PATIENT_INFO_PAGE));
+    	loader.load();
+    	Parent parent = loader.getRoot();
+    	Scene scene = new Scene(parent);
+    	Stage addTodoStage = new Stage();
+    	addTodoStage.setTitle(Main.TITLE);
+    	addTodoStage.setScene(scene);
+    	addTodoStage.initModality(Modality.APPLICATION_MODAL);
+    	
+    	EditPatientInfoPage editPatientInfoPage = loader.getController();
+    	editPatientInfoPage.setUser(this.currentUser);
+    	
+    	addTodoStage.show();
+    	
+    	Stage stage = (Stage) this.currentUserLabel.getScene().getWindow();
+    	stage.close();
     }
     
     @FXML

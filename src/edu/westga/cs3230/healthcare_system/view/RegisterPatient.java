@@ -144,7 +144,6 @@ public class RegisterPatient {
     		}
     		String zip = this.zipcode.textProperty().getValue();
     		try {
-    			int zipcode = Integer.parseInt(zip);
     			if (zip.length() != 5) {
     				zipError = true;
     				this.zipcodeErrorLabel.setText("Zip code should be 5 digits.");
@@ -156,7 +155,6 @@ public class RegisterPatient {
     		
     		String phoneNumber = this.phoneNumber.textProperty().getValue();
     		try {
-    			Long pnumber = Long.parseLong(phoneNumber);
     			if (phoneNumber.length() != 10) {
     				phoneError = true;
     				this.phoneNumberErrorLabel.setText("Phone number should be 10 digits.");
@@ -198,7 +196,7 @@ public class RegisterPatient {
 			this.dobErrorLabel.setVisible(dateOfBirthError);
 			
     		if (!zipError && !phoneError && !firstNameError && !lastNameError && !cityError && !addressError && !genderError && !stateError && !dateOfBirthError) {
-        		Patient patient = new Patient(fname, lname, city, address, zip, phoneNumber, gender, state, dateOfBirth);
+        		Patient patient = new Patient(fname, lname, city, address, zip, phoneNumber, gender, state, dateOfBirth, true);
         		DBRegisterPatient patientRegister = new DBRegisterPatient();
         		patientRegister.registerPatient(patient);
         		

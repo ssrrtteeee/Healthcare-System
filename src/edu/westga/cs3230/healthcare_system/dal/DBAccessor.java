@@ -27,27 +27,26 @@ public class DBAccessor {
 	 * @postcondition true
 	 * @return the connection string
 	 */
-	public String getConnectionString() {
+	public static String getConnectionString() {
 		return String.format("jdbc:mysql://%s:%s/%s?user=%s&password=%s", DB_SERVER_HOST_NAME, DB_PORT, DB_NAME, DB_USERNAME, DB_PASSWORD);
 	}
 		
-	public void sendQueryToDatabase() {
-        try (Connection con = DriverManager.getConnection(this.getConnectionString()); 
-        		Statement stmt = con.createStatement();
-        		ResultSet rs = stmt.executeQuery("select l_name, id from nurse")
-        ) {
-        	//TODO: add functionality here
-            while (rs.next()) {
-				String name = rs.getString(1);
-				int number = rs.getInt(2);
-				System.out.println(name + "\t\t" +  number);
-            }
-        } catch (SQLException ex) {
-			System.out.println("SQLException: "	+ ex.getMessage());
-			System.out.println("SQLState: "		+ ex.getSQLState());
-			System.out.println("VendorError: "	+ ex.getErrorCode());
-		} catch (Exception e) {
-            System.out.println(e.toString());
-        }
-	}
+//	public void sendQueryToDatabase() {
+//        try (Connection con = DriverManager.getConnection(this.getConnectionString()); 
+//        		Statement stmt = con.createStatement();
+//        		ResultSet rs = stmt.executeQuery("select l_name, id from nurse")
+//        ) {
+//            while (rs.next()) {
+//				String name = rs.getString(1);
+//				int number = rs.getInt(2);
+//				System.out.println(name + "\t\t" +  number);
+//            }
+//        } catch (SQLException ex) {
+//			System.out.println("SQLException: "	+ ex.getMessage());
+//			System.out.println("SQLState: "		+ ex.getSQLState());
+//			System.out.println("VendorError: "	+ ex.getErrorCode());
+//		} catch (Exception e) {
+//            System.out.println(e.toString());
+//        }
+//	}
 }
