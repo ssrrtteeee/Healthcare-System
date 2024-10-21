@@ -16,22 +16,6 @@ import edu.westga.cs3230.healthcare_system.model.Patient;
  * @version Fall 2024
  */
 public class DBRegisterPatient {
-	public static final int		DB_PORT				= 3306;
-	public static final String	DB_SERVER_HOST_NAME	= "cs-dblab01.uwg.westga.edu";
-	public static final String	DB_NAME				= "cs3230f24h";
-	public static final String	DB_USERNAME			= "cs3230f24h";
-	public static final String	DB_PASSWORD			= "FTSabWXs4bz0IXsLn6nB";
-	
-	/**
-	 * Gets the connection string.
-	 * 
-	 * @precondition none
-	 * @postcondition none
-	 * @return the connection string
-	 */
-	public String getConnectionString() {
-		return String.format("jdbc:mysql://%s:%s/%s?user=%s&password=%s", DB_SERVER_HOST_NAME, DB_PORT, DB_NAME, DB_USERNAME, DB_PASSWORD);
-	}
 	
 	/**
 	 * Adds a new patient to the database with the given information.
@@ -40,7 +24,7 @@ public class DBRegisterPatient {
 	 */
 	public void registerPatient(Patient patient) throws IllegalArgumentException {
 		String query = "INSERT INTO patient (f_name, l_name, gender, dob, city, state, address, zip_code,  phone_number, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection connection = DriverManager.getConnection(this.getConnectionString());
+        try (Connection connection = DriverManager.getConnection(DBAccessor.getConnectionString());
 				PreparedStatement stmt = connection.prepareStatement(query)) {
 		    
 			stmt.setString(1, patient.getFirstName());

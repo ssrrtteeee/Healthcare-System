@@ -16,22 +16,6 @@ import edu.westga.cs3230.healthcare_system.model.Nurse;
  * @version Fall 2024
  */
 public class DBLogin {
-	public static final int		DB_PORT				= 3306;
-	public static final String	DB_SERVER_HOST_NAME	= "cs-dblab01.uwg.westga.edu";
-	public static final String	DB_NAME				= "cs3230f24h";
-	public static final String	DB_USERNAME			= "cs3230f24h";
-	public static final String	DB_PASSWORD			= "FTSabWXs4bz0IXsLn6nB";
-	
-	/**
-	 * Gets the connection string.
-	 * 
-	 * @precondition none
-	 * @postcondition none
-	 * @return the connection string
-	 */
-	public String getConnectionString() {
-		return String.format("jdbc:mysql://%s:%s/%s?user=%s&password=%s", DB_SERVER_HOST_NAME, DB_PORT, DB_NAME, DB_USERNAME, DB_PASSWORD);
-	}
 	
 	/**
 	 * Checks if the login credentials are valid.
@@ -42,7 +26,7 @@ public class DBLogin {
 	public boolean checkIfLoginIsValid(String username, String password) {
 		boolean correctLogin = false;
 		String query = "select count(*) from nurse where username=? and password=?";
-        try (Connection connection = DriverManager.getConnection(this.getConnectionString());
+        try (Connection connection = DriverManager.getConnection(DBAccessor.getConnectionString());
 				PreparedStatement stmt = connection.prepareStatement(query)) {
 		    
 			stmt.setString(1, username);
@@ -72,7 +56,7 @@ public class DBLogin {
 	public Nurse getUserDetails(String username, String password) {
 		Nurse nurse = null;
 		String query = "select f_name, l_name, id from nurse where username=? and password=?";
-        try (Connection connection = DriverManager.getConnection(this.getConnectionString());
+        try (Connection connection = DriverManager.getConnection(DBAccessor.getConnectionString());
 				PreparedStatement stmt = connection.prepareStatement(query)) {
 		    
 			stmt.setString(1, username);

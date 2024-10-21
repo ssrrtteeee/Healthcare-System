@@ -1,11 +1,5 @@
 package edu.westga.cs3230.healthcare_system.dal;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-
 /**
  * Class used for database access.
  * Interfaces between this client and the remote DB.
@@ -28,7 +22,7 @@ public class DBAccessor {
 	 * @return the connection string
 	 */
 	public static String getConnectionString() {
-		return String.format("jdbc:mysql://%s:%s/%s?user=%s&password=%s", DB_SERVER_HOST_NAME, DB_PORT, DB_NAME, DB_USERNAME, DB_PASSWORD);
+		return String.format("jdbc:mysql://%s:%s/%s?user=%s&password=%s", DB_SERVER_HOST_NAME,  DB_PORT,  DB_NAME,  DB_USERNAME,  DB_PASSWORD);
 	}
 		
 //	public void sendQueryToDatabase() {

@@ -144,6 +144,8 @@ public class RegisterPatient {
     		}
     		String zip = this.zipcode.textProperty().getValue();
     		try {
+    			// This checks if the zipcode is a number.
+    			Integer.parseInt(zip);
     			if (zip.length() != 5) {
     				zipError = true;
     				this.zipcodeErrorLabel.setText("Zip code should be 5 digits.");
@@ -155,6 +157,8 @@ public class RegisterPatient {
     		
     		String phoneNumber = this.phoneNumber.textProperty().getValue();
     		try {
+    			// This checks if the phone number is a number.
+    			Long.parseLong(phoneNumber);
     			if (phoneNumber.length() != 10) {
     				phoneError = true;
     				this.phoneNumberErrorLabel.setText("Phone number should be 10 digits.");
