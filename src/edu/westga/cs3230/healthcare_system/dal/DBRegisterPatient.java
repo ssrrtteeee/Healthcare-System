@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import edu.westga.cs3230.healthcare_system.model.Patient;
 
 /**
- * Class used to login to system database access.
+ * Class used to register a new patient.
  * Interfaces between this client and the remote DB.
  * 
  * @author Stefan
@@ -25,17 +25,20 @@ public class DBRegisterPatient {
 	/**
 	 * Gets the connection string.
 	 * 
-	 * @precondition true
-	 * @postcondition true
+	 * @precondition none
+	 * @postcondition none
 	 * @return the connection string
 	 */
 	public String getConnectionString() {
-		System.out.println(String.format("jdbc:mysql://%s:%s/%s?user=%s&password=%s", DB_SERVER_HOST_NAME, DB_PORT, DB_NAME, DB_USERNAME, DB_PASSWORD));
 		return String.format("jdbc:mysql://%s:%s/%s?user=%s&password=%s", DB_SERVER_HOST_NAME, DB_PORT, DB_NAME, DB_USERNAME, DB_PASSWORD);
 	}
 	
+	/**
+	 * Adds a new patient to the database with the given information.
+	 * @param patient the patient to be added
+	 * @throws IllegalArgumentException
+	 */
 	public void registerPatient(Patient patient) throws IllegalArgumentException {
-		boolean registeredPatient = false;
 		String query = "INSERT INTO patient (f_name, l_name, gender, dob, city, state, address, zip_code,  phone_number, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = DriverManager.getConnection(this.getConnectionString());
 				PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -58,9 +61,6 @@ public class DBRegisterPatient {
 			System.out.println("VendorError: "	+ ex.getErrorCode());
 		} catch (Exception e) {
             System.out.println(e.toString());
-        }
-        if (registeredPatient == false) {
-        	throw new IllegalArgumentException("Couldn't register patient.");
         }
 	}
 }

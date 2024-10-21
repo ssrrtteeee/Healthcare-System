@@ -2,6 +2,11 @@ package edu.westga.cs3230.healthcare_system.model;
 
 import java.time.LocalDate;
 
+/**
+ * The patient class.
+ * @author Stefan
+ * @version Fall 2024
+ */
 public class Patient {
     private String firstName;
     private String lastName;
@@ -27,13 +32,21 @@ public class Patient {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public String getFirstName() { return firstName; }
-    public String getLastName() { return lastName; }
-    public String getCity() { return city; }
-    public String getAddress() { return address; }
-    public String getZipcode() { return zipcode; }
-    public String getPhoneNumber() { return phoneNumber; }
-    public String getGender() { return gender; }
-    public String getState() { return state; }
-    public LocalDate getDateOfBirth() { return dateOfBirth; }
+    public String getFirstName() { return this.firstName; }
+    
+    public String getLastName() { return this.lastName; }
+    
+    public String getCity() { return this.city; }
+    
+    public String getAddress() { return this.address; }
+    
+    public String getZipcode() { return this.zipcode; }
+    
+    public String getPhoneNumber() { return this.phoneNumber; }
+    
+    public String getGender() { return this.gender; }
+    
+    public String getState() { return this.state; }
+    
+    public LocalDate getDateOfBirth() { return this.dateOfBirth; }
 }

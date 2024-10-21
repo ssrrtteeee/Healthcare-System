@@ -30,21 +30,30 @@
       <TextField fx:id="address" layoutX="223.0" layoutY="381.0" />
       <ComboBox fx:id="state" layoutX="223.0" layoutY="333.0" prefWidth="150.0" />
       <Label layoutX="142.0" layoutY="385.0" text="Address" />
-      <TextField fx:id="zipcode" layoutX="223.0" layoutY="423.0" />
-      <TextField fx:id="phoneNumber" layoutX="223.0" layoutY="470.0" />
-      <Label layoutX="140.0" layoutY="427.0" text="Zip Code" />
-      <Label layoutX="118.0" layoutY="474.0" text="Phone Number" />
+      <TextField fx:id="zipcode" layoutX="223.0" layoutY="430.0" />
+      <TextField fx:id="phoneNumber" layoutX="223.0" layoutY="476.0" />
+      <Label layoutX="136.0" layoutY="434.0" text="Zip Code" />
+      <Label layoutX="118.0" layoutY="480.0" text="Phone Number" />
       <Button layoutX="424.0" layoutY="19.0" mnemonicParsing="false" onAction="#logout" text="Logout">
          <font>
             <Font size="15.0" />
          </font>
       </Button>
       <Label layoutX="14.0" layoutY="26.0" text="Current User: " />
-      <Label fx:id="currentUserLabel" layoutX="94.0" layoutY="26.0" maxHeight="1.7976931348623157E308" maxWidth="300.0" text="Error Message" wrapText="true" />
+      <Label fx:id="currentUserLabel" layoutX="94.0" layoutY="26.0" maxHeight="1.7976931348623157E308" maxWidth="300.0" text="User" wrapText="true" />
       <Button fx:id="back" layoutX="25.0" layoutY="73.0" mnemonicParsing="false" onAction="#backToHomePage" text="Back">
          <font>
             <Font size="15.0" />
          </font>
       </Button>
+      <Label fx:id="zipcodeErrorLabel" layoutX="127.0" layoutY="456.0" text="Zip Code Error" textFill="RED" />
+      <Label fx:id="phoneNumberErrorLabel" layoutX="119.0" layoutY="501.0" text="Phone Number Error" textFill="#ff0606" />
+      <Label fx:id="addressErrorLabel" layoutX="127.0" layoutY="406.0" text="Address Error" textFill="RED" />
+      <Label fx:id="stateErrorLabel" layoutX="124.0" layoutY="362.0" text="State Error" textFill="RED" />
+      <Label fx:id="cityErrorLabel" layoutX="125.0" layoutY="315.0" text="City Error" textFill="RED" />
+      <Label fx:id="dobErrorLabel" layoutX="119.0" layoutY="274.0" text="DOB Error" textFill="RED" />
+      <Label fx:id="genderErrorLabel" layoutX="114.0" layoutY="235.0" text="Gender Error" textFill="RED" />
+      <Label fx:id="lNameErrorLabel" layoutX="119.0" layoutY="195.0" text="Last Name Error" textFill="RED" />
+      <Label fx:id="fNameErrorLabel" layoutX="115.0" layoutY="156.0" text="First Name Error" textFill="RED" />
    </children>
 </AnchorPane>

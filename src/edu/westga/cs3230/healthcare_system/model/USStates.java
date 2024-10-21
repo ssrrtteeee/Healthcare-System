@@ -1,5 +1,11 @@
 package edu.westga.cs3230.healthcare_system.model;
 
+/**
+ * Enum class for all US states
+ * @author Stefan
+ * @version Fall 2024
+ *
+ */
 public enum USStates {
     ALABAMA("AL", "Alabama"),
     ALASKA("AK", "Alaska"),
@@ -62,10 +68,14 @@ public enum USStates {
 
     @Override
     public String toString() {
-        return fullName;
+        return this.fullName;
     }
 
+    /**
+     * Gets abbreviated name for a state.
+     * @return the abbreviated name of a state
+     */
     public String getAbbreviation() {
-        return abbreviation;
+        return this.abbreviation;
     }
 }

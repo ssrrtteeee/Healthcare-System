@@ -1,6 +1,5 @@
 package edu.westga.cs3230.healthcare_system;
 
-import edu.westga.cs3230.healthcare_system.dal.DBAccessor;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -24,8 +23,6 @@ public class Main extends Application {
 	 * @param args command line arguments
 	 */
 	public static void main(String[] args) {
-		new DBAccessor().sendQueryToDatabase();
-		System.out.println("test");
 		Main.launch(args);
 	}
 

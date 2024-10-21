@@ -29,12 +29,14 @@ public class HomePage {
     
     private Nurse currentUser;
     
-    //private VMClass viewModel;
-    
+    /**
+     * Sets the current session user.
+     * @param nurse the current session user
+     */
     public void setUser(Nurse nurse) {
     	this.currentUser = nurse;
 		this.currentUserLabel.setVisible(true);
-		this.currentUserLabel.setText(currentUser.getUsername() + ", " + currentUser.getFirstName() + " " + currentUser.getLastName() + ", " + currentUser.getId());
+		this.currentUserLabel.setText(this.currentUser.getUsername() + ", " + this.currentUser.getFirstName() + " " + this.currentUser.getLastName() + ", " + this.currentUser.getId());
     }
 
     @FXML

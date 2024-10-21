@@ -25,20 +25,19 @@ public class DBLogin {
 	/**
 	 * Gets the connection string.
 	 * 
-	 * @precondition true
-	 * @postcondition true
+	 * @precondition none
+	 * @postcondition none
 	 * @return the connection string
 	 */
 	public String getConnectionString() {
-		System.out.println(String.format("jdbc:mysql://%s:%s/%s?user=%s&password=%s", DB_SERVER_HOST_NAME, DB_PORT, DB_NAME, DB_USERNAME, DB_PASSWORD));
 		return String.format("jdbc:mysql://%s:%s/%s?user=%s&password=%s", DB_SERVER_HOST_NAME, DB_PORT, DB_NAME, DB_USERNAME, DB_PASSWORD);
 	}
 	
 	/**
-	 * 
+	 * Checks if the login credentials are valid.
 	 * @param username the users username
 	 * @param password the users password
-	 * @return
+	 * @return true if they are valid, false otherwise
 	 */
 	public boolean checkIfLoginIsValid(String username, String password) {
 		boolean correctLogin = false;
@@ -61,10 +60,15 @@ public class DBLogin {
 		} catch (Exception e) {
             System.out.println(e.toString());
         }
-        System.out.println(correctLogin);
         return correctLogin;
 	}
 	
+	/**
+	 * Returns a nurse with the given login credential
+	 * @param username the nurse's username
+	 * @param password the nurse's password
+	 * @return the nurse corresponding to the given login credentials
+	 */
 	public Nurse getUserDetails(String username, String password) {
 		Nurse nurse = null;
 		String query = "select f_name, l_name, id from nurse where username=? and password=?";

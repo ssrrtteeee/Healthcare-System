@@ -64,10 +64,10 @@ public class LoginPage {
     
     @FXML
     void initialize() {
-        assert this.username != null : "fx:id=\"username\" was not injected: check your FXML file 'AddRX.fxml'.";
-        assert this.password != null : "fx:id=\"password\" was not injected: check your FXML file 'AddRX.fxml'.";
-        assert this.errorMessageLabel != null : "fx:id=\"errorMessageLabel\" was not injected: check your FXML file 'AddRX.fxml'.";
-        assert this.login != null : "fx:id=\"login\" was not injected: check your FXML file 'AddRX.fxml'.";
+        assert this.username != null : "fx:id=\"username\" was not injected: check your FXML file 'LoginPage.fxml'.";
+        assert this.password != null : "fx:id=\"password\" was not injected: check your FXML file 'LoginPage.fxml'.";
+        assert this.errorMessageLabel != null : "fx:id=\"errorMessageLabel\" was not injected: check your FXML file 'LoginPage.fxml'.";
+        assert this.login != null : "fx:id=\"login\" was not injected: check your FXML file 'LoginPage.fxml'.";
         this.errorMessageLabel.setVisible(false);
         try {
 			this.loginViewModel = new LoginPageViewModel();
