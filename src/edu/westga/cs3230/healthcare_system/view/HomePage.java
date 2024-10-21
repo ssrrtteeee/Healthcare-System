@@ -30,13 +30,22 @@ public class HomePage {
     private Nurse currentUser;
     
     /**
-     * Sets the current session user.
-     * @param nurse the current session user
+     * Returns the user label for any given user.
+     * @param user The user to be processed.
+     * @return the string to be displayed with the user information
      */
-    public void setUser(Nurse nurse) {
-    	this.currentUser = nurse;
+    public static String getUserlabel(Nurse user) {
+    	return "Username: " + user.getUsername() + ", Full Name: " + user.getFirstName() + " " + user.getLastName() + ", ID: " + user.getId();
+    }
+    
+    /**
+     * Sets the current session user.
+     * @param user the current session user
+     */
+    public void setUser(Nurse user) {
+    	this.currentUser = user;
 		this.currentUserLabel.setVisible(true);
-		this.currentUserLabel.setText(this.currentUser.getUsername() + ", " + this.currentUser.getFirstName() + " " + this.currentUser.getLastName() + ", " + this.currentUser.getId());
+		this.currentUserLabel.setText(getUserlabel(user));
     }
 
     @FXML

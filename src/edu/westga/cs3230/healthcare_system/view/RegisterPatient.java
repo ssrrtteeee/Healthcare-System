@@ -62,12 +62,12 @@ public class RegisterPatient {
     
     /**
      * Sets the current session user.
-     * @param nurse the current session user
+     * @param user the current session user
      */
-    public void setUser(Nurse nurse) {
-    	this.currentUser = nurse;
+    public void setUser(Nurse user) {
+    	this.currentUser = user;
 		this.currentUserLabel.setVisible(true);
-		this.currentUserLabel.setText(this.currentUser.getUsername() + ", " + this.currentUser.getFirstName() + " " + this.currentUser.getLastName() + ", " + this.currentUser.getId());
+		this.currentUserLabel.setText(HomePage.getUserlabel(user));
     }
     
     @FXML

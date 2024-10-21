@@ -137,7 +137,7 @@ public class EditPatientInfoPage {
     	}
     	this.currentUser = user;
 		this.currentUserLabel.setVisible(true);
-		this.currentUserLabel.setText(this.currentUser.getUsername() + ", " + this.currentUser.getFirstName() + " " + this.currentUser.getLastName() + ", " + this.currentUser.getId());
+		this.currentUserLabel.setText(HomePage.getUserlabel(user));
     }
     
     @FXML
