@@ -18,7 +18,7 @@ import javafx.stage.Stage;
 
 /** Code behind for the Login Page.
  * @author Stefan
- * @version 12/1/2022
+ * @version Fall 2024
  */
 public class HomePage {
     @FXML private ResourceBundle resources;
@@ -57,6 +57,23 @@ public class HomePage {
     
     @FXML
     void registerPatient(ActionEvent event) throws IOException {
+		FXMLLoader loader = new FXMLLoader();
+    	loader.setLocation(Main.class.getResource(Main.REGISTER_PATIENT_PAGE));
+    	loader.load();
+    	Parent parent = loader.getRoot();
+    	Scene scene = new Scene(parent);
+    	Stage addTodoStage = new Stage();
+    	addTodoStage.setTitle(Main.TITLE);
+    	addTodoStage.setScene(scene);
+    	addTodoStage.initModality(Modality.APPLICATION_MODAL);
+    	
+    	RegisterPatient registerPatientPage = loader.getController();
+    	registerPatientPage.setUser(this.currentUser);
+    	
+    	addTodoStage.show();
+    	
+    	Stage stage = (Stage) this.currentUserLabel.getScene().getWindow();
+    	stage.close();
     }
     
     @FXML
@@ -65,8 +82,8 @@ public class HomePage {
     
     @FXML
     void initialize() {
-        assert this.currentUserLabel != null : "fx:id=\"errorMessageLabel\" was not injected: check your FXML file 'AddRX.fxml'.";
-        assert this.logout != null : "fx:id=\"login\" was not injected: check your FXML file 'AddRX.fxml'.";
+        assert this.currentUserLabel != null : "fx:id=\"currentUserLabel\" was not injected: check your FXML file 'AddRX.fxml'.";
+        assert this.logout != null : "fx:id=\"logout\" was not injected: check your FXML file 'AddRX.fxml'.";
         this.currentUserLabel.setVisible(false);
     }
 }
