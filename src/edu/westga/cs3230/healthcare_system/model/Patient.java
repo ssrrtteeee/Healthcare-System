@@ -17,10 +17,11 @@ public class Patient {
     private String gender;
     private String state;
     private LocalDate dateOfBirth;
+    private boolean active;
 
     public Patient(String firstName, String lastName, String city, String address,
                    String zipcode, String phoneNumber, String gender,
-                   String state, LocalDate dateOfBirth) {
+                   String state, LocalDate dateOfBirth, boolean active) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.city = city;
@@ -30,6 +31,7 @@ public class Patient {
         this.gender = gender;
         this.state = state;
         this.dateOfBirth = dateOfBirth;
+        this.active = active;
     }
 
     public String getFirstName() { return this.firstName; }
@@ -49,4 +51,6 @@ public class Patient {
     public String getState() { return this.state; }
     
     public LocalDate getDateOfBirth() { return this.dateOfBirth; }
+    
+    public boolean isActive() { return this.active; }
 }
