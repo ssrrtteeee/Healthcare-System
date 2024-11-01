@@ -5,7 +5,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import edu.westga.cs3230.healthcare_system.Main;
-import edu.westga.cs3230.healthcare_system.model.Nurse;
+import edu.westga.cs3230.healthcare_system.model.UserLogin;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,26 +27,6 @@ public class HomePage {
     @FXML private Label currentUserLabel;
     @FXML private Button logout;
     
-    private Nurse currentUser;
-    
-    /**
-     * Returns the user label for any given user.
-     * @param user The user to be processed.
-     * @return the string to be displayed with the user information
-     */
-    public static String getUserlabel(Nurse user) {
-    	return "Username: " + user.getUsername() + ", Full Name: " + user.getFirstName() + " " + user.getLastName() + ", ID: " + user.getId();
-    }
-    
-    /**
-     * Sets the current session user.
-     * @param user the current session user
-     */
-    public void setUser(Nurse user) {
-    	this.currentUser = user;
-		this.currentUserLabel.setVisible(true);
-		this.currentUserLabel.setText(getUserlabel(user));
-    }
 
     @FXML
     void logout(ActionEvent event) throws IOException {
@@ -77,10 +57,7 @@ public class HomePage {
     	addTodoStage.setTitle(Main.TITLE);
     	addTodoStage.setScene(scene);
     	addTodoStage.initModality(Modality.APPLICATION_MODAL);
-    	
-    	RegisterPatient registerPatientPage = loader.getController();
-    	registerPatientPage.setUser(this.currentUser);
-    	
+    	    	
     	addTodoStage.show();
     	
     	Stage stage = (Stage) this.currentUserLabel.getScene().getWindow();
@@ -99,9 +76,6 @@ public class HomePage {
     	addTodoStage.setScene(scene);
     	addTodoStage.initModality(Modality.APPLICATION_MODAL);
     	
-    	EditPatientInfoPage editPatientInfoPage = loader.getController();
-    	editPatientInfoPage.setUser(this.currentUser);
-    	
     	addTodoStage.show();
     	
     	Stage stage = (Stage) this.currentUserLabel.getScene().getWindow();
@@ -112,6 +86,9 @@ public class HomePage {
     void initialize() {
         assert this.currentUserLabel != null : "fx:id=\"currentUserLabel\" was not injected: check your FXML file 'AddRX.fxml'.";
         assert this.logout != null : "fx:id=\"logout\" was not injected: check your FXML file 'AddRX.fxml'.";
-        this.currentUserLabel.setVisible(false);
+        
+		this.currentUserLabel.setVisible(true);
+		this.currentUserLabel.setText(UserLogin.getUserlabel());
+
     }
 }

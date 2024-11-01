@@ -5,20 +5,24 @@ import java.io.IOException;
 import edu.westga.cs3230.healthcare_system.Main;
 import edu.westga.cs3230.healthcare_system.model.Nurse;
 import edu.westga.cs3230.healthcare_system.model.USStates;
+import edu.westga.cs3230.healthcare_system.model.UserLogin;
 import edu.westga.cs3230.healthcare_system.view_model.EditPatientInfoPageViewModel;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -33,8 +37,6 @@ public class EditPatientInfoPage {
     private Label currentUserLabel;
     @FXML
     private Label errorMessageLabel;
-    @FXML
-    private Spinner<Integer> patientIdSpinner;
     
     @FXML
     private TextField fname;
@@ -60,23 +62,93 @@ public class EditPatientInfoPage {
     private Button confirm;
     
     private EditPatientInfoPageViewModel viewmodel;
-    private Nurse currentUser;
-    
+        
     /**
      * Instantiates a new EditPatientInfoPage
      */
     public EditPatientInfoPage() {
     	this.viewmodel = new EditPatientInfoPageViewModel();
     }
-    
-	@FXML
+
+    @FXML
     void initialize() {
-        this.patientIdSpinner.setValueFactory(new IntegerSpinnerValueFactory(0, 999999999, 0, 1));
         this.bindElements();
+        this.currentUserLabel.setText(UserLogin.getUserlabel());
     }
 	
+	private void showGetPatientDialog() {
+		Dialog<Boolean> dialog = new Dialog<Boolean>();
+	    dialog.setTitle("Select patient");
+	    dialog.setHeaderText("Enter your desired patient's info below.");
+	    dialog.setResizable(false);
+
+	    GridPane grid = new GridPane();
+	    grid.setHgap(10);
+	    grid.setVgap(10);
+	    grid.setPadding(new Insets(0, 10, 0, 10));
+	    
+	    Label fnameLabel = new Label("First name: ");
+	    Label lnameLabel = new Label("Last name: ");
+	    Label dobLabel = new Label("Date of birth: ");
+	    Label errorLabel = new Label();
+	    errorLabel.setTextFill(Color.RED);
+	    GridPane.setColumnSpan(errorLabel, 2);
+	    
+	    TextField fnameTextField = new TextField();
+	    TextField lnameTextField = new TextField();
+	    DatePicker dobDatePicker = new DatePicker();
+	    fnameTextField.setPrefSize(200, 30);
+	    lnameTextField.setPrefSize(200, 30);
+	    dobDatePicker.setPrefSize(200, 30);
+	    
+	    Button confirmButton = new Button("Confirm");
+	    Button cancelButton = new Button("Cancel");
+	    confirmButton.setPrefSize(80, 30);
+	    cancelButton.setPrefSize(80, 30);
+	    
+	    grid.addRow(1, fnameLabel, fnameTextField);
+	    grid.addRow(2, lnameLabel, lnameTextField);
+	    grid.addRow(3, dobLabel, dobDatePicker);
+	    grid.addRow(4, confirmButton, cancelButton);
+	    grid.addRow(5, errorLabel);
+	    
+	    dialog.getDialogPane().setContent(grid);
+
+	    confirmButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				if (fnameTextField.textProperty().get() == null
+						|| lnameTextField.textProperty().get() == null
+						|| dobDatePicker.valueProperty().get() == null
+				) {
+					errorLabel.textProperty().set("Please fill in all data before proceeding.");
+				}
+				
+				EditPatientInfoPage.this.viewmodel.getPatient(fnameTextField.textProperty().get(), lnameTextField.textProperty().get(), dobDatePicker.valueProperty().get());
+				
+				if (EditPatientInfoPage.this.viewmodel.getControlsActiveProperty().get()) {
+					errorLabel.textProperty().set("Could not find patient data. Please try again.");
+				} else {
+					Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+					stage.close();
+				}
+				
+			}
+		});
+		
+	    cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+				stage.close();
+				dialog.resultProperty().set(true);
+			}
+		});
+	    
+	    dialog.showAndWait();
+	}
+    
 	private void bindElements() {
-		this.patientIdSpinner.getValueFactory().valueProperty().bindBidirectional(this.viewmodel.getIdProperty());
 		this.fname.textProperty().bindBidirectional(this.viewmodel.getFnameProperty());
 		this.lname.textProperty().bindBidirectional(this.viewmodel.getLnameProperty());
 		this.city.textProperty().bindBidirectional(this.viewmodel.getCityProperty());
@@ -104,20 +176,21 @@ public class EditPatientInfoPage {
 	}
 
 	@FXML
-    void backToHomePage(ActionEvent event) throws IOException {
+    void backToHomePage() {
 		FXMLLoader loader = new FXMLLoader();
     	loader.setLocation(Main.class.getResource(Main.HOME_PAGE));
-    	loader.load();
+    	try {
+			loader.load();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     	Parent parent = loader.getRoot();
     	Scene scene = new Scene(parent);
     	Stage addTodoStage = new Stage();
     	addTodoStage.setTitle(Main.TITLE);
     	addTodoStage.setScene(scene);
     	addTodoStage.initModality(Modality.APPLICATION_MODAL);
-    	
-    	HomePage homePage = loader.getController();
-    	homePage.setUser(this.currentUser);
-    	
+    	    	
     	addTodoStage.show();
     	
     	Stage stage = (Stage) this.currentUserLabel.getScene().getWindow();
@@ -135,9 +208,16 @@ public class EditPatientInfoPage {
     	if (user == null) {
     		throw new IllegalArgumentException("User cannot be null.");
     	}
-    	this.currentUser = user;
+    	
+	    this.showGetPatientDialog();
+    	
 		this.currentUserLabel.setVisible(true);
-		this.currentUserLabel.setText(HomePage.getUserlabel(user));
+		this.currentUserLabel.setText(UserLogin.getUserlabel());
+    }
+    
+    @FXML
+    void selectNewPatient() {
+    	this.showGetPatientDialog();
     }
     
     @FXML
