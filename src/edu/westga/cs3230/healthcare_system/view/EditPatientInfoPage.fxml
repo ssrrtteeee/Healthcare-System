@@ -46,7 +46,7 @@
       <Button layoutX="172.0" layoutY="104.0" mnemonicParsing="false" onAction="#selectNewPatient" text="Select new patient" />
       <Label fx:id="fnameErrMsg" layoutX="153.0" layoutY="168.0" textFill="RED" />
       <Label fx:id="lnameErrMsg" layoutX="154.0" layoutY="213.0" textFill="RED" />
-      <Label fx:id="dobErrMsg" layoutX="154.0" layoutY="303.0" text="Patient date of birth should not be in the future." textFill="RED" />
+      <Label fx:id="dobErrMsg" layoutX="154.0" layoutY="303.0" textFill="RED" />
       <Label fx:id="cityErrMsg" layoutX="154.0" layoutY="348.0" textFill="RED" />
       <Label fx:id="addressErrMsg" layoutX="155.0" layoutY="438.0" textFill="RED" />
       <Label fx:id="zipcodeErrMsg" layoutX="155.0" layoutY="483.0" textFill="RED" />
