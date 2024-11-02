@@ -48,9 +48,6 @@ public class LoginPage {
             	addTodoStage.setScene(scene);
             	addTodoStage.initModality(Modality.APPLICATION_MODAL);
             	
-            	HomePage homePage = loader.getController();
-            	homePage.setUser(this.loginViewModel.getUserDetails(this.username.textProperty().getValue(), this.password.textProperty().getValue()));
-            	
             	addTodoStage.show();
             	
             	Stage stage = (Stage) this.username.getScene().getWindow();

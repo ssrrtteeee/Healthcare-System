@@ -8,6 +8,7 @@ import java.time.LocalDate;
  * @version Fall 2024
  */
 public class Patient {
+	private int id;
     private String firstName;
     private String lastName;
     private String city;
@@ -19,9 +20,26 @@ public class Patient {
     private LocalDate dateOfBirth;
     private boolean active;
 
+    /**
+     * Constructs a patient with the specified information, including unique ID.
+     * 
+     * 
+     * @param firstName
+     * @param lastName
+     * @param city
+     * @param address
+     * @param zipcode
+     * @param phoneNumber
+     * @param gender
+     * @param state
+     * @param dateOfBirth
+     * @param active
+     * @param id
+     */
     public Patient(String firstName, String lastName, String city, String address,
-                   String zipcode, String phoneNumber, String gender,
-                   String state, LocalDate dateOfBirth, boolean active) {
+            String zipcode, String phoneNumber, String gender,
+            String state, LocalDate dateOfBirth, boolean active, int id
+    ) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.city = city;
@@ -32,6 +50,14 @@ public class Patient {
         this.state = state;
         this.dateOfBirth = dateOfBirth;
         this.active = active;
+    	this.id = id;
+    }
+
+    public Patient(String firstName, String lastName, String city, String address,
+                   String zipcode, String phoneNumber, String gender,
+                   String state, LocalDate dateOfBirth, boolean active
+    ) {
+    	this(firstName, lastName, city, address, zipcode, phoneNumber, gender, state, dateOfBirth, active, -1);
     }
 
     public String getFirstName() { return this.firstName; }
@@ -53,4 +79,6 @@ public class Patient {
     public LocalDate getDateOfBirth() { return this.dateOfBirth; }
     
     public boolean isActive() { return this.active; }
+    
+    public int getId() { return this.id; }
 }

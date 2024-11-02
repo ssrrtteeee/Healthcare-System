@@ -11,7 +11,7 @@ import edu.westga.cs3230.healthcare_system.dal.DBLogin;
  */
 public class UserLogin {
 	
-	private Nurse currentSessionUser;
+	private static Nurse currentSessionUser;
 	private DBLogin dbLoginAcess;
 	
 	/** 
@@ -31,9 +31,15 @@ public class UserLogin {
 	 * 
 	 * @param username the username to login with
 	 * @param password the password to login with
+	 * @return true if login succeeded, false otherwise
 	 */
 	public boolean login(String username, String password) throws IllegalArgumentException {
-		return this.dbLoginAcess.checkIfLoginIsValid(username, password);
+		boolean isValid = this.dbLoginAcess.checkIfLoginIsValid(username, password);
+		if (isValid) {
+			currentSessionUser = this.dbLoginAcess.getUserDetails(username, password);
+		}
+		
+		return isValid;
 	}
 	
 	public Nurse getUserInformation(String username, String password) throws IllegalArgumentException {
@@ -45,7 +51,18 @@ public class UserLogin {
 	 * 
 	 * @return the current session user
 	 */
-	public Nurse getSessionUser() {
-		return this.currentSessionUser;
+	public static Nurse getSessionUser() {
+		return currentSessionUser;
 	}
+	
+    /**
+     * Returns the user label for any given user.
+     * @return the string to be displayed with the user information
+     */
+    public static String getUserlabel() {
+    	return "Username: " + currentSessionUser.getUsername() + ", Full Name: " + currentSessionUser.getFirstName() + " " + currentSessionUser.getLastName() + ", ID: " + currentSessionUser.getId();
+    }
+
+	
+	
 }

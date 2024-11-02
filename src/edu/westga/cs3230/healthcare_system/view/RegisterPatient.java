@@ -6,10 +6,11 @@ import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 import edu.westga.cs3230.healthcare_system.Main;
-import edu.westga.cs3230.healthcare_system.dal.DBRegisterPatient;
+import edu.westga.cs3230.healthcare_system.dal.PatientDAL;
 import edu.westga.cs3230.healthcare_system.model.Nurse;
 import edu.westga.cs3230.healthcare_system.model.Patient;
 import edu.westga.cs3230.healthcare_system.model.USStates;
+import edu.westga.cs3230.healthcare_system.model.UserLogin;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -67,7 +68,7 @@ public class RegisterPatient {
     public void setUser(Nurse user) {
     	this.currentUser = user;
 		this.currentUserLabel.setVisible(true);
-		this.currentUserLabel.setText(HomePage.getUserlabel(user));
+		this.currentUserLabel.setText(UserLogin.getUserlabel());
     }
     
     @FXML
@@ -81,9 +82,6 @@ public class RegisterPatient {
     	addTodoStage.setTitle(Main.TITLE);
     	addTodoStage.setScene(scene);
     	addTodoStage.initModality(Modality.APPLICATION_MODAL);
-    	
-    	HomePage homePage = loader.getController();
-    	homePage.setUser(this.currentUser);
     	
     	addTodoStage.show();
     	
@@ -201,7 +199,7 @@ public class RegisterPatient {
 			
     		if (!zipError && !phoneError && !firstNameError && !lastNameError && !cityError && !addressError && !genderError && !stateError && !dateOfBirthError) {
         		Patient patient = new Patient(fname, lname, city, address, zip, phoneNumber, gender, state, dateOfBirth, true);
-        		DBRegisterPatient patientRegister = new DBRegisterPatient();
+        		PatientDAL patientRegister = new PatientDAL();
         		patientRegister.registerPatient(patient);
         		
         		FXMLLoader loader = new FXMLLoader();
@@ -213,9 +211,6 @@ public class RegisterPatient {
             	addTodoStage.setTitle(Main.TITLE);
             	addTodoStage.setScene(scene);
             	addTodoStage.initModality(Modality.APPLICATION_MODAL);
-            	
-            	HomePage homePage = loader.getController();
-            	homePage.setUser(this.currentUser);
             	
             	addTodoStage.show();
             	
