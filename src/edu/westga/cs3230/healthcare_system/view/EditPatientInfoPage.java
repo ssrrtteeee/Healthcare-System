@@ -14,6 +14,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -33,33 +34,45 @@ import javafx.stage.Stage;
  * @version Fall 2024
  */
 public class EditPatientInfoPage {
+	@FXML
+    private TextField address;
     @FXML
-    private Label currentUserLabel;
-    @FXML
-    private Label errorMessageLabel;
-    
-    @FXML
-    private TextField fname;
-    @FXML
-    private TextField lname;
+    private Label addressErrMsg;
     @FXML
     private TextField city;
     @FXML
-    private TextField address;
+    private Label cityErrMsg;
     @FXML
-    private TextField zipcode;
+    private Button confirm;
     @FXML
-    private TextField phoneNumber;
-    @FXML
-    private ComboBox<String> gender;
-    @FXML
-    private ComboBox<USStates> state;
+    private Label currentUserLabel;
     @FXML
     private DatePicker dateOfBirth;
     @FXML
+    private Label dobErrMsg;
+    @FXML
+    private TextField fname;
+    @FXML
+    private Label fnameErrMsg;
+    @FXML
+    private ComboBox<String> gender;
+    @FXML
     private CheckBox isActive;
     @FXML
-    private Button confirm;
+    private TextField lname;
+    @FXML
+    private Label lnameErrMsg;
+    @FXML
+    private Label phoneNumErrMsg;
+    @FXML
+    private TextField phoneNumber;
+    @FXML
+    private ComboBox<USStates> state;
+    @FXML
+    private TextField zipcode;
+    @FXML
+    private Label zipcodeErrMsg;
+    
     
     private EditPatientInfoPageViewModel viewmodel;
         
@@ -74,6 +87,7 @@ public class EditPatientInfoPage {
     void initialize() {
         this.bindElements();
         this.currentUserLabel.setText(UserLogin.getUserlabel());
+        this.showGetPatientDialog();
     }
 	
 	private void showGetPatientDialog() {
@@ -122,17 +136,16 @@ public class EditPatientInfoPage {
 						|| dobDatePicker.valueProperty().get() == null
 				) {
 					errorLabel.textProperty().set("Please fill in all data before proceeding.");
-				}
-				
-				EditPatientInfoPage.this.viewmodel.getPatient(fnameTextField.textProperty().get(), lnameTextField.textProperty().get(), dobDatePicker.valueProperty().get());
-				
-				if (EditPatientInfoPage.this.viewmodel.getControlsActiveProperty().get()) {
-					errorLabel.textProperty().set("Could not find patient data. Please try again.");
 				} else {
-					Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-					stage.close();
+					EditPatientInfoPage.this.viewmodel.getPatient(fnameTextField.textProperty().get(), lnameTextField.textProperty().get(), dobDatePicker.valueProperty().get());
+					
+					if (EditPatientInfoPage.this.viewmodel.getControlsActiveProperty().get()) {
+						errorLabel.textProperty().set("Could not find patient data. Please try again.");
+					} else {
+						Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+						stage.close();
+					}
 				}
-				
 			}
 		});
 		
@@ -173,6 +186,14 @@ public class EditPatientInfoPage {
 		this.dateOfBirth.disableProperty().bind(this.viewmodel.getControlsActiveProperty());
 		this.confirm.disableProperty().bind(this.viewmodel.getControlsActiveProperty());
 		this.isActive.disableProperty().bind(this.viewmodel.getControlsActiveProperty());
+		
+		this.fnameErrMsg.textProperty().bindBidirectional(this.viewmodel.getFnameErrorMsgProperty());
+		this.lnameErrMsg.textProperty().bindBidirectional(this.viewmodel.getLnameErrorMsgProperty());
+		this.dobErrMsg.textProperty().bindBidirectional(this.viewmodel.getDobErrorMsgProperty());
+		this.cityErrMsg.textProperty().bindBidirectional(this.viewmodel.getCityErrorMsgProperty());
+		this.addressErrMsg.textProperty().bindBidirectional(this.viewmodel.getAddressErrorMsgProperty());
+		this.zipcodeErrMsg.textProperty().bindBidirectional(this.viewmodel.getZipcodeErrorMsgProperty());
+		this.phoneNumErrMsg.textProperty().bindBidirectional(this.viewmodel.getPhoneNumErrorMsgProperty());
 	}
 
 	@FXML
@@ -222,6 +243,17 @@ public class EditPatientInfoPage {
     
     @FXML
     void confirmChanges() {
-    	this.viewmodel.onConfirm();
+    	Alert dialog;
+    	if (!this.viewmodel.onConfirm()) {
+    		dialog = new Alert(Alert.AlertType.ERROR);
+    		dialog.setTitle("Error");
+    		dialog.setHeaderText("Could not update patient.");
+    		
+    	} else {
+    		dialog = new Alert(Alert.AlertType.INFORMATION);
+    		dialog.setTitle("Success");
+    		dialog.setHeaderText("Updated patient successfully.");
+    	}
+    	dialog.showAndWait();
     }
 }

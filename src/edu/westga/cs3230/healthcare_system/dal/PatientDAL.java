@@ -29,7 +29,9 @@ public class PatientDAL {
 	 * @throws IllegalArgumentException
 	 */
 	public void registerPatient(Patient patient) throws IllegalArgumentException {
-		String query = "INSERT INTO patient (f_name, l_name, gender, dob, city, state, address, zip_code,  phone_number, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String query =
+			  "INSERT INTO patient (f_name, l_name, gender, dob, city, state, address, zip_code,  phone_number, is_active)"
+			+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = DriverManager.getConnection(DBAccessor.getConnectionString());
 				PreparedStatement stmt = connection.prepareStatement(query)) {
 		    
@@ -118,8 +120,9 @@ public class PatientDAL {
 	 * @postcondition true
 	 * @param id the id
 	 * @param patient the patient
+	 * @return false if some error occurs.
 	 */
-	public void updatePatient(int id, Patient patient) {
+	public boolean updatePatient(int id, Patient patient) {
 		if (patient == null) {
 			throw new IllegalArgumentException("Patient cannot be null.");
 		}
@@ -146,8 +149,11 @@ public class PatientDAL {
 			stmt.setInt(11, id);
 	
 			stmt.executeUpdate();
+			
+			return true;
 		} catch (Exception e) {
-            System.out.println(e.toString());
+            System.err.println(e.getMessage());
+            return false;
         }
 	}
 }

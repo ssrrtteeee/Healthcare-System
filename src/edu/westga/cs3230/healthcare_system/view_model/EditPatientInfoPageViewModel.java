@@ -353,10 +353,65 @@ public class EditPatientInfoPageViewModel {
 	
 	/**
 	 * Confirms this patient's new info.
+	 * If any information is invalid, displays error messages as appropriate.
+	 * Otherwise, updates the database with the new information.
+	 * 
+	 * @precondition true
+	 * @postcondition true
+	 * @return true if updated, false otherwise.
 	 */
-	public void onConfirm() {
-		Patient patient = new Patient(this.fnameProperty.get(), this.lnameProperty.get(), this.cityProperty.get(), this.addressProperty.get(), this.zipcodeProperty.get(), this.phoneNumProperty.get(), this.genderProperty.get().substring(0, 1), this.stateProperty.get().getAbbreviation(), this.dobProperty.get(), this.isActiveProperty.get());
-		this.db.updatePatient(this.patientId, patient);
+	public boolean onConfirm() {
+		boolean hasErrors = false;
+		if (this.fnameProperty.get().isBlank()) {
+			this.fnameErrorMsgProperty.set("First name should not be blank.");
+			hasErrors = true;
+		} else {
+			this.fnameErrorMsgProperty.set("");
+		}
+		if (this.lnameProperty.get().isBlank()) {
+			this.lnameErrorMsgProperty.set("Last name should not be blank.");
+			hasErrors = true;
+		} else {
+			this.lnameErrorMsgProperty.set("");
+		}
+		if (this.dobProperty.get() == null) {
+			this.dobErrorMsgProperty.set("Please enter a valid date of birth.");
+			hasErrors = true;
+		} else if (this.dobProperty.get().isAfter(LocalDate.now())) {
+			this.dobErrorMsgProperty.set("Patient date of birth should not be in the future.");
+			hasErrors = true;
+		} else {
+			this.dobErrorMsgProperty.set("");
+		}
+		if (this.cityProperty.get().isBlank()) {
+			this.cityErrorMsgProperty.set("City should not be blank.");
+			hasErrors = true;
+		} else {
+			this.cityErrorMsgProperty.set("");
+		}
+		if (this.addressProperty.get().isBlank()) {
+			this.addressErrorMsgProperty.set("Address should not be blank.");
+			hasErrors = true;
+		} else {
+			this.addressErrorMsgProperty.set("");
+		}
+		if (!this.zipcodeProperty.get().matches("\\d{5}")) {
+			this.zipcodeErrorMsgProperty.set("Zip code must be 5 digits.");
+			hasErrors = true;
+		} else {
+			this.zipcodeErrorMsgProperty.set("");
+		}
+		if (!this.phoneNumProperty.get().matches("\\d{10}")) {
+			this.phoneNumErrorMsgProperty.set("Phone number should be 10 digits." + System.lineSeparator() + "(No spaces or dashes)");
+			hasErrors = true;
+		} else {
+			this.phoneNumErrorMsgProperty.set("");
+		}
+		
+		if (!hasErrors) {
+			Patient patient = new Patient(this.fnameProperty.get(), this.lnameProperty.get(), this.cityProperty.get(), this.addressProperty.get(), this.zipcodeProperty.get(), this.phoneNumProperty.get(), this.genderProperty.get().substring(0, 1), this.stateProperty.get().getAbbreviation(), this.dobProperty.get(), this.isActiveProperty.get());
+			return this.db.updatePatient(this.patientId, patient);
+		}
+		return false;
 	}
-
 }
