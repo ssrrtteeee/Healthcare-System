@@ -41,8 +41,8 @@
       <TextField fx:id="zipcode" layoutX="154.0" layoutY="438.0" />
       <Label layoutX="47.0" layoutY="487.0" text="Phone Number" />
       <TextField fx:id="phoneNumber" layoutX="154.0" layoutY="483.0" />
-      <CheckBox fx:id="isActive" layoutX="171.0" layoutY="525.0" mnemonicParsing="false" text="Active patient" />
-      <Button fx:id="confirm" layoutX="188.0" layoutY="570.0" mnemonicParsing="false" onAction="#confirmChanges" text="Confirm" />
+      <CheckBox fx:id="isActive" layoutX="171.0" layoutY="555.0" mnemonicParsing="false" text="Active patient" />
+      <Button fx:id="confirm" layoutX="188.0" layoutY="590.0" mnemonicParsing="false" onAction="#confirmChanges" text="Confirm" />
       <Label fx:id="fnameErrMsg" layoutX="153.0" layoutY="148.0" textFill="RED" />
       <Label fx:id="lnameErrMsg" layoutX="154.0" layoutY="193.0" textFill="RED" />
       <Label fx:id="dobErrMsg" layoutX="154.0" layoutY="283.0" textFill="RED" />

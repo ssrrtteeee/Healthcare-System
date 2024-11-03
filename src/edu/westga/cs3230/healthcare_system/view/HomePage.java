@@ -2,12 +2,14 @@ package edu.westga.cs3230.healthcare_system.view;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collection;
 import java.util.ResourceBundle;
 
 import edu.westga.cs3230.healthcare_system.Main;
 import edu.westga.cs3230.healthcare_system.dal.PatientDAL;
 import edu.westga.cs3230.healthcare_system.model.Patient;
 import edu.westga.cs3230.healthcare_system.model.UserLogin;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -19,9 +21,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -170,23 +175,84 @@ public class HomePage {
 	    confirmButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				if (fnameTextField.textProperty().get() == null
-						|| lnameTextField.textProperty().get() == null
-						|| dobDatePicker.valueProperty().get() == null
-				) {
-					errorLabel.textProperty().set("Please fill in all data before proceeding.");
+				Patient result = null;
+				
+				if (dobDatePicker.valueProperty().get() == null) {
+				    PatientDAL db = new PatientDAL();
+					Collection<Patient> patients = db.retrievePatient(fnameTextField.textProperty().get(), lnameTextField.textProperty().get());
+					result = patients.isEmpty() ? null : HomePage.this.showPatientsList(patients);
 				} else {
-				    PatientDAL db = new PatientDAL(); 
-					Patient result = db.retrievePatient(fnameTextField.textProperty().get(), lnameTextField.textProperty().get(), dobDatePicker.valueProperty().get());
-					
-					if (result == null) {
-						errorLabel.textProperty().set("Could not find patient data. Please try again.");
+					PatientDAL db = new PatientDAL(); 
+					if (fnameTextField.textProperty().get().isBlank() || lnameTextField.textProperty().get().isBlank()) {
+						Collection<Patient> patients = db.retrievePatient(dobDatePicker.valueProperty().get());
+						result = patients.isEmpty() ? null : HomePage.this.showPatientsList(patients);
 					} else {
-						dialog.setResult(result);
-						//Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-						//stage.close();
+						result = db.retrievePatient(fnameTextField.textProperty().get(), lnameTextField.textProperty().get(), dobDatePicker.valueProperty().get());
 					}
 				}
+				
+				if (result == null) {
+					errorLabel.textProperty().set("Could not find patient data. Please try again.");
+				} else {
+					dialog.setResult(result);
+				}
+			}
+		});
+	    cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+				stage.close();
+				dialog.resultProperty().set(null);
+			}
+		});
+	    
+	    return dialog.showAndWait().orElse(null);
+	}
+
+	private Patient showPatientsList(Collection<Patient> patients) {
+		Dialog<Patient> dialog = new Dialog<Patient>();
+	    dialog.setTitle("Select patient");
+	    dialog.setResizable(false);
+
+	    GridPane grid = new GridPane();
+	    grid.setHgap(10);
+	    grid.setVgap(10);
+	    grid.setPadding(new Insets(0, 10, 0, 10));
+	    
+	    ListView<Patient> patientsListView = new ListView<Patient>(FXCollections.observableArrayList(patients));
+	    Button confirmButton = new Button("Confirm");
+	    Button cancelButton = new Button("Cancel");
+	    confirmButton.setPrefSize(80, 30);
+	    cancelButton.setPrefSize(80, 30);
+	    GridPane.setColumnSpan(patientsListView, 2);
+	    patientsListView.setCellFactory(cell -> {
+            return new ListCell<Patient>() {
+                @Override
+                protected void updateItem(Patient item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item != null) {
+                        setText(item.getFirstName() + " " + item.getLastName() + ", " + item.getDateOfBirth().toString());
+                    }
+                }
+            };
+        });	    confirmButton.disableProperty().set(true);
+	    
+	    grid.addRow(1, patientsListView);
+	    grid.addRow(2, confirmButton, cancelButton);
+	    
+	    dialog.getDialogPane().setContent(grid);
+	    
+	    patientsListView.getSelectionModel().selectedItemProperty().addListener((unused, oldVal, newVal) -> {
+	    	if (newVal != null) {
+	    		confirmButton.disableProperty().set(false);
+	    	}
+	    });
+	    
+	    confirmButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				dialog.setResult(patientsListView.getSelectionModel().getSelectedItem());
 			}
 		});
 	    cancelButton.setOnAction(new EventHandler<ActionEvent>() {
