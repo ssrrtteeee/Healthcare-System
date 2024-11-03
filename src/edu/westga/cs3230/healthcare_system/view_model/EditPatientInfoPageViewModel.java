@@ -42,8 +42,6 @@ public class EditPatientInfoPageViewModel {
 	private StringProperty zipcodeProperty;
 	private StringProperty phoneNumProperty;
 	private BooleanProperty isActiveProperty;
-
-	private BooleanProperty controlsActiveProperty;
 	
 	private int patientId;
 	private PatientDAL db;
@@ -258,17 +256,6 @@ public class EditPatientInfoPageViewModel {
 	}
 	
 	/**
-	 * Gets the controls active property.
-	 *
-	 * @precondition true
-	 * @postconditino true
-	 * @return the controls active property
-	 */
-	public BooleanProperty getControlsActiveProperty() {
-		return this.controlsActiveProperty;
-	}
-
-	/**
 	 * Instantiates a new edit patient info page view model.
 	 */
 	public EditPatientInfoPageViewModel() {
@@ -293,64 +280,42 @@ public class EditPatientInfoPageViewModel {
 		this.phoneNumProperty = new SimpleStringProperty();
 		this.isActiveProperty = new SimpleBooleanProperty();
 		
-		this.controlsActiveProperty = new SimpleBooleanProperty(false);		
-		
 		this.gendersListProperty.add("Male");
 		this.gendersListProperty.add("Female");
 		this.statesProperty.setAll(USStates.values());
 		
 		this.db = new PatientDAL();
-		
-		this.disableControls();
 	}
 	
 	/**
 	 * Gets the info for the patient whose info has been selected.
 	 * 
-	 * @precondition true
+	 * @precondition patient != null
 	 * @postcondition true
-	 * @param firstName the first name
-	 * @param lastName the last name
-	 * @param dateOfBirth the patient's date of birth
+	 * @param patient the patient to edit
 	 */
-	public void getPatient(String firstName, String lastName, LocalDate dateOfBirth) {
-		Patient patient = this.db.retrievePatient(firstName, lastName, dateOfBirth);
-		if (patient != null) {
-			this.patientId = patient.getId();
-			this.fnameProperty.set(patient.getFirstName());
-			this.lnameProperty.set(patient.getLastName());
-			this.genderProperty.set(patient.getGender());
-			this.dobProperty.set(patient.getDateOfBirth());
-			this.cityProperty.set(patient.getCity());
-			for (USStates currState : USStates.values()) {
-				if (patient.getState().equals(currState.getAbbreviation())) {
-					this.stateProperty.set(currState);
-				}
-			}
-			this.addressProperty.set(patient.getAddress());
-			this.zipcodeProperty.set(patient.getZipcode());
-			this.phoneNumProperty.set(patient.getPhoneNumber());
-			this.isActiveProperty.set(patient.isActive());
-			this.controlsActiveProperty.set(false);
-		} else {
-			this.disableControls();
+	public void setPatient(Patient patient) {
+		if (patient == null) {
+			throw new IllegalArgumentException("Patient cannot be null.");
 		}
+
+		this.patientId = patient.getId();
+		this.fnameProperty.set(patient.getFirstName());
+		this.lnameProperty.set(patient.getLastName());
+		this.genderProperty.set(patient.getGender());
+		this.dobProperty.set(patient.getDateOfBirth());
+		this.cityProperty.set(patient.getCity());
+		for (USStates currState : USStates.values()) {
+			if (patient.getState().equals(currState.getAbbreviation())) {
+				this.stateProperty.set(currState);
+			}
+		}
+		this.addressProperty.set(patient.getAddress());
+		this.zipcodeProperty.set(patient.getZipcode());
+		this.phoneNumProperty.set(patient.getPhoneNumber());
+		this.isActiveProperty.set(patient.isActive());
 	}
 
-	private void disableControls() {
-		this.fnameProperty.set("");
-		this.lnameProperty.set("");
-		this.genderProperty.set("");
-		this.dobProperty.set(null);
-		this.cityProperty.set("");
-		this.stateProperty.set(null);
-		this.addressProperty.set("");
-		this.zipcodeProperty.set("");
-		this.phoneNumProperty.set("");
-		this.isActiveProperty.set(false);
-		this.controlsActiveProperty.set(true);
-	}
-	
 	/**
 	 * Confirms this patient's new info.
 	 * If any information is invalid, displays error messages as appropriate.
