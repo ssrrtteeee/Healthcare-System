@@ -199,12 +199,12 @@ public class HomePage {
 				
 				if (dobDatePicker.valueProperty().get() == null) {
 				    PatientDAL db = new PatientDAL();
-					Collection<Patient> patients = db.retrievePatient(fnameTextField.textProperty().get(), lnameTextField.textProperty().get());
+					Collection<Patient> patients = db.retrievePatients(fnameTextField.textProperty().get(), lnameTextField.textProperty().get());
 					result = patients.isEmpty() ? null : HomePage.this.showPatientsList(patients);
 				} else {
 					PatientDAL db = new PatientDAL(); 
 					if (fnameTextField.textProperty().get().isBlank() || lnameTextField.textProperty().get().isBlank()) {
-						Collection<Patient> patients = db.retrievePatient(dobDatePicker.valueProperty().get());
+						Collection<Patient> patients = db.retrievePatients(dobDatePicker.valueProperty().get());
 						result = patients.isEmpty() ? null : HomePage.this.showPatientsList(patients);
 					} else {
 						result = db.retrievePatient(fnameTextField.textProperty().get(), lnameTextField.textProperty().get(), dobDatePicker.valueProperty().get());

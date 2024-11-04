@@ -63,7 +63,7 @@ public class DoctorDAL {
 	 */
 	public Collection<Doctor> retrieveDoctorsBySpecialty(String specialty) {
 		if (specialty == null) {
-			//throw new IllegalArgumentException(ErrMsgs.NULL_SPECIALTY);
+			throw new IllegalArgumentException("Specialty cannot be null.");
 		}
 		
 		String query =
@@ -123,6 +123,37 @@ public class DoctorDAL {
 		) {
 			stmt.setString(1, firstName);
 			stmt.setString(2, lastName);
+			ResultSet rs = stmt.executeQuery();
+
+			rs.next();
+			String fName = rs.getString(1);
+			String lName = rs.getString(2);
+			int id = rs.getInt(3);
+			
+			return new Doctor(id, fName, lName);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return null;
+	    }
+	}
+	
+	/**
+	 * Retrieves the doctor with the specified id
+	 * 
+	 * @precondition firstName != null && lastName != null
+	 * @postcondition true
+	 * @param did the id
+	 * @return the doctor, or null if none could be found.
+	 */
+	public Doctor retrieveDoctor(int did) {
+		String query =
+				"SELECT f_name, l_name, id "
+			  + "FROM doctor "
+			  + "WHERE id = ?";
+		try (Connection con = DriverManager.getConnection(DBAccessor.getConnectionString()); 
+				PreparedStatement stmt = con.prepareStatement(query);
+		) {
+			stmt.setInt(1, did);
 			ResultSet rs = stmt.executeQuery();
 
 			rs.next();

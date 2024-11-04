@@ -1,8 +1,10 @@
 package edu.westga.cs3230.healthcare_system.view;
 
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 
 import edu.westga.cs3230.healthcare_system.Main;
+import edu.westga.cs3230.healthcare_system.model.Appointment;
 import edu.westga.cs3230.healthcare_system.model.Patient;
 import edu.westga.cs3230.healthcare_system.model.UserLogin;
 import edu.westga.cs3230.healthcare_system.view_model.ViewPatientInfoPageViewModel;
@@ -10,12 +12,17 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
+import javafx.util.Pair;
 
 /**
  * The codebehind for the edit patient info page.
@@ -35,6 +42,8 @@ public class ViewPatientInfoPage {
     @FXML private TextField zipcode;
     @FXML private TextField phoneNumber;
     @FXML private CheckBox isActive;
+    @FXML private ListView<Pair<String, Appointment>> appointments;
+    @FXML private Button editAppointmentButton;
     
     private ViewPatientInfoPageViewModel viewmodel;
     
@@ -50,6 +59,23 @@ public class ViewPatientInfoPage {
         this.bindElements();
         this.currentUserLabel.setText(UserLogin.getUserlabel());
         this.isActive.disableProperty().set(true);
+        
+        this.appointments.setCellFactory(new Callback<ListView<Pair<String, Appointment>>, ListCell<Pair<String, Appointment>>>() {
+			@Override
+			public ListCell<Pair<String, Appointment>> call(ListView<Pair<String, Appointment>> appointmentsListView) {
+				return new ListCell<Pair<String, Appointment>>() {
+					@Override
+					protected void updateItem(Pair<String, Appointment> item, boolean empty) {
+						super.updateItem(item, empty);
+						if (item == null || empty) {
+							setText("");
+						} else {
+							setText(item.getKey() + ", " + DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a").format(item.getValue().getAppointmentTime()));
+						}
+					}
+				};
+			};
+		});
     }
 	
     /**
@@ -74,6 +100,12 @@ public class ViewPatientInfoPage {
 		this.state.textProperty().bindBidirectional(this.viewmodel.getStateProperty());
 		this.dateOfBirth.valueProperty().bindBidirectional(this.viewmodel.getDobProperty());
 		this.isActive.selectedProperty().bindBidirectional(this.viewmodel.getIsActiveProperty());
+		this.appointments.itemsProperty().bindBidirectional(this.viewmodel.getAppointmentsProperty());
+		this.viewmodel.getSelectedAppointmentProperty().bind(this.appointments.getSelectionModel().selectedItemProperty());
+		
+		this.viewmodel.getSelectedAppointmentProperty().addListener((unused, oldVal, newVal) -> {
+			this.editAppointmentButton.disableProperty().set(newVal == null);
+		});
 	}
 	
 	@FXML
@@ -101,6 +133,29 @@ public class ViewPatientInfoPage {
     	stage.close();
     }
 
+	@FXML
+	void editAppointment() throws IOException {
+		FXMLLoader loader = new FXMLLoader();
+    	loader.setLocation(Main.class.getResource(EditAppointmentPage.LOCATION));
+    	loader.load();
+    	
+    	EditAppointmentPage page = loader.getController();
+    	page.setPatient(this.viewmodel.getPatient());
+    	page.setAppointment(this.appointments.getSelectionModel().getSelectedItem().getValue());
+    	
+    	Parent parent = loader.getRoot();
+    	Scene scene = new Scene(parent);
+    	Stage addTodoStage = new Stage();
+    	addTodoStage.setTitle(Main.TITLE);
+    	addTodoStage.setScene(scene);
+    	addTodoStage.initModality(Modality.APPLICATION_MODAL);
+    	        	
+    	addTodoStage.show();
+    	
+    	Stage stage = (Stage) this.currentUserLabel.getScene().getWindow();
+    	stage.close();
+	}
+	
 	@FXML
     void backToHomePage() {
 		FXMLLoader loader = new FXMLLoader();
