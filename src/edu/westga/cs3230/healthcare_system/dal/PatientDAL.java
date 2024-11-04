@@ -17,9 +17,9 @@ import edu.westga.cs3230.healthcare_system.model.Patient;
  * @version Fall 2024
  */
 public class PatientDAL {
-	private static final String NULL_FIRST_NAME = "First name cannot be null.";
-	private static final String NULL_LAST_NAME = "Last name cannot be null.";
-	private static final String NULL_DATE_OF_BIRTH = "DoB cannot be null.";
+	public static final String NULL_FIRST_NAME = "First name cannot be null.";
+	public static final String NULL_LAST_NAME = "Last name cannot be null.";
+	public static final String NULL_DATE_OF_BIRTH = "DoB cannot be null.";
 
 	/**
 	 * Adds a new patient to the database with the given information.

@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane minHeight="441.0" minWidth="457.0" prefHeight="568.0" prefWidth="593.0" xmlns="http://javafx.com/javafx/18.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.westga.cs3230.healthcare_system.view.HomePage">
+<AnchorPane minHeight="441.0" minWidth="457.0" prefHeight="568.0" prefWidth="593.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.westga.cs3230.healthcare_system.view.HomePage">
    <children>
       <Label layoutX="167.0" layoutY="71.0" text="Healthcare System Home Page">
          <font>
@@ -20,5 +20,6 @@
       <Label fx:id="currentUserLabel" layoutX="94.0" layoutY="22.0" maxHeight="1.7976931348623157E308" maxWidth="300.0" text="Error Message" wrapText="true" />
       <Button layoutX="225.0" layoutY="129.0" mnemonicParsing="false" onAction="#registerPatient" text="Register New Patient" />
       <Button layoutX="228.0" layoutY="202.0" mnemonicParsing="false" onAction="#editPatient" text="Edit Existing Patient" />
+      <Button layoutX="225.0" layoutY="259.0" mnemonicParsing="false" onAction="#createAppointment" text="Create Appointment" />
    </children>
 </AnchorPane>

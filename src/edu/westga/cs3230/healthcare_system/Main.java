@@ -17,6 +17,7 @@ public class Main extends Application {
 	public static final String HOME_PAGE = "view/HomePage.fxml";
 	public static final String EDIT_PATIENT_INFO_PAGE = "view/EditPatientInfoPage.fxml";
 	public static final String REGISTER_PATIENT_PAGE = "view/RegisterPatient.fxml";
+	public static final String CREATE_APPOINTMENT_PAGE = "view/CreateAppointment.fxml";
 
 	/**
 	 * Entry point of the application.

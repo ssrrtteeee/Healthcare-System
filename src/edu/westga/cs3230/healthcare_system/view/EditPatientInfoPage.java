@@ -218,23 +218,24 @@ public class EditPatientInfoPage {
     	stage.close();
     }
 	
-	/**
-     * Sets the user.
-     * 
-     * @precondition user != null
-     * @postcondition true
-     * @param user the user
-     */
-    public void setUser(Nurse user) {
-    	if (user == null) {
-    		throw new IllegalArgumentException("User cannot be null.");
-    	}
-    	
-	    this.showGetPatientDialog();
-    	
-		this.currentUserLabel.setVisible(true);
-		this.currentUserLabel.setText(UserLogin.getUserlabel());
-    }
+	// What does this do?
+//	/**
+//     * Sets the user.
+//     * 
+//     * @precondition user != null
+//     * @postcondition true
+//     * @param user the user
+//     */
+//    public void setUser(Nurse user) {
+//    	if (user == null) {
+//    		throw new IllegalArgumentException("User cannot be null.");
+//    	}
+//    	
+//	    this.showGetPatientDialog();
+//    	
+//		this.currentUserLabel.setVisible(true);
+//		this.currentUserLabel.setText(UserLogin.getUserlabel());
+//    }
     
     @FXML
     void selectNewPatient() {
