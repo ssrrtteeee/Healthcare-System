@@ -7,7 +7,6 @@ import java.util.ResourceBundle;
 
 import edu.westga.cs3230.healthcare_system.Main;
 import edu.westga.cs3230.healthcare_system.dal.PatientDAL;
-import edu.westga.cs3230.healthcare_system.model.Nurse;
 import edu.westga.cs3230.healthcare_system.model.Patient;
 import edu.westga.cs3230.healthcare_system.model.USStates;
 import edu.westga.cs3230.healthcare_system.model.UserLogin;
@@ -57,42 +56,10 @@ public class RegisterPatient {
     @FXML private Label stateErrorLabel;
     @FXML private Label dobErrorLabel;
     
-    private Nurse currentUser;
-    
-    //private VMClass viewModel;
-    
-    /**
-     * Sets the current session user.
-     * @param user the current session user
-     */
-    public void setUser(Nurse user) {
-    	this.currentUser = user;
-		this.currentUserLabel.setVisible(true);
-		this.currentUserLabel.setText(UserLogin.getUserlabel());
-    }
-    
     @FXML
     void backToHomePage(ActionEvent event) throws IOException {
 		FXMLLoader loader = new FXMLLoader();
     	loader.setLocation(Main.class.getResource(Main.HOME_PAGE));
-    	loader.load();
-    	Parent parent = loader.getRoot();
-    	Scene scene = new Scene(parent);
-    	Stage addTodoStage = new Stage();
-    	addTodoStage.setTitle(Main.TITLE);
-    	addTodoStage.setScene(scene);
-    	addTodoStage.initModality(Modality.APPLICATION_MODAL);
-    	
-    	addTodoStage.show();
-    	
-    	Stage stage = (Stage) this.currentUserLabel.getScene().getWindow();
-    	stage.close();
-    }
-
-    @FXML
-    void logout(ActionEvent event) throws IOException {
-		FXMLLoader loader = new FXMLLoader();
-    	loader.setLocation(Main.class.getResource(Main.LOGIN_PAGE_FXML));
     	loader.load();
     	Parent parent = loader.getRoot();
     	Scene scene = new Scene(parent);
@@ -202,20 +169,7 @@ public class RegisterPatient {
         		PatientDAL patientRegister = new PatientDAL();
         		patientRegister.registerPatient(patient);
         		
-        		FXMLLoader loader = new FXMLLoader();
-            	loader.setLocation(Main.class.getResource(Main.HOME_PAGE));
-            	loader.load();
-            	Parent parent = loader.getRoot();
-            	Scene scene = new Scene(parent);
-            	Stage addTodoStage = new Stage();
-            	addTodoStage.setTitle(Main.TITLE);
-            	addTodoStage.setScene(scene);
-            	addTodoStage.initModality(Modality.APPLICATION_MODAL);
-            	
-            	addTodoStage.show();
-            	
-            	Stage stage = (Stage) this.currentUserLabel.getScene().getWindow();
-            	stage.close();
+        		this.backToHomePage(event);
     		}
     	} catch (Exception e) {
     		
@@ -246,7 +200,8 @@ public class RegisterPatient {
         assert this.stateErrorLabel != null : "fx:id=\"stateErrorLabel\" was not injected: check your FXML file 'RegisterPatient.fxml'.";
         assert this.dobErrorLabel != null : "fx:id=\"dobErrorLabel\" was not injected: check your FXML file 'RegisterPatient.fxml'.";
         
-        this.currentUserLabel.setVisible(false);
+        this.currentUserLabel.setText(UserLogin.getUserlabel());
+        //this.currentUserLabel.setVisible(false);
         this.zipcodeErrorLabel.setVisible(false);
         this.phoneNumberErrorLabel.setVisible(false);
         this.fNameErrorLabel.setVisible(false);

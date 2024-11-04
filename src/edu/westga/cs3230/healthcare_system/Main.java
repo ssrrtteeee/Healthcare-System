@@ -15,9 +15,11 @@ public class Main extends Application {
     public static final String TITLE = "Healthcare System";
     public static final String LOGIN_PAGE_FXML = "view/LoginPage.fxml";
 	public static final String HOME_PAGE = "view/HomePage.fxml";
-	public static final String EDIT_PATIENT_INFO_PAGE = "view/EditPatientInfoPage.fxml";
 	public static final String REGISTER_PATIENT_PAGE = "view/RegisterPatient.fxml";
-
+	public static final String CREATE_APPOINTMENT_PAGE = "view/CreateAppointment.fxml";
+	public static final String EDIT_PATIENT_INFO_PAGE = "view/EditPatientInfoPage.fxml";
+	public static final String VIEW_PATIENT_INFO_PAGE = "view/ViewPatientInfoPage.fxml";
+	
 	/**
 	 * Entry point of the application.
 	 * 
