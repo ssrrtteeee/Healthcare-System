@@ -2,14 +2,20 @@ package edu.westga.cs3230.healthcare_system.view_model;
 
 import java.time.LocalDate;
 
+import edu.westga.cs3230.healthcare_system.dal.AppointmentDAL;
+import edu.westga.cs3230.healthcare_system.model.Appointment;
 import edu.westga.cs3230.healthcare_system.model.Patient;
 import edu.westga.cs3230.healthcare_system.model.USStates;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.util.Pair;
 
 /**
  * ViewModel for ViewPatientInfoPage.
@@ -28,7 +34,11 @@ public class ViewPatientInfoPageViewModel {
 	private StringProperty zipcodeProperty;
 	private StringProperty phoneNumProperty;
 	private BooleanProperty isActiveProperty;
+	private ListProperty<Pair<String, Appointment>> appointmentsProperty;
+	private ObjectProperty<Pair<String, Appointment>> selectedAppointmentProperty;
+	
 	private Patient patient;
+	private AppointmentDAL dbApmt;
 	
 	/**
 	 * Gets the fname property.
@@ -141,6 +151,28 @@ public class ViewPatientInfoPageViewModel {
 	}
 	
 	/**
+	 * Gets the appointments list property.
+	 * 
+	 * @precondition true
+	 * @postcondition true
+	 * @return the appointments property
+	 */
+	public ListProperty<Pair<String, Appointment>> getAppointmentsProperty() {
+		return this.appointmentsProperty;
+	}
+	
+	/**
+	 * Gets the selected appointment property.
+	 * 
+	 * @precondition true
+	 * @postcondition true
+	 * @return the selected appointment property
+	 */
+	public ObjectProperty<Pair<String, Appointment>> getSelectedAppointmentProperty() {
+		return this.selectedAppointmentProperty;
+	}
+	
+	/**
 	 * Gets the current patient being viewed
 	 * @return the patient being viewed
 	 */
@@ -152,6 +184,7 @@ public class ViewPatientInfoPageViewModel {
 	 * Instantiates a new edit patient info page view model.
 	 */
 	public ViewPatientInfoPageViewModel() {
+		this.dbApmt = new AppointmentDAL();
 		this.fnameProperty = new SimpleStringProperty();
 		this.lnameProperty = new SimpleStringProperty();
 		this.genderProperty = new SimpleStringProperty();
@@ -162,6 +195,8 @@ public class ViewPatientInfoPageViewModel {
 		this.zipcodeProperty = new SimpleStringProperty();
 		this.phoneNumProperty = new SimpleStringProperty();
 		this.isActiveProperty = new SimpleBooleanProperty();
+		this.appointmentsProperty = new SimpleListProperty<Pair<String, Appointment>>();
+		this.selectedAppointmentProperty = new SimpleObjectProperty<Pair<String, Appointment>>();
 	}
 	
 	/**
@@ -191,5 +226,6 @@ public class ViewPatientInfoPageViewModel {
 		this.zipcodeProperty.set(patient.getZipcode());
 		this.phoneNumProperty.set(patient.getPhoneNumber());
 		this.isActiveProperty.set(patient.isActive());
+		this.appointmentsProperty.set(FXCollections.observableArrayList(this.dbApmt.getAppointmentsFor(patient)));
 	}
 }

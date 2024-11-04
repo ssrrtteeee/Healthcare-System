@@ -57,7 +57,6 @@ public class PatientDAL {
             System.out.println(e.toString());
         }
 	}
-
 	
 	/**
 	 * Retrieves the patient with the specified first name, last name, and date of birth
@@ -159,7 +158,7 @@ public class PatientDAL {
 	}
 
 
-	public Collection<Patient> retrievePatient(String firstName, String lastName) {
+	public Collection<Patient> retrievePatients(String firstName, String lastName) {
 		if (firstName == null) {
 			throw new IllegalArgumentException(NULL_FIRST_NAME);
 		}
@@ -203,7 +202,7 @@ public class PatientDAL {
 	    }
 	}
 	
-	public Collection<Patient> retrievePatient(LocalDate dateOfBirth) {
+	public Collection<Patient> retrievePatients(LocalDate dateOfBirth) {
 		if (dateOfBirth == null) {
 			throw new IllegalArgumentException(NULL_DATE_OF_BIRTH);
 		}
@@ -233,7 +232,6 @@ public class PatientDAL {
 				boolean isActive = rs.getBoolean(10);
 				int id = rs.getInt(11);
 				
-				System.out.println(id);
 				result.add(new Patient(fName, lName, city, address, zipCode, phoneNumber, gender, state, dob, isActive, id));
 			}
 

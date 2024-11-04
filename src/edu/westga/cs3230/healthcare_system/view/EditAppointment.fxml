@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane minHeight="441.0" minWidth="413.0" prefHeight="726.0" prefWidth="420.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.westga.cs3230.healthcare_system.view.EditAppointmentPage">
+   <children>
+      <Button layoutX="352.0" layoutY="19.0" mnemonicParsing="false" onAction="#backToViewPatient" text="Back">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Button>
+      <Label layoutX="14.0" layoutY="26.0" text="Current User: " />
+      <Label fx:id="currentUserLabel" layoutX="13.0" layoutY="42.0" maxHeight="1.7976931348623157E308" maxWidth="300.0" text="Error Message" wrapText="true" />
+      <Label layoutX="138.0" layoutY="75.0" text="Edit Appointment">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="81.0" layoutY="131.0" text="Old/current info:" />
+      <Label layoutX="283.0" layoutY="131.0" text="New info:" />
+      <Label fx:id="doctorName" layoutX="25.0" layoutY="170.0" text="Doctor:" />
+      <Label fx:id="oldDoctor" layoutX="25.0" layoutY="190.0" text="Error" translateZ="1.0" />
+      <Label layoutX="25.0" layoutY="240.0" text="Appointment time:" />
+      <Label fx:id="oldTime" layoutX="25.0" layoutY="260.0" text="Error" />
+      <Label layoutX="25.0" layoutY="350.0" text="Reason For Appointment" />
+      <TextArea fx:id="oldReason" editable="false" layoutX="25.0" layoutY="368.0" prefHeight="270.0" prefWidth="173.0" />
+      <Separator layoutX="210.0" layoutY="154.0" orientation="VERTICAL" prefHeight="504.0" prefWidth="5.0" />
+      <Label fx:id="doctorName1" layoutX="230.0" layoutY="170.0" text="Doctor:" />
+      <Button fx:id="selectDoctor" layoutX="316.0" layoutY="166.0" mnemonicParsing="false" onAction="#selectDoctor" text="Select Doctor" />
+      <Label fx:id="newDoctor" layoutX="230.0" layoutY="190.0" text="Error" />
+      <Label fx:id="timeErrMsg" layoutX="229.0" layoutY="320.0" prefHeight="17.0" prefWidth="173.0" textFill="RED" />
+      <Label layoutX="230.0" layoutY="240.0" text="Appointment time:" />
+      <DatePicker fx:id="newDate" editable="false" layoutX="230.0" layoutY="260.0" prefHeight="25.0" prefWidth="150.0" />
+      <ComboBox fx:id="newTime" layoutX="230.0" layoutY="285.0" prefWidth="150.0" />
+      <Label layoutX="230.0" layoutY="350.0" text="Reason For Appointment" />
+      <TextArea fx:id="newReason" layoutX="230.0" layoutY="368.0" prefHeight="270.0" prefWidth="173.0" />
+      <Label fx:id="reasonErrMsg" layoutX="230.0" layoutY="638.0" prefHeight="31.0" prefWidth="173.0" textFill="RED" />
+      <Button fx:id="confirm" layoutX="148.0" layoutY="685.0" mnemonicParsing="false" onAction="#updateAppointment" text="Update Appointment" />
+      <Separator layoutY="150.0" prefHeight="0.0" prefWidth="425.0" />
+   </children>
+</AnchorPane>
