@@ -2,6 +2,7 @@ package edu.westga.cs3230.healthcare_system.view;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.regex.PatternSyntaxException;
 
 import edu.westga.cs3230.healthcare_system.Main;
 import edu.westga.cs3230.healthcare_system.dal.RoutineCheckupDAL;
@@ -12,32 +13,34 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
 import javafx.scene.control.Alert.AlertType;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class AddRoutineCheckupPage {
 
     @FXML private Label currentUserLabel;
-    @FXML
-    private TextField patientHeightField;
-    @FXML
-    private TextField patientWeightField;
-    @FXML
-    private TextField systolicBPField;
-    @FXML
-    private TextField diastolicBPField;
-    @FXML
-    private TextField bodyTemperatureField;
-    @FXML
-    private TextField pulseField;
-    @FXML
-    private TextField symptomsField;
-    @FXML
-    private TextArea initialDiagnosisField;
+    @FXML private TextField patientHeight;
+    @FXML private TextField patientWeight;
+    @FXML private TextField systolicBP;
+    @FXML private TextField diastolicBP;
+    @FXML private TextField bodyTemperature;
+    @FXML private TextField pulse;
+    @FXML private TextArea symptoms;
+    @FXML private TextArea initialDiagnosis;
+    
+    @FXML private Text heightWarning;
+    @FXML private Text weightWarning;
+    @FXML private Label systolicBPWarning;
+    @FXML private Label diastolicBPWarning;
+    @FXML private Label bodyTemperatureWarning;
+    @FXML private Label pulseWarning;
+    @FXML private Label symptomsWarning;
+    @FXML private Label initialDiagnosisWarning;
     
     private LocalDateTime appointmentTime;
     private int doctorId;
@@ -61,29 +64,114 @@ public class AddRoutineCheckupPage {
     }
     
     @FXML
-    private void handleSubmit() {
+    void handleSubmit() {
+    	boolean hasError = false;
         try {
-            double patientHeight = Double.parseDouble(this.patientHeightField.getText());
-            double patientWeight = Double.parseDouble(this.patientWeightField.getText());
-            int systolicBP = Integer.parseInt(this.systolicBPField.getText());
-            int diastolicBP = Integer.parseInt(this.diastolicBPField.getText());
-            int bodyTemperature = Integer.parseInt(this.bodyTemperatureField.getText());
-            int pulse = Integer.parseInt(this.pulseField.getText());
-            String symptoms = this.symptomsField.getText();
-            String initialDiagnosis = this.initialDiagnosisField.getText();
-
-            RoutineCheckup checkup = new RoutineCheckup(this.appointmentTime, this.doctorId, UserLogin.getSessionUser().getId(),
-                    patientHeight, patientWeight, systolicBP, diastolicBP,
-                    bodyTemperature, pulse, symptoms, initialDiagnosis);
+        	Double patientHeight = (double) 0;
+        	try {
+        		patientHeight = Double.parseDouble(this.patientHeight.getText());
+        		if (this.patientHeight.getText().length() > 4 || this.patientHeight.getText().isBlank() || this.patientHeight.getText().split(".")[1].length() > 2) {
+        			throw new IllegalArgumentException();
+        		}
+        		this.heightWarning.setText("");
+        	} catch (PatternSyntaxException ex) {
+        		this.heightWarning.setText("");
+        	} catch (Exception ex) {
+        		this.heightWarning.setText("Must be 1 digit and less than 5, with not more than 2 decimals.");
+        		hasError = true;
+        	}
+        	
+        	Double patientWeight = (double) 0;
+        	try {
+        		patientWeight = Double.parseDouble(this.patientWeight.getText());
+        		if (this.patientWeight.getText().length() > 4 || this.patientWeight.getText().isBlank() || this.patientWeight.getText().split(".")[1].length() > 2) {
+        			throw new IllegalArgumentException();
+        		}
+        		this.weightWarning.setText("");
+        	} catch (PatternSyntaxException ex) {
+        		this.weightWarning.setText("");
+        	} catch (Exception ex) {
+        		this.weightWarning.setText("Weight must be at least 1 digit and less than 5, with not more than 2 decimals.");
+        		hasError = true;
+        	}
+        	
+        	int systolicBP = 0;
+        	try {
+        		systolicBP = Integer.parseInt(this.systolicBP.getText());
+        		if (this.systolicBP.getText().isBlank()) {
+        			throw new IllegalArgumentException();
+        		}
+        		this.systolicBPWarning.setText("");
+        	} catch (Exception ex) {
+        		hasError = true;
+        		this.systolicBPWarning.setText("Systolic BP should be at least 1 digit");
+        	}
+        	
+        	int diastolicBP = 0;
+        	try {
+        		diastolicBP = Integer.parseInt(this.diastolicBP.getText());
+        		if (this.diastolicBP.getText().isBlank()) {
+        			throw new IllegalArgumentException();
+        		}
+        		this.diastolicBPWarning.setText("");
+        	} catch (Exception ex) {
+        		hasError = true;
+        		this.diastolicBPWarning.setText("Diastolic BP should be at least 1 digit ");
+        	}
             
-            this.routinCheckupDB.addRoutineCheckup(checkup);
+        	int bodyTemperature = 0;
+        	try {
+        		bodyTemperature = Integer.parseInt(this.bodyTemperature.getText());
+        		if (this.bodyTemperature.getText().isBlank()) {
+        			throw new IllegalArgumentException();
+        		}
+        		this.bodyTemperatureWarning.setText("");
+        	} catch (Exception ex) {
+        		hasError = true;
+        		this.bodyTemperatureWarning.setText("Body Temperature should be at least 1 digit ");
+        	}
+            
+        	int pulse = 0;
+        	try {
+        		pulse = Integer.parseInt(this.pulse.getText());
+        		if (this.pulse.getText().isBlank()) {
+        			throw new IllegalArgumentException();
+        		}
+        		this.pulseWarning.setText("");
+        	} catch (Exception ex) {
+        		hasError = true;
+        		this.pulseWarning.setText("Pulse should be at least 1 digit");
+        	}
+            
+            String symptoms = this.symptoms.getText();
+    		if (symptoms.isBlank()) {
+    			hasError = true;
+    			this.symptomsWarning.setText("Symptoms should not be empty.");
+    		} else {
+    			this.symptomsWarning.setText("");
+    		}
+    		
+            String initialDiagnosis = this.initialDiagnosis.getText();
+    		if (initialDiagnosis.isBlank()) {
+    			hasError = true;
+    			this.initialDiagnosisWarning.setText("Initial diagnosis should not be empty.");
+    		} else {
+    			this.initialDiagnosisWarning.setText("");
+    		}
 
-            Alert alert = new Alert(AlertType.INFORMATION);
-            alert.setTitle("Checkup Submitted");
-            alert.setHeaderText(null);
-            alert.setContentText("Routine Checkup submitted successfully");
-            alert.showAndWait();
-
+            if (!hasError) {
+	            RoutineCheckup checkup = new RoutineCheckup(this.appointmentTime, this.doctorId, UserLogin.getSessionUser().getId(),
+	            		patientHeight, patientWeight, systolicBP, diastolicBP,
+	                    bodyTemperature, pulse, symptoms, initialDiagnosis);
+	            
+	            this.routinCheckupDB.addRoutineCheckup(checkup);
+	
+	            Alert alert = new Alert(AlertType.INFORMATION);
+	            alert.setTitle("Checkup Submitted");
+	            alert.setHeaderText(null);
+	            alert.setContentText("Routine Checkup submitted successfully");
+	            alert.showAndWait();
+            }
         } catch (Exception e) {
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("Input Error");

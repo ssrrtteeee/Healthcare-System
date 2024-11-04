@@ -7,6 +7,12 @@ import java.sql.Timestamp;
 
 import edu.westga.cs3230.healthcare_system.model.RoutineCheckup;
 
+/**
+ * Class used to send and get routine checkup for appointments from the DB.
+ * 
+ * @author Stefan
+ * @version Fall 2024
+ */
 public class RoutineCheckupDAL {
 
 	public void addRoutineCheckup(RoutineCheckup routineCheckup) throws Exception{
