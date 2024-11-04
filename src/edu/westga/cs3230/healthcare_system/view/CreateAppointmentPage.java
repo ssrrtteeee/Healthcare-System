@@ -3,6 +3,7 @@ package edu.westga.cs3230.healthcare_system.view;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 
 import edu.westga.cs3230.healthcare_system.Main;
@@ -25,12 +26,15 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 /**
  * The codebehind for the create appointment page.
@@ -77,6 +81,33 @@ public class CreateAppointmentPage {
     @FXML
     void initialize() {
         this.currentUserLabel.setText(UserLogin.getUserlabel());
+        this.appointmentTime.setCellFactory(new Callback<ListView<LocalTime>, ListCell<LocalTime>>() {
+			@Override
+			public ListCell<LocalTime> call(ListView<LocalTime> timeSlotsListView) {
+				return new ListCell<LocalTime>() {
+					@Override
+					protected void updateItem(LocalTime item, boolean empty) {
+						super.updateItem(item, empty);
+						if (item == null || empty) {
+							setText("No available time slots.");
+						} else {
+							setText(DateTimeFormatter.ofPattern("hh:mm a").format(item));
+						}
+					}
+				};
+			};
+		});
+		this.appointmentTime.setButtonCell(new ListCell<LocalTime>() {
+			@Override
+			protected void updateItem(LocalTime item, boolean empty) {
+				super.updateItem(item, empty);
+				if (item == null || empty) {
+					setText("Please select a time.");
+				} else {
+					setText(DateTimeFormatter.ofPattern("hh:mm a").format(item));
+				}
+			}
+		});
     }
     
     @FXML
