@@ -9,6 +9,7 @@ import edu.westga.cs3230.healthcare_system.dal.AppointmentDAL;
 import edu.westga.cs3230.healthcare_system.dal.DoctorDAL;
 import edu.westga.cs3230.healthcare_system.model.Appointment;
 import edu.westga.cs3230.healthcare_system.model.Doctor;
+import edu.westga.cs3230.healthcare_system.model.Patient;
 import javafx.beans.property.StringProperty;
 
 /**
@@ -30,6 +31,7 @@ public class CreateAppointmentPageViewModel {
 //	private StringProperty appointmentReasonProperty;
 
 	private int patientId;
+	private Patient patient;
 	private Doctor doctor;
 	private DoctorDAL doctorDB;
 	private AppointmentDAL appointmentDB;
@@ -136,10 +138,19 @@ public class CreateAppointmentPageViewModel {
 	}
 	
 	/**
-	 * Sets the patient id.
-	 * @param patientId the patient id
+	 * Gets the patient the appointment is for.
+	 * @return the patient the appointment is for
 	 */
-	public void setPatientId(int patientId) {
-		this.patientId = patientId;
+	public Patient getPatient() {
+		return this.patient;
+	}
+	
+	/**
+	 * Sets the patient.
+	 * @param patient the patient
+	 */
+	public void setPatient(Patient patient) {
+		this.patient = patient;
+		this.patientId = patient.getId();
 	}
 }

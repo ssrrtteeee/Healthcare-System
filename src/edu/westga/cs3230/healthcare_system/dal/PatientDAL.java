@@ -7,6 +7,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.HashSet;
 
 import edu.westga.cs3230.healthcare_system.model.Patient;
 
@@ -85,7 +87,6 @@ public class PatientDAL {
 		try (Connection con = DriverManager.getConnection(DBAccessor.getConnectionString()); 
 				PreparedStatement stmt = con.prepareStatement(query);
 		) {
-			//rs.next();
 			stmt.setString(1, firstName);
 			stmt.setString(2, lastName);
 			stmt.setDate(3, Date.valueOf(dateOfBirth));
@@ -155,5 +156,91 @@ public class PatientDAL {
             System.err.println(e.getMessage());
             return false;
         }
+	}
+
+
+	public Collection<Patient> retrievePatient(String firstName, String lastName) {
+		if (firstName == null) {
+			throw new IllegalArgumentException(NULL_FIRST_NAME);
+		}
+		if (lastName == null) {
+			throw new IllegalArgumentException(NULL_LAST_NAME);
+		}
+		
+		String query =
+				"SELECT f_name, l_name, city, address, zip_code, phone_number, gender, state, dob, is_active, id "
+			  + "FROM patient "
+			  + "WHERE f_name = ? AND l_name = ?";
+		try (Connection con = DriverManager.getConnection(DBAccessor.getConnectionString()); 
+				PreparedStatement stmt = con.prepareStatement(query);
+		) {
+			stmt.setString(1, firstName);
+			stmt.setString(2, lastName);
+			ResultSet rs = stmt.executeQuery();
+
+			Collection<Patient> result = new HashSet<Patient>(); 
+			
+			while (rs.next()) {
+				String fName = rs.getString(1);
+				String lName = rs.getString(2);
+				String city = rs.getString(3);
+				String address = rs.getString(4);
+				String zipCode = rs.getString(5);
+				String phoneNumber = rs.getString(6);
+				String gender = rs.getString(7);
+				String state = rs.getString(8);
+				LocalDate dob = rs.getDate(9).toLocalDate();
+				boolean isActive = rs.getBoolean(10);
+				int id = rs.getInt(11);
+				
+				result.add(new Patient(fName, lName, city, address, zipCode, phoneNumber, gender, state, dob, isActive, id));
+			}
+
+			return result;
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return null;
+	    }
+	}
+	
+	public Collection<Patient> retrievePatient(LocalDate dateOfBirth) {
+		if (dateOfBirth == null) {
+			throw new IllegalArgumentException(NULL_DATE_OF_BIRTH);
+		}
+		
+		String query =
+				"SELECT f_name, l_name, city, address, zip_code, phone_number, gender, state, dob, is_active, id "
+			  + "FROM patient "
+			  + "WHERE dob = ?";
+		try (Connection con = DriverManager.getConnection(DBAccessor.getConnectionString()); 
+				PreparedStatement stmt = con.prepareStatement(query);
+		) {
+			stmt.setDate(1, Date.valueOf(dateOfBirth));
+			ResultSet rs = stmt.executeQuery();
+
+			Collection<Patient> result = new HashSet<Patient>(); 
+			
+			while (rs.next()) {
+				String fName = rs.getString(1);
+				String lName = rs.getString(2);
+				String city = rs.getString(3);
+				String address = rs.getString(4);
+				String zipCode = rs.getString(5);
+				String phoneNumber = rs.getString(6);
+				String gender = rs.getString(7);
+				String state = rs.getString(8);
+				LocalDate dob = rs.getDate(9).toLocalDate();
+				boolean isActive = rs.getBoolean(10);
+				int id = rs.getInt(11);
+				
+				System.out.println(id);
+				result.add(new Patient(fName, lName, city, address, zipCode, phoneNumber, gender, state, dob, isActive, id));
+			}
+
+			return result;
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return null;
+	    }
 	}
 }

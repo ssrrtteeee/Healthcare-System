@@ -33,7 +33,8 @@ public class LoginPageViewModel {
 	 * 
 	 * @param username the username for the user
 	 * @param password the password for the user
-	 * @throws IllegalArgumentException
+	 * @return true if successful
+	 * @throws IllegalArgumentException if login was unsuccessful
 	 */
 	public boolean login(String username, String password) throws IllegalArgumentException {
 		if (!this.userLogin.login(username, password)) {
@@ -43,6 +44,13 @@ public class LoginPageViewModel {
 		}
 	}
 	
+	/**
+	 * Gets the details of the user with the specified information.
+	 * 
+	 * @param username
+	 * @param password
+	 * @return the nurse with the specified account information
+	 */
 	public Nurse getUserDetails(String username, String password) {
 		return this.userLogin.getUserInformation(username, password);
 	}

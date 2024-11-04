@@ -7,6 +7,7 @@ import java.util.Collection;
 
 import edu.westga.cs3230.healthcare_system.Main;
 import edu.westga.cs3230.healthcare_system.model.Doctor;
+import edu.westga.cs3230.healthcare_system.model.Patient;
 import edu.westga.cs3230.healthcare_system.model.UserLogin;
 import edu.westga.cs3230.healthcare_system.view_model.CreateAppointmentPageViewModel;
 import javafx.event.ActionEvent;
@@ -161,7 +162,7 @@ public class CreateAppointmentPage {
 	    		dialog = new Alert(Alert.AlertType.INFORMATION);
 	    		dialog.setTitle("Success");
 	    		dialog.setHeaderText("Updated patient successfully.");
-	    		this.backToHomePage();
+	    		this.backToViewPatient();
 			} else {
 	    		dialog = new Alert(Alert.AlertType.ERROR);
 	    		dialog.setTitle("Error");
@@ -245,9 +246,9 @@ public class CreateAppointmentPage {
 	}
 
 	@FXML
-    void backToHomePage() {
+    void backToViewPatient() {
 		FXMLLoader loader = new FXMLLoader();
-    	loader.setLocation(Main.class.getResource(Main.HOME_PAGE));
+    	loader.setLocation(Main.class.getResource(Main.VIEW_PATIENT_INFO_PAGE));
     	try {
 			loader.load();
 		} catch (IOException e) {
@@ -259,6 +260,9 @@ public class CreateAppointmentPage {
     	addTodoStage.setTitle(Main.TITLE);
     	addTodoStage.setScene(scene);
     	addTodoStage.initModality(Modality.APPLICATION_MODAL);
+    	
+    	ViewPatientInfoPage page = loader.getController();
+    	page.setPatient(this.viewmodel.getPatient());
     	    	
     	addTodoStage.show();
     	
@@ -267,13 +271,10 @@ public class CreateAppointmentPage {
     }
     
 	/**
-     * Sets the patient.
-     * 
-     * @precondition patient != null
-     * @postcondition true
-     * @param patientId the patients id
-     */
-    public void setPatient(int patientId) {
-    	this.viewmodel.setPatientId(patientId);
+	 * Sets the patient.
+	 * @param patient the patient
+	 */
+    public void setPatient(Patient patient) {
+    	this.viewmodel.setPatient(patient);
     }
 }

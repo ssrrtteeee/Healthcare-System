@@ -60,7 +60,9 @@ public class UserLogin {
      * @return the string to be displayed with the user information
      */
     public static String getUserlabel() {
-    	return "Username: " + currentSessionUser.getUsername() + ", Full Name: " + currentSessionUser.getFirstName() + " " + currentSessionUser.getLastName() + ", ID: " + currentSessionUser.getId();
+    	return "Username: " + currentSessionUser.getUsername() + System.lineSeparator()
+    		 + "Full Name: " + currentSessionUser.getFirstName() + " " + currentSessionUser.getLastName() + System.lineSeparator()
+    		 + "ID: " + currentSessionUser.getId();
     }
 
 	
