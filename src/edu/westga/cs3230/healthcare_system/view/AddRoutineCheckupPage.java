@@ -2,10 +2,10 @@ package edu.westga.cs3230.healthcare_system.view;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.regex.PatternSyntaxException;
 
 import edu.westga.cs3230.healthcare_system.Main;
 import edu.westga.cs3230.healthcare_system.dal.RoutineCheckupDAL;
+import edu.westga.cs3230.healthcare_system.model.Patient;
 import edu.westga.cs3230.healthcare_system.model.RoutineCheckup;
 import edu.westga.cs3230.healthcare_system.model.UserLogin;
 import javafx.fxml.FXML;
@@ -45,6 +45,7 @@ public class AddRoutineCheckupPage {
     private LocalDateTime appointmentTime;
     private int doctorId;
     private RoutineCheckupDAL routinCheckupDB;
+    private Patient patient;
     
     @FXML
     void initialize() {
@@ -59,6 +60,10 @@ public class AddRoutineCheckupPage {
     	this.doctorId = doctorId;
     }
     
+    public void setPatient(Patient patient) {
+    	this.patient = patient;
+    }
+    
     public AddRoutineCheckupPage() {
     	this.routinCheckupDB = new RoutineCheckupDAL();
     }
@@ -68,30 +73,58 @@ public class AddRoutineCheckupPage {
     	boolean hasError = false;
         try {
         	Double patientHeight = (double) 0;
+        	boolean heightFieldHasError = false;
         	try {
-        		patientHeight = Double.parseDouble(this.patientHeight.getText());
-        		if (this.patientHeight.getText().length() > 4 || this.patientHeight.getText().isBlank() || this.patientHeight.getText().split(".")[1].length() > 2) {
-        			throw new IllegalArgumentException();
+        		String patientHeightString = this.patientHeight.getText();
+        		patientHeight = Double.parseDouble(patientHeightString);
+        		if (patientHeightString.isBlank()) {
+        			heightFieldHasError = true;
         		}
-        		this.heightWarning.setText("");
-        	} catch (PatternSyntaxException ex) {
-        		this.heightWarning.setText("");
+        		if (patientHeightString.contains(".")) {
+        			String[] splitDecimal = patientHeightString.split("\\.");
+        			if (splitDecimal[1] != null && ((splitDecimal[0].length() + splitDecimal[1].length()) > 4 || splitDecimal[1].length() > 2)) {
+        				heightFieldHasError = true;
+        			}
+        		} else {
+        			if (patientHeightString.length() > 3) {
+        				heightFieldHasError = true;
+        			}
+        		}
         	} catch (Exception ex) {
-        		this.heightWarning.setText("Must be 1 digit and less than 5, with not more than 2 decimals.");
+        		heightFieldHasError = true;
+        	}
+        	if (!heightFieldHasError) {
+        		this.heightWarning.setText("");
+        	} else {
+				this.heightWarning.setText("Must be 1 digit and less than 4, with not more than 2 decimals.");
         		hasError = true;
         	}
         	
         	Double patientWeight = (double) 0;
+        	boolean weightFieldHasError = false;
         	try {
-        		patientWeight = Double.parseDouble(this.patientWeight.getText());
-        		if (this.patientWeight.getText().length() > 4 || this.patientWeight.getText().isBlank() || this.patientWeight.getText().split(".")[1].length() > 2) {
-        			throw new IllegalArgumentException();
+        		String patientWeightString = this.patientWeight.getText();
+        		patientWeight = Double.parseDouble(patientWeightString);
+        		if (patientWeightString.isBlank()) {
+        			weightFieldHasError = true;
         		}
-        		this.weightWarning.setText("");
-        	} catch (PatternSyntaxException ex) {
-        		this.weightWarning.setText("");
+        		if (patientWeightString.contains(".")) {
+        			String[] splitDecimal = patientWeightString.split("\\.");
+        			if ((splitDecimal[0].length() + splitDecimal[1].length()) > 4 || splitDecimal[1].length() > 2) {
+        				weightFieldHasError = true;
+        			}
+        		} else {
+        			if (patientWeightString.length() > 3) {
+        				weightFieldHasError = true;
+        			}
+        		}
         	} catch (Exception ex) {
-        		this.weightWarning.setText("Weight must be at least 1 digit and less than 5, with not more than 2 decimals.");
+        		weightFieldHasError = true;
+        	}
+        	if (!weightFieldHasError) {
+        		this.weightWarning.setText("");
+        	} else {
+				this.weightWarning.setText("Must be 1 digit and less than 4, with not more than 2 decimals.");
         		hasError = true;
         	}
         	
@@ -165,6 +198,7 @@ public class AddRoutineCheckupPage {
 	                    bodyTemperature, pulse, symptoms, initialDiagnosis);
 	            
 	            this.routinCheckupDB.addRoutineCheckup(checkup);
+	            this.goBack();
 	
 	            Alert alert = new Alert(AlertType.INFORMATION);
 	            alert.setTitle("Checkup Submitted");
@@ -184,7 +218,7 @@ public class AddRoutineCheckupPage {
     @FXML
     private void goBack() {
     	FXMLLoader loader = new FXMLLoader();
-    	loader.setLocation(Main.class.getResource(Main.HOME_PAGE));
+    	loader.setLocation(Main.class.getResource(Main.VIEW_PATIENT_INFO_PAGE));
     	try {
 			loader.load();
 		} catch (IOException e) {
@@ -196,6 +230,9 @@ public class AddRoutineCheckupPage {
     	addTodoStage.setTitle(Main.TITLE);
     	addTodoStage.setScene(scene);
     	addTodoStage.initModality(Modality.APPLICATION_MODAL);
+    	
+    	ViewPatientInfoPage page = loader.getController();
+    	page.setPatient(this.patient);
     	    	
     	addTodoStage.show();
     	

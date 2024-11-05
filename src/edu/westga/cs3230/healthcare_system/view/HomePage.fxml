@@ -24,7 +24,6 @@
             <Button mnemonicParsing="false" onAction="#registerPatient" text="Register New Patient" />
             <Button mnemonicParsing="false" onAction="#viewPatientInfo" text="View Patient Info" />
             <Button mnemonicParsing="false" onAction="#editPatient" text="Edit Existing Patient" />
-            <Button fx:id="loadNewPage" mnemonicParsing="false" onAction="#loadNewPage" text="Routine Checkup" />
          </children>
       </VBox>
    </children>

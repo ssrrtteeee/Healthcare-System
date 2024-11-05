@@ -54,28 +54,6 @@ public class HomePage {
     }
     
     @FXML
-    void loadNewPage(ActionEvent event) throws IOException {
-		FXMLLoader loader = new FXMLLoader();
-    	loader.setLocation(Main.class.getResource(Main.ADD_ROUTINE_CHECKUP_PAGE));
-    	loader.load();
-    	Parent parent = loader.getRoot();
-    	Scene scene = new Scene(parent);
-    	Stage addTodoStage = new Stage();
-    	addTodoStage.setTitle(Main.TITLE);
-    	addTodoStage.setScene(scene);
-    	addTodoStage.initModality(Modality.APPLICATION_MODAL);
-    	
-    	AddRoutineCheckupPage page = loader.getController();
-    	page.setDoctor(1);
-    	page.setAppointmentTime(LocalDate.of(2024, Month.NOVEMBER, 12).atTime(0, 40));
-    	    	
-    	addTodoStage.show();
-    	
-    	Stage stage = (Stage) this.currentUserLabel.getScene().getWindow();
-    	stage.close();
-    }
-    
-    @FXML
     void logout(ActionEvent event) throws IOException {
 		FXMLLoader loader = new FXMLLoader();
     	loader.setLocation(Main.class.getResource(Main.LOGIN_PAGE_FXML));

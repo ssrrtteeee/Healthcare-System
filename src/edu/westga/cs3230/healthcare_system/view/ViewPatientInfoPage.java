@@ -1,6 +1,8 @@
 package edu.westga.cs3230.healthcare_system.view;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 
 import edu.westga.cs3230.healthcare_system.Main;
@@ -44,6 +46,7 @@ public class ViewPatientInfoPage {
     @FXML private CheckBox isActive;
     @FXML private ListView<Pair<String, Appointment>> appointments;
     @FXML private Button editAppointmentButton;
+    @FXML private Button addRoutineCheckupButton;
     
     private ViewPatientInfoPageViewModel viewmodel;
     
@@ -105,6 +108,7 @@ public class ViewPatientInfoPage {
 		
 		this.viewmodel.getSelectedAppointmentProperty().addListener((unused, oldVal, newVal) -> {
 			this.editAppointmentButton.disableProperty().set(newVal == null);
+			this.addRoutineCheckupButton.disableProperty().set(newVal == null);
 		});
 	}
 	
@@ -132,6 +136,34 @@ public class ViewPatientInfoPage {
     	Stage stage = (Stage) this.currentUserLabel.getScene().getWindow();
     	stage.close();
     }
+	
+	@FXML
+	void addRoutineCheckup() {
+		FXMLLoader loader = new FXMLLoader();
+    	loader.setLocation(Main.class.getResource(Main.ADD_ROUTINE_CHECKUP_PAGE));
+    	try {
+			loader.load();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	
+    	AddRoutineCheckupPage page = loader.getController();
+    	page.setDoctor(this.appointments.getSelectionModel().getSelectedItem().getValue().getDoctorId());
+    	page.setAppointmentTime(this.appointments.getSelectionModel().getSelectedItem().getValue().getAppointmentTime());
+    	page.setPatient(this.viewmodel.getPatient());
+    	
+    	Parent parent = loader.getRoot();
+    	Scene scene = new Scene(parent);
+    	Stage addTodoStage = new Stage();
+    	addTodoStage.setTitle(Main.TITLE);
+    	addTodoStage.setScene(scene);
+    	addTodoStage.initModality(Modality.APPLICATION_MODAL);
+    	        	
+    	addTodoStage.show();
+    	
+    	Stage stage = (Stage) this.currentUserLabel.getScene().getWindow();
+    	stage.close();
+	}
 
 	@FXML
 	void editAppointment() throws IOException {
