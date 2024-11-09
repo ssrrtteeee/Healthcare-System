@@ -233,6 +233,11 @@ public class HomePage {
 	}
 
 	private Patient showPatientsList(Collection<Patient> patients) {
+		if (patients.size() == 1) {
+			for (Patient currPatient : patients) {
+				return currPatient;
+			}
+		}
 		Dialog<Patient> dialog = new Dialog<Patient>();
 	    dialog.setTitle("Select patient");
 	    dialog.setResizable(false);

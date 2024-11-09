@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+import javax.swing.text.DateFormatter;
+
 import edu.westga.cs3230.healthcare_system.Main;
 import edu.westga.cs3230.healthcare_system.model.Appointment;
 import edu.westga.cs3230.healthcare_system.model.Patient;
@@ -63,6 +65,7 @@ public class EditAppointmentPage {
     @FXML private Label appointmentReasonErrMsg;
     
     @FXML private Label currentUserLabel;
+    @FXML private Label patientInfoLabel;
     
     private EditAppointmentPageViewModel viewmodel;
         
@@ -258,6 +261,8 @@ public class EditAppointmentPage {
 	 */
     public void setPatient(Patient patient) {
     	this.viewmodel.setPatient(patient);
+    	this.patientInfoLabel.setText(patient.getFirstName() + " " + patient.getLastName() + ", "
+    			+ DateTimeFormatter.ofPattern("MM-dd-yyyy").format(patient.getDateOfBirth()));
     }
 
     public void setAppointment(Appointment appointment) {

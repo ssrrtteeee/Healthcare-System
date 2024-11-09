@@ -1,17 +1,14 @@
 package edu.westga.cs3230.healthcare_system.dal;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.time.LocalDate;
 import java.util.Collection;
 import java.util.LinkedList;
 
 import edu.westga.cs3230.healthcare_system.model.Doctor;
-//import edu.westga.cs3230.healthcare_system.resources.ErrMsgs;
-import edu.westga.cs3230.healthcare_system.model.Patient;
+import edu.westga.cs3230.healthcare_system.resources.ErrMsgs;
 
 /**
  * The data access object for the Doctor class.
@@ -100,7 +97,7 @@ public class DoctorDAL {
 	/**
 	 * Retrieves the doctor with the specified first name and last name
 	 * 
-	 * @precondition firstName != null && lastName != null
+	 * @precondition firstName != null && lastName != null && !firstName.isBlank() && !lastName.isBlank()
 	 * @postcondition true
 	 * @param firstName the first name of the desired patient
 	 * @param lastName the patient's last name
@@ -108,12 +105,18 @@ public class DoctorDAL {
 	 */
 	public Doctor retrieveDoctor(String firstName, String lastName) {
 		if (firstName == null) {
-			throw new IllegalArgumentException(PatientDAL.NULL_FIRST_NAME);
+			throw new IllegalArgumentException(ErrMsgs.NULL_FNAME);
 		}
 		if (lastName == null) {
-			throw new IllegalArgumentException(PatientDAL.NULL_LAST_NAME);
+			throw new IllegalArgumentException(ErrMsgs.NULL_LNAME);
 		}
-		
+		if (firstName.isBlank()) {
+			throw new IllegalArgumentException(ErrMsgs.BLANK_FNAME);
+		}
+		if (lastName.isBlank()) {
+			throw new IllegalArgumentException(ErrMsgs.BLANK_LNAME);
+		}
+
 		String query =
 				"SELECT f_name, l_name, id "
 			  + "FROM doctor "
@@ -140,7 +143,7 @@ public class DoctorDAL {
 	/**
 	 * Retrieves the doctor with the specified id
 	 * 
-	 * @precondition firstName != null && lastName != null
+	 * @precondition true
 	 * @postcondition true
 	 * @param did the id
 	 * @return the doctor, or null if none could be found.

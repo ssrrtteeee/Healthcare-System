@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import edu.westga.cs3230.healthcare_system.model.Patient;
+import edu.westga.cs3230.healthcare_system.resources.ErrMsgs;
 
 /**
  * Represents the Patient class database access layer
@@ -19,14 +20,12 @@ import edu.westga.cs3230.healthcare_system.model.Patient;
  * @version Fall 2024
  */
 public class PatientDAL {
-	public static final String NULL_FIRST_NAME = "First name cannot be null.";
-	public static final String NULL_LAST_NAME = "Last name cannot be null.";
-	public static final String NULL_DATE_OF_BIRTH = "DoB cannot be null.";
-
 	/**
 	 * Adds a new patient to the database with the given information.
 	 * 
 	 * @author Stefan
+	 * @precondition patient != null
+	 * @postcondition true
 	 * @param patient the patient to be added
 	 * @throws IllegalArgumentException
 	 */
@@ -61,7 +60,8 @@ public class PatientDAL {
 	/**
 	 * Retrieves the patient with the specified first name, last name, and date of birth
 	 * 
-	 * @precondition firstName != null && lastName != null && dateOfBirth != null
+	 * @precondition firstName != null && lastName != null && dateOfBirth != null &&
+	 * 				 !firstName.isBlank() && !lastName.isBlank() && !dateOfBirth.isAfter(LocalDate.now())
 	 * @postcondition true
 	 * @param firstName the first name of the desired patient
 	 * @param lastName the patient's last name
@@ -70,15 +70,24 @@ public class PatientDAL {
 	 */
 	public Patient retrievePatient(String firstName, String lastName, LocalDate dateOfBirth) {
 		if (firstName == null) {
-			throw new IllegalArgumentException(NULL_FIRST_NAME);
+			throw new IllegalArgumentException(ErrMsgs.NULL_FNAME);
 		}
 		if (lastName == null) {
-			throw new IllegalArgumentException(NULL_LAST_NAME);
+			throw new IllegalArgumentException(ErrMsgs.NULL_LNAME);
 		}
 		if (dateOfBirth == null) {
-			throw new IllegalArgumentException(NULL_DATE_OF_BIRTH);
+			throw new IllegalArgumentException(ErrMsgs.NULL_DOB);
 		}
-		
+		if (firstName.isBlank()) {
+			throw new IllegalArgumentException(ErrMsgs.BLANK_FNAME);
+		}
+		if (lastName.isBlank()) {
+			throw new IllegalArgumentException(ErrMsgs.BLANK_LNAME);
+		}
+		if (dateOfBirth.isAfter(LocalDate.now())) {
+			throw new IllegalArgumentException(ErrMsgs.FUTURE_DOB);
+		}
+
 		String query =
 				"SELECT f_name, l_name, city, address, zip_code, phone_number, gender, state, dob, is_active, id "
 			  + "FROM patient "
@@ -104,7 +113,6 @@ public class PatientDAL {
 			LocalDate dob = rs.getDate(9).toLocalDate();
 			boolean isActive = rs.getBoolean(10);
 			int id = rs.getInt(11);
-
 			
 			return new Patient(fName, lName, city, address, zipCode, phoneNumber, gender, state, dob, isActive, id);
 		} catch (Exception e) {
@@ -120,12 +128,13 @@ public class PatientDAL {
 	 * @postcondition true
 	 * @param id the id
 	 * @param patient the patient
-	 * @return false if some error occurs.
+	 * @return false if some error occurs, or true otherwise.
 	 */
 	public boolean updatePatient(int id, Patient patient) {
 		if (patient == null) {
-			throw new IllegalArgumentException("Patient cannot be null.");
+			throw new IllegalArgumentException(ErrMsgs.NULL_PATIENT);
 		}
+		
 		String query =
 			  "UPDATE patient "
 			+ "SET f_name = ?, l_name = ?, gender = ?, dob = ?,"
@@ -157,13 +166,27 @@ public class PatientDAL {
         }
 	}
 
-
+	/**
+	 * Gets a collection of all patients having the specified first and last name.
+	 * 
+	 * @precondition firstName != null && lastName != null && !firstName.isBlank() && !lastName.isBlank()
+	 * @postcondition true
+	 * @param firstName the patients' first name
+	 * @param lastName the patients' last name
+	 * @return the collection of patients, or null if an error occurs.
+	 */
 	public Collection<Patient> retrievePatients(String firstName, String lastName) {
 		if (firstName == null) {
-			throw new IllegalArgumentException(NULL_FIRST_NAME);
+			throw new IllegalArgumentException(ErrMsgs.NULL_FNAME);
 		}
 		if (lastName == null) {
-			throw new IllegalArgumentException(NULL_LAST_NAME);
+			throw new IllegalArgumentException(ErrMsgs.NULL_LNAME);
+		}
+		if (firstName.isBlank()) {
+			throw new IllegalArgumentException(ErrMsgs.BLANK_FNAME);
+		}
+		if (lastName.isBlank()) {
+			throw new IllegalArgumentException(ErrMsgs.BLANK_LNAME);
 		}
 		
 		String query =
@@ -202,9 +225,17 @@ public class PatientDAL {
 	    }
 	}
 	
+	/**
+	 * Gets the collection of patients whose date of birth is the specified date.
+	 * 
+	 * @precondition dateOfBirth != null
+	 * @postcondition true
+	 * @param dateOfBirth the date
+	 * @return the collection of patients, or null if an error occurs.
+	 */
 	public Collection<Patient> retrievePatients(LocalDate dateOfBirth) {
 		if (dateOfBirth == null) {
-			throw new IllegalArgumentException(NULL_DATE_OF_BIRTH);
+			throw new IllegalArgumentException(ErrMsgs.NULL_DOB);
 		}
 		
 		String query =

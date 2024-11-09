@@ -43,31 +43,20 @@ import javafx.util.Callback;
  * @version Fall 2024
  */
 public class CreateAppointmentPage {
-    @FXML
-    private Button createAppointment;
+    @FXML private Button createAppointment;
+    @FXML private Button selectDoctor;
+    @FXML private DatePicker appointmentDate;
+    @FXML private ComboBox<LocalTime> appointmentTime;
+    @FXML private TextArea appointmentReason;
+    @FXML private Label doctorName;
     
-    @FXML
-    private Button selectDoctor;
-    @FXML
-    private DatePicker appointmentDate;
-    @FXML
-    private ComboBox<LocalTime> appointmentTime;
-    @FXML
-    private TextArea appointmentReason;
-    @FXML
-    private Label doctorName;
-    
-    @FXML
-    private Label doctorErrMsg;
-    @FXML
-    private Label appointmentDateErrMsg;
-    @FXML
-    private Label appointmentTimeErrMsg;
-    @FXML
-    private Label appointmentReasonErrMsg;
+    @FXML private Label doctorErrMsg;
+    @FXML private Label appointmentDateErrMsg;
+    @FXML private Label appointmentTimeErrMsg;
+    @FXML private Label appointmentReasonErrMsg;
 	
-    @FXML
-    private Label currentUserLabel;
+    @FXML private Label currentUserLabel;
+    @FXML private Label patientInfoLabel;
     
     private CreateAppointmentPageViewModel viewmodel;
         
@@ -307,5 +296,7 @@ public class CreateAppointmentPage {
 	 */
     public void setPatient(Patient patient) {
     	this.viewmodel.setPatient(patient);
+    	this.patientInfoLabel.setText(patient.getFirstName() + " " + patient.getLastName() + ", "
+    			+ DateTimeFormatter.ofPattern("MM-dd-yyyy").format(patient.getDateOfBirth()));
     }
 }

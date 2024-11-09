@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 
 import edu.westga.cs3230.healthcare_system.model.RoutineCheckup;
+import edu.westga.cs3230.healthcare_system.resources.ErrMsgs;
 
 /**
  * Class used to send and get routine checkup for appointments from the DB.
@@ -15,7 +16,19 @@ import edu.westga.cs3230.healthcare_system.model.RoutineCheckup;
  */
 public class RoutineCheckupDAL {
 
-	public void addRoutineCheckup(RoutineCheckup routineCheckup) throws Exception{
+	/**
+	 * Adds the specified routine checkup to the database.
+	 * 
+	 * @precondition routineCheckup != null
+	 * @postcondition true
+	 * @param routineCheckup the routine checkup to add
+	 * @throws Exception
+	 */
+	public void addRoutineCheckup(RoutineCheckup routineCheckup) throws Exception {
+		if (routineCheckup == null) {
+			throw new IllegalArgumentException(ErrMsgs.NULL_ROUTINE_CHECKUP);
+		}
+		
 		String query = "INSERT INTO visit_details (appointment_time, doctor_id, recording_nurse_id, "
                 + "patient_height, patient_weight, systolic_bp, diastolic_bp, "
                 + "body_temperature, pulse, symptoms, initial_diagnosis) "

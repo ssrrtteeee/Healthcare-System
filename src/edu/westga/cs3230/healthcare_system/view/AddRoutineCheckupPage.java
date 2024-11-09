@@ -21,6 +21,9 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+/**
+ * The CodeBehind for the AddRoutineCheckup page
+ */
 public class AddRoutineCheckupPage {
 
     @FXML private Label currentUserLabel;

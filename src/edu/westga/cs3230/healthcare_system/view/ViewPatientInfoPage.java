@@ -1,8 +1,7 @@
 package edu.westga.cs3230.healthcare_system.view;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.Month;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import edu.westga.cs3230.healthcare_system.Main;
@@ -107,7 +106,7 @@ public class ViewPatientInfoPage {
 		this.viewmodel.getSelectedAppointmentProperty().bind(this.appointments.getSelectionModel().selectedItemProperty());
 		
 		this.viewmodel.getSelectedAppointmentProperty().addListener((unused, oldVal, newVal) -> {
-			this.editAppointmentButton.disableProperty().set(newVal == null);
+			this.editAppointmentButton.disableProperty().set(newVal == null || newVal.getValue().getAppointmentTime().isBefore(LocalDateTime.now()));
 			this.addRoutineCheckupButton.disableProperty().set(newVal == null);
 		});
 	}
