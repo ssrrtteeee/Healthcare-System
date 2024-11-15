@@ -25,7 +25,6 @@ public class Patient {
     /**
      * Constructs a patient with the specified information, including unique ID.
      * 
-     * 
      * @precondition firstName != null && lastName != null && city != null && address != null &&
      * 					zipcode != null && phoneNumber != null && gender != null && state != null &&
      * 					dateOfBirth != null &&
