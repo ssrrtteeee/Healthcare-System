@@ -24,12 +24,6 @@ public class CreateAppointmentPageViewModel {
 	private StringProperty appointmentTimeErrorMsgProperty;
 	private StringProperty appointmentReasonErrorMsgProperty;
 	
-//	private StringProperty doctorProperty;
-//	private ObjectProperty<LocalDate> appointmentDateProperty;
-//	private ListProperty<USStates> appointmentTimesProperty;
-//	private ObjectProperty<USStates> appointmentTimeProperty;
-//	private StringProperty appointmentReasonProperty;
-
 	private int patientId;
 	private Patient patient;
 	private Doctor doctor;

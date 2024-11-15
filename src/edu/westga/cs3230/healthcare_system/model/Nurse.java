@@ -25,20 +25,47 @@ public class Nurse {
 		this.id = id;
 	}
 	
+	/**
+	 * Gets the first name
+	 * 
+	 * @precondition true
+	 * @postcondition true
+	 * @return the first name
+	 */
     public String getFirstName() {
-        return firstName;
+        return this.firstName;
     }
 
+    /**
+     * Gets the last name
+	 * 
+	 * @precondition true
+	 * @postcondition true
+     * @return the last name
+     */
     public String getLastName() {
-        return lastName;
+        return this.lastName;
     }
 
+    /**
+     * Gets the username
+	 * 
+	 * @precondition true
+	 * @postcondition true
+     * @return the username
+     */
     public String getUsername() {
-        return username;
+        return this.username;
     }
 
-
+    /**
+     * Gets the ID
+	 * 
+	 * @precondition true
+	 * @postcondition true
+     * @return the ID
+     */
     public int getId() {
-        return id;
+        return this.id;
     }
 }

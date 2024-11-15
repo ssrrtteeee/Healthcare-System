@@ -5,12 +5,11 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-import javax.swing.text.DateFormatter;
-
 import edu.westga.cs3230.healthcare_system.Main;
 import edu.westga.cs3230.healthcare_system.model.Appointment;
 import edu.westga.cs3230.healthcare_system.model.Patient;
 import edu.westga.cs3230.healthcare_system.model.UserLogin;
+import edu.westga.cs3230.healthcare_system.resources.ErrMsgs;
 import edu.westga.cs3230.healthcare_system.view_model.EditAppointmentPageViewModel;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -257,17 +256,30 @@ public class EditAppointmentPage {
     
 	/**
 	 * Sets the patient.
+     * 
+     * @precondition patient != null
+	 * @postcondition true
 	 * @param patient the patient
 	 */
     public void setPatient(Patient patient) {
+    	if (patient == null) {
+    		throw new IllegalArgumentException(ErrMsgs.NULL_PATIENT);
+    	}
     	this.viewmodel.setPatient(patient);
     	this.patientInfoLabel.setText(patient.getFirstName() + " " + patient.getLastName() + ", "
     			+ DateTimeFormatter.ofPattern("MM-dd-yyyy").format(patient.getDateOfBirth()));
     }
 
+    /**
+     * Sets the appointment
+     * 
+     * @precondition appointment != null
+	 * @postcondition true
+     * @param appointment the appointment
+     */
     public void setAppointment(Appointment appointment) {
     	if (appointment == null) {
-    		throw new IllegalArgumentException("Appointment cannot be null.");
+    		throw new IllegalArgumentException(ErrMsgs.NULL_APPOINTMENT);
     	}
     	this.viewmodel.setOldAppointment(appointment);
     	this.newTime.getSelectionModel().select(appointment.getAppointmentTime().toLocalTime());

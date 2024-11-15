@@ -2,6 +2,8 @@ package edu.westga.cs3230.healthcare_system.model;
 
 import java.time.LocalDateTime;
 
+import edu.westga.cs3230.healthcare_system.resources.ErrMsgs;
+
 /**
  * Represents an appointment.
  * 
@@ -25,6 +27,12 @@ public class Appointment {
 	 * @param reason the reason for the appointment
 	 */
 	public Appointment(LocalDateTime appointmentTime, int doctorId, int patientId, String reason) {
+		if (appointmentTime == null) {
+			throw new IllegalArgumentException(ErrMsgs.NULL_APMT_TIME);
+		}
+		if (reason == null) {
+			throw new IllegalArgumentException(ErrMsgs.NULL_APMT_REASON);
+		}
 		this.appointmentTime = appointmentTime;
 		this.doctorId = doctorId;
 		this.patientId = patientId;
@@ -32,6 +40,10 @@ public class Appointment {
 	}
 
 	/**
+	 * Gets the time.
+	 * 
+	 * @precondition true
+	 * @postcondition true
 	 * @return the appointmentTime
 	 */
 	public LocalDateTime getAppointmentTime() {
@@ -39,6 +51,10 @@ public class Appointment {
 	}
 
 	/**
+	 * Gets the doctor ID
+	 * 
+	 * @precondition true
+	 * @postcondition true
 	 * @return the doctorId
 	 */
 	public int getDoctorId() {
@@ -46,6 +62,10 @@ public class Appointment {
 	}
 
 	/**
+	 * Gets the patient ID
+	 * 
+	 * @precondition true
+	 * @postcondition true
 	 * @return the patientId
 	 */
 	public int getPatientId() {
@@ -53,6 +73,10 @@ public class Appointment {
 	}
 
 	/**
+	 * Gets the reason
+	 * 
+	 * @precondition true
+	 * @postcondition true
 	 * @return the reason
 	 */
 	public String getReason() {

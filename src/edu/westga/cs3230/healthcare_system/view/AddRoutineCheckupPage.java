@@ -8,6 +8,7 @@ import edu.westga.cs3230.healthcare_system.dal.RoutineCheckupDAL;
 import edu.westga.cs3230.healthcare_system.model.Patient;
 import edu.westga.cs3230.healthcare_system.model.RoutineCheckup;
 import edu.westga.cs3230.healthcare_system.model.UserLogin;
+import edu.westga.cs3230.healthcare_system.resources.ErrMsgs;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -23,6 +24,9 @@ import javafx.stage.Stage;
 
 /**
  * The CodeBehind for the AddRoutineCheckup page
+ * 
+ * @author Stefan
+ * @version Spring 2024
  */
 public class AddRoutineCheckupPage {
 
@@ -55,22 +59,45 @@ public class AddRoutineCheckupPage {
         this.currentUserLabel.setText(UserLogin.getUserlabel());
     }
     
+    /**
+     * Sets the appointment date and time to the specified value.
+     * 
+     * @precondition time != null
+     * @postcondition true
+     * @param time the time
+     */
     public void setAppointmentTime(LocalDateTime time) {
+    	if (time == null) {
+    		throw new IllegalArgumentException(ErrMsgs.NULL_APMT_TIME);
+    	}
     	this.appointmentTime = time;
     }
     
+    /**
+     * Sets the doctor to the one with the specified ID
+     * 
+     * @precondition true
+	 * @postcondition true
+     * @param doctorId the ID
+     */
     public void setDoctor(int doctorId) {
     	this.doctorId = doctorId;
     }
     
+    /**
+     * Sets the patient to the specified value
+     * 
+     * @precondition patient != null
+	 * @postcondition true
+     * @param patient the patient
+     */
     public void setPatient(Patient patient) {
+    	if (patient == null) {
+    		throw new IllegalArgumentException(ErrMsgs.NULL_PATIENT);
+    	}
     	this.patient = patient;
     }
-    
-    public AddRoutineCheckupPage() {
-    	this.routinCheckupDB = new RoutineCheckupDAL();
-    }
-    
+        
     @FXML
     void handleSubmit() {
     	boolean hasError = false;

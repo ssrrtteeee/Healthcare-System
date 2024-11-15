@@ -44,7 +44,7 @@ public class AppointmentDAL {
 	 */
 	public Collection<LocalTime> getOpenTimeSlots(LocalDate day, int did, int pid) {
 		if (day == null) {
-			throw new IllegalArgumentException("Day cannot be null.");
+			throw new IllegalArgumentException(ErrMsgs.NULL_DAY);
 		}
 		
 		String query =

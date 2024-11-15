@@ -60,7 +60,7 @@ public class DoctorDAL {
 	 */
 	public Collection<Doctor> retrieveDoctorsBySpecialty(String specialty) {
 		if (specialty == null) {
-			throw new IllegalArgumentException("Specialty cannot be null.");
+			throw new IllegalArgumentException(ErrMsgs.NULL_SPECIALTY);
 		}
 		
 		String query =

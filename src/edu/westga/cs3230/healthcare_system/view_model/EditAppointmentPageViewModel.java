@@ -10,6 +10,7 @@ import edu.westga.cs3230.healthcare_system.dal.DoctorDAL;
 import edu.westga.cs3230.healthcare_system.model.Appointment;
 import edu.westga.cs3230.healthcare_system.model.Doctor;
 import edu.westga.cs3230.healthcare_system.model.Patient;
+import edu.westga.cs3230.healthcare_system.resources.ErrMsgs;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleListProperty;
@@ -45,6 +46,9 @@ public class EditAppointmentPageViewModel {
 	
 	/**
 	 * Instantiates a new edit appointment page view model.
+	 * 
+     * @precondition true
+	 * @postcondition true
 	 */
 	public EditAppointmentPageViewModel() {
 		this.doctorErrorMsgProperty = new SimpleStringProperty();
@@ -62,7 +66,7 @@ public class EditAppointmentPageViewModel {
 		this.appointmentDB = new AppointmentDAL();
 		
 		this.newDateProperty.addListener((unused, oldVal, newVal) -> {
-			this.resetTimeSlots();
+			this.populateTimeSlots();
 		});
 	}
 	
@@ -89,6 +93,10 @@ public class EditAppointmentPageViewModel {
 	}
 		
 	/**
+	 * Gets the old doctor property
+     * 
+     * @precondition true
+	 * @postcondition true
 	 * @return the oldDoctorProperty
 	 */
 	public StringProperty getOldDoctorProperty() {
@@ -96,6 +104,10 @@ public class EditAppointmentPageViewModel {
 	}
 
 	/**
+	 * Gets the old time property
+     * 
+     * @precondition true
+	 * @postcondition true
 	 * @return the oldTimeProperty
 	 */
 	public StringProperty getOldTimeProperty() {
@@ -103,6 +115,10 @@ public class EditAppointmentPageViewModel {
 	}
 
 	/**
+	 * Gets the old reason property
+     * 
+     * @precondition true
+	 * @postcondition true
 	 * @return the oldReasonProperty
 	 */
 	public StringProperty getOldReasonProperty() {
@@ -110,6 +126,10 @@ public class EditAppointmentPageViewModel {
 	}
 
 	/**
+	 * Gets the new doctor property
+     * 
+     * @precondition true
+	 * @postcondition true
 	 * @return the newDoctorProperty
 	 */
 	public StringProperty getNewDoctorProperty() {
@@ -117,6 +137,10 @@ public class EditAppointmentPageViewModel {
 	}
 
 	/**
+	 * Gets the new date property
+     * 
+     * @precondition true
+	 * @postcondition true
 	 * @return the newDateProperty
 	 */
 	public ObjectProperty<LocalDate> getNewDateProperty() {
@@ -124,6 +148,10 @@ public class EditAppointmentPageViewModel {
 	}
 
 	/**
+	 * Gets the new timeslots set property
+     * 
+     * @precondition true
+	 * @postcondition true
 	 * @return the timeslotsProperty
 	 */
 	public ListProperty<LocalTime> getTimeslotsProperty() {
@@ -131,6 +159,10 @@ public class EditAppointmentPageViewModel {
 	}
 
 	/**
+	 * Gets the new time property
+     * 
+     * @precondition true
+	 * @postcondition true
 	 * @return the newTimeProperty
 	 */
 	public ObjectProperty<LocalTime> getNewTimeProperty() {
@@ -138,6 +170,10 @@ public class EditAppointmentPageViewModel {
 	}
 
 	/**
+	 * Gets the new reason property
+     * 
+     * @precondition true
+	 * @postcondition true
 	 * @return the newReasonProperty
 	 */
 	public StringProperty getNewReasonProperty() {
@@ -145,7 +181,10 @@ public class EditAppointmentPageViewModel {
 	}
 
 	/**
-	 * Updates the appointment
+	 * Updates the appointment with the current information
+	 * 
+     * @precondition true
+	 * @postcondition true
 	 * @return true if the appointment could be updated, false otherwise
 	 */
 	public boolean updateAppointment() {
@@ -159,6 +198,9 @@ public class EditAppointmentPageViewModel {
 	
 	/**
 	 * Gets the patient the appointment is for.
+	 * 
+     * @precondition true
+	 * @postcondition true
 	 * @return the patient the appointment is for
 	 */
 	public Patient getPatient() {
@@ -167,6 +209,9 @@ public class EditAppointmentPageViewModel {
 	
 	/**
 	 * Sets the patient.
+	 * 
+     * @precondition patient != null
+	 * @postcondition true
 	 * @param patient the patient
 	 */
 	public void setPatient(Patient patient) {
@@ -176,6 +221,15 @@ public class EditAppointmentPageViewModel {
 		this.patient = patient;
 	}
 
+	/**
+	 * Sets the doctor to the one with the specified information
+     * 
+     * @precondition fname != null && lname != null && !fname.isBlank() && !lname.isBlank()
+	 * @postcondition true
+	 * @param fname
+	 * @param lname
+	 * @return true if the doctor could be changed, false otherwise
+	 */
 	public boolean setDoctor(String fname, String lname) {
 		Doctor newDoctor = this.doctorDB.retrieveDoctor(fname, lname);
 		
@@ -185,13 +239,20 @@ public class EditAppointmentPageViewModel {
 		
 		this.doctor = newDoctor;
 		this.newDoctorProperty.set(newDoctor.getFirstName() + " " + newDoctor.getLastName());
-		this.resetTimeSlots();
+		this.populateTimeSlots();
 		return true;
 	}
 	
+	/**
+	 * Sets the old appointment data to that of the specified appointment
+     * 
+     * @precondition apmt != null
+	 * @postcondition true
+	 * @param apmt the appointment
+	 */
 	public void setOldAppointment(Appointment apmt) {
 		if (apmt == null) {
-			throw new IllegalArgumentException("Old appointment cannot be null.");
+			throw new IllegalArgumentException(ErrMsgs.NULL_APPOINTMENT);
 		}
 		this.oldApmt = apmt;
 		this.doctor = this.doctorDB.retrieveDoctor(apmt.getDoctorId());
@@ -200,11 +261,17 @@ public class EditAppointmentPageViewModel {
 		this.oldReasonProperty.set(apmt.getReason());
 		this.newDoctorProperty.set(this.oldDoctorProperty.get());
 		this.newDateProperty.set(apmt.getAppointmentTime().toLocalDate());
-		this.resetTimeSlots();
+		this.populateTimeSlots();
 		this.newReasonProperty.set(apmt.getReason());
 	}
 
-	public void resetTimeSlots() {
+	/**
+	 * Populates the time slots to match the current appointment info.
+     * 
+     * @precondition true
+	 * @postcondition true
+	 */
+	public void populateTimeSlots() {
 		this.timeslotsProperty.set(FXCollections.observableArrayList(this.appointmentDB.getOpenTimeSlots(this.newDateProperty.get(), this.doctor.getId(), this.patient.getId())));
 	}
 }

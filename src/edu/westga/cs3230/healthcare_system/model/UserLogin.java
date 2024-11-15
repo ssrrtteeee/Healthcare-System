@@ -42,6 +42,13 @@ public class UserLogin {
 		return isValid;
 	}
 	
+	/**
+	 * Gets the information for the specified user.
+	 * @param username
+	 * @param password
+	 * @return the user information
+	 * @throws IllegalArgumentException
+	 */
 	public Nurse getUserInformation(String username, String password) throws IllegalArgumentException {
 		return this.dbLoginAcess.getUserDetails(username, password);
 	}
@@ -64,7 +71,4 @@ public class UserLogin {
     		 + "Full Name: " + currentSessionUser.getFirstName() + " " + currentSessionUser.getLastName() + System.lineSeparator()
     		 + "ID: " + currentSessionUser.getId();
     }
-
-	
-	
 }

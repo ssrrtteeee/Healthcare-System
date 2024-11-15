@@ -52,6 +52,9 @@ public class EditPatientInfoPage {
         
     /**
      * Instantiates a new EditPatientInfoPage
+     * 
+     * @precondition true
+	 * @postcondition true
      */
     public EditPatientInfoPage() {
     	this.viewmodel = new EditPatientInfoPageViewModel();
