@@ -10,6 +10,7 @@ import edu.westga.cs3230.healthcare_system.dal.DoctorDAL;
 import edu.westga.cs3230.healthcare_system.model.Appointment;
 import edu.westga.cs3230.healthcare_system.model.Doctor;
 import edu.westga.cs3230.healthcare_system.model.Patient;
+import edu.westga.cs3230.healthcare_system.resources.ErrMsgs;
 import javafx.beans.property.StringProperty;
 
 /**
@@ -127,8 +128,24 @@ public class CreateAppointmentPageViewModel {
 	 */
 	public Doctor getDoctor(String firstName, String lastName) {
 		Doctor doctor = this.doctorDB.retrieveDoctor(firstName, lastName);
-		this.doctor = doctor == null ? this.doctor : doctor;
+		if (doctor != null) {
+			this.doctor = doctor;
+		}
 		return doctor;
+	}
+	
+	/**
+	 * Sets the currently selected doctor to the specified doctor.
+	 * 
+	 * @precondition doctor != null
+	 * @postcondition true
+	 * @param doctor the doctor
+	 */
+	public void setDoctor(Doctor doctor) {
+		if (doctor == null) {
+			throw new IllegalArgumentException(ErrMsgs.NULL_DOCTOR);
+		}
+		this.doctor = doctor;
 	}
 	
 	/**
@@ -146,5 +163,28 @@ public class CreateAppointmentPageViewModel {
 	public void setPatient(Patient patient) {
 		this.patient = patient;
 		this.patientId = patient.getId();
+	}
+
+	/**
+	 * Gets the doctors with the specified specialty from the database.
+	 * 
+	 * @precondition specialty != null
+	 * @postcondition true
+	 * @param specialty the specialty
+	 * @return the doctors
+	 */
+	public Collection<Doctor> getDoctorsBySpecialty(String specialty) {
+		return this.doctorDB.retrieveDoctorsBySpecialty(specialty);
+	}
+
+	/**
+	 * Gets the list of all specialties from the database.
+	 * 
+	 * @precondition true
+	 * @postcondition true
+	 * @return the specialties
+	 */
+	public Collection<String> getSpecialties() {
+		return this.doctorDB.retrieveSpecialties();
 	}
 }

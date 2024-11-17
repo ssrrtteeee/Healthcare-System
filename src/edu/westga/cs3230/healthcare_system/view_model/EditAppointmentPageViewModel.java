@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collection;
 
 import edu.westga.cs3230.healthcare_system.dal.AppointmentDAL;
 import edu.westga.cs3230.healthcare_system.dal.DoctorDAL;
@@ -18,6 +19,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
+import javafx.util.Callback;
 
 /**
  * ViewModel for CreateAppointmentPage.
@@ -231,17 +233,28 @@ public class EditAppointmentPageViewModel {
 	 * @return true if the doctor could be changed, false otherwise
 	 */
 	public boolean setDoctor(String fname, String lname) {
-		Doctor newDoctor = this.doctorDB.retrieveDoctor(fname, lname);
-		
-		if (newDoctor == null) {
+		return this.setDoctor(this.doctorDB.retrieveDoctor(fname, lname));
+	}
+	
+	/**
+	 * Sets the doctor to the one with the specified information
+     * 
+     * @precondition doctor != null
+	 * @postcondition true
+	 * @param doctor the doctor
+	 * @return true if the doctor could be changed, false otherwise
+	 */
+	public boolean setDoctor(Doctor doctor) {
+		if (doctor == null) {
 			return false;
 		}
 		
-		this.doctor = newDoctor;
-		this.newDoctorProperty.set(newDoctor.getFirstName() + " " + newDoctor.getLastName());
+		this.doctor = doctor;
+		this.newDoctorProperty.set(doctor.getFirstName() + " " + doctor.getLastName());
 		this.populateTimeSlots();
 		return true;
-	}
+		
+	}	
 	
 	/**
 	 * Sets the old appointment data to that of the specified appointment
@@ -274,4 +287,29 @@ public class EditAppointmentPageViewModel {
 	public void populateTimeSlots() {
 		this.timeslotsProperty.set(FXCollections.observableArrayList(this.appointmentDB.getOpenTimeSlots(this.newDateProperty.get(), this.doctor.getId(), this.patient.getId())));
 	}
+
+	/**
+	 * Gets all doctors with the specified specialty from the database.
+	 * 
+	 * @precondition specialty != null
+	 * @postcondition true
+	 * @param specialty the specialty
+	 * @return the doctors
+	 */
+	public Collection<Doctor> getDoctorsBySpecialty(String specialty) {
+		return this.doctorDB.retrieveDoctorsBySpecialty(specialty);
+	}
+
+	/**
+	 * Gets all specialties from the database.
+	 * 
+	 * @precondition true
+	 * @postcondition true
+	 * @return the collection of specialties
+	 */
+	public Collection<String> getSpecialties() {
+		return this.doctorDB.retrieveSpecialties();
+	}
+
+	
 }
