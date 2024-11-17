@@ -4,13 +4,16 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 import edu.westga.cs3230.healthcare_system.Main;
 import edu.westga.cs3230.healthcare_system.model.Appointment;
+import edu.westga.cs3230.healthcare_system.model.Doctor;
 import edu.westga.cs3230.healthcare_system.model.Patient;
 import edu.westga.cs3230.healthcare_system.model.UserLogin;
 import edu.westga.cs3230.healthcare_system.resources.ErrMsgs;
 import edu.westga.cs3230.healthcare_system.view_model.EditAppointmentPageViewModel;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -41,7 +44,7 @@ import javafx.util.Callback;
 /**
  * The codebehind for the create appointment page.
  * 
- * @author Jacob
+ * @author Jacob Wilson
  * @version Fall 2024
  */
 public class EditAppointmentPage {
@@ -140,10 +143,194 @@ public class EditAppointmentPage {
     
     @FXML
     void selectDoctor() {
-    	this.showGetDoctorDialog();
+    	Dialog<Boolean> dialog = new Dialog<Boolean>();
+		dialog.setTitle("Search Doctors");
+	    dialog.setHeaderText("Search by.");
+	    dialog.setResizable(false);
+
+	    GridPane grid = new GridPane();
+	    grid.setHgap(10);
+	    
+	    Button nameButton = new Button("Name");
+	    Button specialtyButton = new Button("Specialty");
+	    nameButton.setPrefSize(80, 30);
+	    specialtyButton.setPrefSize(80, 30);
+	    grid.addRow(1, nameButton, specialtyButton);
+	    
+	    dialog.getDialogPane().setContent(grid);
+		
+	    nameButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				dialog.setResult(true);
+			}
+		});
+	    specialtyButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				dialog.setResult(false);
+			}
+		});
+	    
+		Optional<Boolean> result = dialog.showAndWait();
+		if (result.isPresent()) {
+			if (result.get()) {
+		    	this.showGetDoctorByNameDialog();
+			} else {
+				this.showGetDoctorBySpecialtyDialog();
+			}
+		}
     }
 	
-	private boolean showGetDoctorDialog() {
+    private void showGetDoctorByNameDialog() {
+		Dialog<Boolean> dialog = new Dialog<Boolean>();
+	    dialog.setTitle("Select Doctor");
+	    dialog.setHeaderText("Enter the doctor's info below.");
+	    dialog.setResizable(false);
+
+	    GridPane grid = new GridPane();
+	    grid.setHgap(10);
+	    grid.setVgap(10);
+	    grid.setPadding(new Insets(0, 10, 0, 10));
+	    
+	    Label fnameLabel = new Label("First name: ");
+	    Label lnameLabel = new Label("Last name: ");
+	    Label errorLabel = new Label();
+	    errorLabel.setTextFill(Color.RED);
+	    GridPane.setColumnSpan(errorLabel, 2);
+	    
+	    TextField fnameTextField = new TextField();
+	    TextField lnameTextField = new TextField();
+	    fnameTextField.setPrefSize(200, 30);
+	    lnameTextField.setPrefSize(200, 30);
+	    
+	    Button confirmButton = new Button("Confirm");
+	    Button cancelButton = new Button("Cancel");
+	    confirmButton.setPrefSize(80, 30);
+	    cancelButton.setPrefSize(80, 30);
+	    
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);
+        closeButton.managedProperty().bind(closeButton.visibleProperty());
+        closeButton.setVisible(false);
+	    
+	    grid.addRow(1, fnameLabel, fnameTextField);
+	    grid.addRow(2, lnameLabel, lnameTextField);
+	    grid.addRow(3, confirmButton, cancelButton);
+	    grid.addRow(4, errorLabel);
+	    
+	    dialog.getDialogPane().setContent(grid);
+
+	    confirmButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				if (fnameTextField.textProperty().get().isBlank() || lnameTextField.textProperty().get().isBlank()) {
+					errorLabel.textProperty().set("Please fill in all data before proceeding.");
+				} else {
+					if (EditAppointmentPage.this.viewmodel.setDoctor(fnameTextField.textProperty().get(), lnameTextField.textProperty().get())) {
+						Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+						stage.close();
+					} else {
+						errorLabel.textProperty().set("Could not find doctor. Please try again.");
+					}
+				}
+			}
+		});
+		
+	    cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+				stage.close();
+				dialog.resultProperty().set(true);
+			}
+		});
+	    
+	    dialog.showAndWait();
+	}
+
+    private void showGetDoctorBySpecialtyDialog() {
+		Dialog<Boolean> dialog = new Dialog<Boolean>();
+	    dialog.setTitle("Select Doctor");
+	    dialog.setHeaderText("Please select a specialty below.");
+	    dialog.setResizable(false);
+
+	    GridPane grid = new GridPane();
+	    grid.setHgap(10);
+	    grid.setVgap(10);
+	    grid.setPadding(new Insets(0, 10, 0, 10));
+	    
+	    Label errorLabel = new Label();
+	    errorLabel.setTextFill(Color.RED);
+	    
+	    ComboBox<String> specialtyComboBox = new ComboBox<String>();
+	    ListView<Doctor> doctorsListView = new ListView<Doctor>();
+
+	    doctorsListView.setCellFactory(new Callback<ListView<Doctor>, ListCell<Doctor>>() {
+			@Override
+			public ListCell<Doctor> call(ListView<Doctor> appointmentsListView) {
+				return new ListCell<Doctor>() {
+					@Override
+					protected void updateItem(Doctor item, boolean empty) {
+						super.updateItem(item, empty);
+						if (item == null || empty) {
+							setText("");
+						} else {
+							setText(item.getFirstName() + " " + item.getLastName());
+						}
+					}
+				};
+			};
+		});
+	    
+	    specialtyComboBox.itemsProperty().set(FXCollections.observableArrayList(this.viewmodel.getSpecialties()));
+	    
+	    Button confirmButton = new Button("Confirm");
+	    Button cancelButton = new Button("Cancel");
+	    confirmButton.disableProperty().set(true);
+	    confirmButton.setPrefSize(80, 30);
+	    cancelButton.setPrefSize(80, 30);
+
+	    GridPane.setColumnSpan(doctorsListView, 2);
+	    GridPane.setColumnSpan(errorLabel, 2);
+
+	    grid.addRow(1, specialtyComboBox);
+	    grid.addRow(2, doctorsListView);
+	    grid.addRow(3, confirmButton, cancelButton);
+	    grid.addRow(4, errorLabel);
+	    
+	    dialog.getDialogPane().setContent(grid);
+
+	    specialtyComboBox.getSelectionModel().selectedItemProperty().addListener((unused, oldVal, newVal) -> {
+	    	if (newVal != null) {
+	    		doctorsListView.setItems(FXCollections.observableArrayList(this.viewmodel.getDoctorsBySpecialty(newVal)));
+	    	}
+	    });
+	    doctorsListView.getSelectionModel().selectedItemProperty().addListener((unused, oldVal, newVal) -> {
+	    	confirmButton.disableProperty().set(newVal == null);
+	    });
+	    confirmButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Doctor doctor = doctorsListView.getSelectionModel().getSelectedItem();
+				EditAppointmentPage.this.viewmodel.setDoctor(doctor);
+				Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+				stage.close();
+			}
+		});
+	    cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+				stage.close();
+				dialog.resultProperty().set(true);
+			}
+		});
+	    
+	    dialog.showAndWait();
+	}
+    
+	private void showGetDoctorDialog() {
 		Dialog<Boolean> dialog = new Dialog<Boolean>();
 	    dialog.setTitle("Select Doctor");
 	    dialog.setHeaderText("Enter the doctors info below.");
@@ -204,7 +391,7 @@ public class EditAppointmentPage {
 			}
 		});
 	    
-	    return dialog.showAndWait().orElse(false);
+	    dialog.showAndWait();
 	}
 
 	@FXML

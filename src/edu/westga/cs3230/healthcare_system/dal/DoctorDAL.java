@@ -27,9 +27,9 @@ public class DoctorDAL {
 	 */
 	public Collection<String> retrieveSpecialties() {
 		String query =
-				"SELECT UNIQUE specialty_name "
+				"SELECT specialty_name "
 			  + "FROM doctor_specialty "
-			  + "ORDER BY specialty_name";
+			  + "ORDER BY specialty_name;";
 		try (Connection con = DriverManager.getConnection(DBAccessor.getConnectionString()); 
 				PreparedStatement stmt = con.prepareStatement(query);
 		) {
@@ -64,12 +64,12 @@ public class DoctorDAL {
 		}
 		
 		String query =
-				"SELECT id, f_name, l_name"
+				"SELECT id, f_name, l_name "
 			  + "FROM doctor "
 			  + "WHERE id IN ("
 			  + "  SELECT doctor_id "
-			  + "  FROM doctor_specialty"
-			  + "  WHERE specialty_name = ?"
+			  + "  FROM doctor_specialty "
+			  + "  WHERE specialty_name = ? "
 			  + ");";
 		try (Connection con = DriverManager.getConnection(DBAccessor.getConnectionString()); 
 				PreparedStatement stmt = con.prepareStatement(query);
