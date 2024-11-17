@@ -2,9 +2,12 @@ package edu.westga.cs3230.healthcare_system.view;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import edu.westga.cs3230.healthcare_system.Main;
+import edu.westga.cs3230.healthcare_system.dal.DoctorDAL;
 import edu.westga.cs3230.healthcare_system.dal.RoutineCheckupDAL;
+import edu.westga.cs3230.healthcare_system.model.Doctor;
 import edu.westga.cs3230.healthcare_system.model.Patient;
 import edu.westga.cs3230.healthcare_system.model.RoutineCheckup;
 import edu.westga.cs3230.healthcare_system.model.UserLogin;
@@ -31,6 +34,9 @@ import javafx.stage.Stage;
 public class AddRoutineCheckupPage {
 
     @FXML private Label currentUserLabel;
+    @FXML private Label currentPatientLabel;
+    @FXML private Label currentDoctorLabel;
+    
     @FXML private TextField patientHeight;
     @FXML private TextField patientWeight;
     @FXML private TextField systolicBP;
@@ -47,16 +53,19 @@ public class AddRoutineCheckupPage {
     @FXML private Label bodyTemperatureWarning;
     @FXML private Label pulseWarning;
     @FXML private Label symptomsWarning;
-    @FXML private Label initialDiagnosisWarning;
     
     private LocalDateTime appointmentTime;
     private int doctorId;
-    private RoutineCheckupDAL routinCheckupDB;
+    private RoutineCheckupDAL routineCheckupDB;
     private Patient patient;
+    
+    private DoctorDAL doctorDB;
     
     @FXML
     void initialize() {
         this.currentUserLabel.setText(UserLogin.getUserlabel());
+        this.doctorDB = new DoctorDAL();
+        this.routineCheckupDB = new RoutineCheckupDAL();
     }
     
     /**
@@ -82,6 +91,8 @@ public class AddRoutineCheckupPage {
      */
     public void setDoctor(int doctorId) {
     	this.doctorId = doctorId;
+    	Doctor doctor = this.doctorDB.retrieveDoctor(doctorId);
+    	this.currentDoctorLabel.setText("Doctor Name: " + doctor.getFirstName() + " " + doctor.getLastName());
     }
     
     /**
@@ -96,6 +107,9 @@ public class AddRoutineCheckupPage {
     		throw new IllegalArgumentException(ErrMsgs.NULL_PATIENT);
     	}
     	this.patient = patient;
+    	this.currentPatientLabel.setText(
+    			"Patient Name: " + patient.getFirstName() + " " + patient.getLastName() + System.lineSeparator()
+    			+ "Patient Date of Birth: " + DateTimeFormatter.ofPattern("MM-dd-yyyy").format(patient.getDateOfBirth()));
     }
         
     @FXML
@@ -215,19 +229,13 @@ public class AddRoutineCheckupPage {
     		}
     		
             String initialDiagnosis = this.initialDiagnosis.getText();
-    		if (initialDiagnosis.isBlank()) {
-    			hasError = true;
-    			this.initialDiagnosisWarning.setText("Initial diagnosis should not be empty.");
-    		} else {
-    			this.initialDiagnosisWarning.setText("");
-    		}
 
             if (!hasError) {
 	            RoutineCheckup checkup = new RoutineCheckup(this.appointmentTime, this.doctorId, UserLogin.getSessionUser().getId(),
 	            		patientHeight, patientWeight, systolicBP, diastolicBP,
 	                    bodyTemperature, pulse, symptoms, initialDiagnosis);
 	            
-	            this.routinCheckupDB.addRoutineCheckup(checkup);
+	            this.routineCheckupDB.addRoutineCheckup(checkup);
 	            this.goBack();
 	
 	            Alert alert = new Alert(AlertType.INFORMATION);

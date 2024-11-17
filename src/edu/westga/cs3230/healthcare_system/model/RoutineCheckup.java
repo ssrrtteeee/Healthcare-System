@@ -28,17 +28,17 @@ public class RoutineCheckup {
      * 
      * @precondition appointmentTime != null && symptoms != null && initialDiagnosis != null
      * @postcondition true
-     * @param appointmentTime
-     * @param doctorId
-     * @param recordingNurseId
-     * @param patientHeight
-     * @param patientWeight
-     * @param systolicBP
-     * @param diastolicBP
-     * @param bodyTemperature
-     * @param pulse
-     * @param symptoms
-     * @param initialDiagnosis
+     * @param appointmentTime the time of the appointment
+     * @param doctorId the doctors id
+     * @param recordingNurseId the nurse performing and recording the routine checkup
+     * @param patientHeight the height of the patient
+     * @param patientWeight the weight of the patient
+     * @param systolicBP the patients maximum blood pressure
+     * @param diastolicBP the patients minimum pressure recorded
+     * @param bodyTemperature the patients body temperature
+     * @param pulse the patients number of heart beats per minute
+     * @param symptoms the patients symptoms
+     * @param initialDiagnosis the doctors initial diagnosis
      */
     public RoutineCheckup(LocalDateTime appointmentTime, int doctorId, int recordingNurseId,
                           double patientHeight, double patientWeight, int systolicBP,
@@ -49,12 +49,6 @@ public class RoutineCheckup {
     	}
     	if (symptoms == null) {
     		throw new IllegalArgumentException(ErrMsgs.NULL_SYMPTOMS);
-    	}
-    	if (initialDiagnosis == null) {
-    		throw new IllegalArgumentException(ErrMsgs.NULL_INITIAL_DIAGNOSIS);
-    	}
-    	if (initialDiagnosis.isBlank()) {
-    		throw new IllegalArgumentException(ErrMsgs.BLANK_INITIAL_DIAGNOSIS);
     	}
     	
         this.appointmentTime = appointmentTime;
