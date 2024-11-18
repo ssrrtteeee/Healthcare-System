@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import edu.westga.cs3230.healthcare_system.Main;
+import edu.westga.cs3230.healthcare_system.dal.RoutineCheckupDAL;
 import edu.westga.cs3230.healthcare_system.model.Appointment;
 import edu.westga.cs3230.healthcare_system.model.Patient;
 import edu.westga.cs3230.healthcare_system.model.UserLogin;
@@ -46,7 +47,9 @@ public class ViewPatientInfoPage {
     @FXML private ListView<Pair<String, Appointment>> appointments;
     @FXML private Button editAppointmentButton;
     @FXML private Button addRoutineCheckupButton;
+    @FXML private Button orderTestsButton;
     
+    private RoutineCheckupDAL routineCheckupDB;
     private ViewPatientInfoPageViewModel viewmodel;
     
     /**
@@ -58,6 +61,7 @@ public class ViewPatientInfoPage {
 
     @FXML
     void initialize() {
+    	this.routineCheckupDB = new RoutineCheckupDAL();
         this.bindElements();
         this.currentUserLabel.setText(UserLogin.getUserlabel());
         this.isActive.disableProperty().set(true);
@@ -107,7 +111,11 @@ public class ViewPatientInfoPage {
 		
 		this.viewmodel.getSelectedAppointmentProperty().addListener((unused, oldVal, newVal) -> {
 			this.editAppointmentButton.disableProperty().set(newVal == null || newVal.getValue().getAppointmentTime().isBefore(LocalDateTime.now()));
-			this.addRoutineCheckupButton.disableProperty().set(newVal == null);
+			
+			boolean hasRoutineCheckup =  this.routineCheckupDB.hasRoutineCheckup(newVal.getValue().getAppointmentTime(), newVal.getValue().getDoctorId());
+			
+			this.addRoutineCheckupButton.disableProperty().set(newVal == null || hasRoutineCheckup);
+			this.orderTestsButton.disableProperty().set(newVal == null || !hasRoutineCheckup);
 		});
 	}
 	
@@ -173,6 +181,30 @@ public class ViewPatientInfoPage {
     	EditAppointmentPage page = loader.getController();
     	page.setPatient(this.viewmodel.getPatient());
     	page.setAppointment(this.appointments.getSelectionModel().getSelectedItem().getValue());
+    	
+    	Parent parent = loader.getRoot();
+    	Scene scene = new Scene(parent);
+    	Stage addTodoStage = new Stage();
+    	addTodoStage.setTitle(Main.TITLE);
+    	addTodoStage.setScene(scene);
+    	addTodoStage.initModality(Modality.APPLICATION_MODAL);
+    	        	
+    	addTodoStage.show();
+    	
+    	Stage stage = (Stage) this.currentUserLabel.getScene().getWindow();
+    	stage.close();
+	}
+	
+	@FXML
+	void orderTests() throws IOException {
+		FXMLLoader loader = new FXMLLoader();
+    	loader.setLocation(Main.class.getResource(Main.ORDER_TESTS_PAGE));
+    	loader.load();
+    	
+    	OrderTestsPage page = loader.getController();
+    	page.setDoctor(this.appointments.getSelectionModel().getSelectedItem().getValue().getDoctorId());
+    	page.setPatient(this.viewmodel.getPatient());
+    	page.setAppointmentTime(this.appointments.getSelectionModel().getSelectedItem().getValue().getAppointmentTime());
     	
     	Parent parent = loader.getRoot();
     	Scene scene = new Scene(parent);

@@ -41,6 +41,25 @@ public class ViewPatientInfoPageViewModel {
 	private AppointmentDAL dbApmt;
 	
 	/**
+	 * Instantiates a new edit patient info page view model.
+	 */
+	public ViewPatientInfoPageViewModel() {
+		this.dbApmt = new AppointmentDAL();
+		this.fnameProperty = new SimpleStringProperty();
+		this.lnameProperty = new SimpleStringProperty();
+		this.genderProperty = new SimpleStringProperty();
+		this.dobProperty = new SimpleObjectProperty<>();
+		this.cityProperty = new SimpleStringProperty();
+		this.stateProperty = new SimpleStringProperty();
+		this.addressProperty = new SimpleStringProperty();
+		this.zipcodeProperty = new SimpleStringProperty();
+		this.phoneNumProperty = new SimpleStringProperty();
+		this.isActiveProperty = new SimpleBooleanProperty();
+		this.appointmentsProperty = new SimpleListProperty<Pair<String, Appointment>>();
+		this.selectedAppointmentProperty = new SimpleObjectProperty<Pair<String, Appointment>>();
+	}
+	
+	/**
 	 * Gets the fname property.
 	 *
 	 * @precondition true
@@ -178,25 +197,6 @@ public class ViewPatientInfoPageViewModel {
 	 */
 	public Patient getPatient() {
 		return this.patient;
-	}
-	
-	/**
-	 * Instantiates a new edit patient info page view model.
-	 */
-	public ViewPatientInfoPageViewModel() {
-		this.dbApmt = new AppointmentDAL();
-		this.fnameProperty = new SimpleStringProperty();
-		this.lnameProperty = new SimpleStringProperty();
-		this.genderProperty = new SimpleStringProperty();
-		this.dobProperty = new SimpleObjectProperty<>();
-		this.cityProperty = new SimpleStringProperty();
-		this.stateProperty = new SimpleStringProperty();
-		this.addressProperty = new SimpleStringProperty();
-		this.zipcodeProperty = new SimpleStringProperty();
-		this.phoneNumProperty = new SimpleStringProperty();
-		this.isActiveProperty = new SimpleBooleanProperty();
-		this.appointmentsProperty = new SimpleListProperty<Pair<String, Appointment>>();
-		this.selectedAppointmentProperty = new SimpleObjectProperty<Pair<String, Appointment>>();
 	}
 	
 	/**

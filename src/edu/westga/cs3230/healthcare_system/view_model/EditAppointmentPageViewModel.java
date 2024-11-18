@@ -19,7 +19,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
-import javafx.util.Callback;
 
 /**
  * ViewModel for CreateAppointmentPage.
@@ -228,8 +227,8 @@ public class EditAppointmentPageViewModel {
      * 
      * @precondition fname != null && lname != null && !fname.isBlank() && !lname.isBlank()
 	 * @postcondition true
-	 * @param fname
-	 * @param lname
+	 * @param fname the doctor's first name
+	 * @param lname the doctor's last name
 	 * @return true if the doctor could be changed, false otherwise
 	 */
 	public boolean setDoctor(String fname, String lname) {
@@ -310,6 +309,4 @@ public class EditAppointmentPageViewModel {
 	public Collection<String> getSpecialties() {
 		return this.doctorDB.retrieveSpecialties();
 	}
-
-	
 }

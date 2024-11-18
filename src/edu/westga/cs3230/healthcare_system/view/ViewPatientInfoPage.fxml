@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane minHeight="441.0" minWidth="425.0" prefHeight="500.0" prefWidth="570.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.westga.cs3230.healthcare_system.view.ViewPatientInfoPage">
+<AnchorPane minHeight="441.0" minWidth="425.0" prefHeight="500.0" prefWidth="570.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.westga.cs3230.healthcare_system.view.ViewPatientInfoPage">
    <children>
       <Button layoutX="494.0" layoutY="11.0" mnemonicParsing="false" onAction="#backToHomePage" text="Back">
          <font>
@@ -48,9 +48,9 @@
       <ListView fx:id="appointments" layoutX="345.0" layoutY="158.0" prefHeight="110.0" prefWidth="200.0" />
       <Button layoutX="345.0" layoutY="278.0" mnemonicParsing="false" onAction="#scheduleAppointment" text="Schedule New" />
       <Button fx:id="editAppointmentButton" disable="true" layoutX="508.0" layoutY="278.0" mnemonicParsing="false" onAction="#editAppointment" text="Edit" />
-      <Label layoutX="345.0" layoutY="323.0" text="Visit history:" />
-      <ListView layoutX="345.0" layoutY="340.0" prefHeight="110.0" prefWidth="200.0" />
-      <Button fx:id="addRoutineCheckupButton" disable="true" layoutX="345.0" layoutY="460.0" mnemonicParsing="false" onAction="#addRoutineCheckup" text="Add Routine Checkup" />
+      <Label layoutX="345.0" layoutY="323.0" text="Visit Details:" />
+      <Button fx:id="addRoutineCheckupButton" disable="true" layoutX="344.0" layoutY="353.0" mnemonicParsing="false" onAction="#addRoutineCheckup" text="Add Routine Checkup" />
       <Separator layoutX="325.0" layoutY="313.0" prefHeight="3.0" prefWidth="246.0" />
+      <Button fx:id="orderTestsButton" disable="true" layoutX="344.0" layoutY="388.0" mnemonicParsing="false" onAction="#orderTests" text="Order Tests" />
    </children>
 </AnchorPane>

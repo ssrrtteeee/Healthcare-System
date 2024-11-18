@@ -20,6 +20,7 @@ public class Main extends Application {
 	public static final String EDIT_PATIENT_INFO_PAGE = "view/EditPatientInfoPage.fxml";
 	public static final String VIEW_PATIENT_INFO_PAGE = "view/ViewPatientInfoPage.fxml";
 	public static final String ADD_ROUTINE_CHECKUP_PAGE = "view/AddRoutineCheckupPage.fxml";
+	public static final String ORDER_TESTS_PAGE = "view/OrderTestsPage.fxml";
 	
 	/**
 	 * Entry point of the application.

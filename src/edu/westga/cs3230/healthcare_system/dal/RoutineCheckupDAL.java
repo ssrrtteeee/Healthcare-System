@@ -3,7 +3,10 @@ package edu.westga.cs3230.healthcare_system.dal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import edu.westga.cs3230.healthcare_system.model.RoutineCheckup;
 import edu.westga.cs3230.healthcare_system.resources.ErrMsgs;
@@ -49,6 +52,31 @@ public class RoutineCheckupDAL {
 	    	stmt.setString(11, routineCheckup.getInitialDiagnosis());
 	
 			stmt.executeUpdate();
+	    }
+	}
+	
+	/**
+	 * Checks if there is already a routine checkup for the given appointment time and doctor id.
+	 * @param appointmentTime the appointment time and date
+	 * @param doctorId the id for the doctor
+	 * @return true if a routine checkup exists, false otherwise
+	 */
+	public boolean hasRoutineCheckup(LocalDateTime appointmentTime, int doctorId) {
+		String query =
+				"SELECT 0 "
+			  + "FROM visit_details "
+			  + "WHERE doctor_id = ?  AND appointment_time = ?";
+		try (Connection con = DriverManager.getConnection(DBAccessor.getConnectionString()); 
+				PreparedStatement stmt = con.prepareStatement(query);
+		) {	
+			stmt.setInt(1, doctorId);
+			stmt.setTimestamp(2, Timestamp.valueOf(appointmentTime));
+			
+			ResultSet rs = stmt.executeQuery();
+			return rs.next();
+			
+		} catch (SQLException e) {
+			return false;
 	    }
 	}
 }

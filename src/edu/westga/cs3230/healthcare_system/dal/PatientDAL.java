@@ -20,6 +20,7 @@ import edu.westga.cs3230.healthcare_system.resources.ErrMsgs;
  * @version Fall 2024
  */
 public class PatientDAL {
+	
 	/**
 	 * Adds a new patient to the database with the given information.
 	 * 
@@ -52,8 +53,8 @@ public class PatientDAL {
 			System.out.println("SQLException: "	+ ex.getMessage());
 			System.out.println("SQLState: "		+ ex.getSQLState());
 			System.out.println("VendorError: "	+ ex.getErrorCode());
-		} catch (Exception e) {
-            System.out.println(e.toString());
+		} catch (Exception ex) {
+            System.out.println(ex.toString());
         }
 	}
 	
@@ -115,8 +116,8 @@ public class PatientDAL {
 			int id = rs.getInt(11);
 			
 			return new Patient(fName, lName, city, address, zipCode, phoneNumber, gender, state, dob, isActive, id);
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
 			return null;
 	    }
 	}
@@ -160,8 +161,8 @@ public class PatientDAL {
 			stmt.executeUpdate();
 			
 			return true;
-		} catch (Exception e) {
-            System.err.println(e.getMessage());
+		} catch (Exception ex) {
+            System.err.println(ex.getMessage());
             return false;
         }
 	}
@@ -219,8 +220,8 @@ public class PatientDAL {
 			}
 
 			return result;
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
 			return null;
 	    }
 	}
@@ -267,8 +268,8 @@ public class PatientDAL {
 			}
 
 			return result;
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
 			return null;
 	    }
 	}

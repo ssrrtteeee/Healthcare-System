@@ -85,8 +85,8 @@ public class AddRoutineCheckupPage {
     /**
      * Sets the doctor to the one with the specified ID
      * 
-     * @precondition true
-	 * @postcondition true
+     * @precondition none
+	 * @postcondition none
      * @param doctorId the ID
      */
     public void setDoctor(int doctorId) {

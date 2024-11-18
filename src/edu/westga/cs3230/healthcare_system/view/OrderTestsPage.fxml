@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane minHeight="441.0" minWidth="425.0" prefHeight="691.0" prefWidth="651.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.westga.cs3230.healthcare_system.view.OrderTestsPage">
+   <children>
+      <Button layoutX="587.0" layoutY="19.0" mnemonicParsing="false" onAction="#goBack" text="Back">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Button>
+      <Label layoutX="14.0" layoutY="14.0" text="Current User: " />
+      <Label fx:id="currentUserLabel" layoutX="14.0" layoutY="41.0" maxHeight="1.7976931348623157E308" maxWidth="300.0" text="Error Message" wrapText="true" />
+      <Label layoutX="263.0" layoutY="30.0" text="Order Tests">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="95.0" layoutY="295.0" text="Available Tests" />
+      <ListView fx:id="availableTests" layoutX="45.0" layoutY="328.0" prefHeight="110.0" prefWidth="200.0" />
+      <Button fx:id="addTestButton" layoutX="103.0" layoutY="450.0" mnemonicParsing="false" onAction="#addTest" text="Add Test" />
+      <Button fx:id="confirmButton" layoutX="276.0" layoutY="649.0" mnemonicParsing="false" onAction="#confirmTests" text="Confirm Order" />
+      <TextArea fx:id="initialDiagnosis" layoutX="113.0" layoutY="130.0" prefHeight="110.0" prefWidth="458.0" />
+      <Label layoutX="14.0" layoutY="172.0" text="Initial Diagnosis:" />
+      <ListView fx:id="selectedTests" layoutX="395.0" layoutY="328.0" prefHeight="110.0" prefWidth="200.0" />
+      <Button fx:id="removeTestButton" layoutX="453.0" layoutY="450.0" mnemonicParsing="false" onAction="#removeTest" text="Remove Test" />
+      <Label layoutX="457.0" layoutY="295.0" text="Selected Tests" />
+      <TextArea fx:id="availableTestsDescription" editable="false" focusTraversable="false" layoutX="27.0" layoutY="525.0" prefHeight="110.0" prefWidth="236.0" />
+      <TextArea fx:id="selectedTestsDescription" editable="false" focusTraversable="false" layoutX="376.0" layoutY="525.0" prefHeight="110.0" prefWidth="236.0" />
+      <Label layoutX="91.0" layoutY="502.0" text="Test Description" />
+      <Label layoutX="452.0" layoutY="494.0" text="Test Description" />
+      <Label fx:id="currentPatientLabel" layoutX="162.0" layoutY="84.0" text="Patient Name" />
+      <Label fx:id="currentDoctorLabel" layoutX="383.0" layoutY="84.0" text="Doctor Name" />
+      <Label fx:id="initialDiagnosisWarning" layoutX="253.0" layoutY="252.0" textFill="RED" />
+   </children>
+</AnchorPane>

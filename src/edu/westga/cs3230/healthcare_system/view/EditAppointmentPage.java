@@ -422,8 +422,8 @@ public class EditAppointmentPage {
     	loader.setLocation(Main.class.getResource(Main.VIEW_PATIENT_INFO_PAGE));
     	try {
 			loader.load();
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException ex) {
+			ex.printStackTrace();
 		}
     	Parent parent = loader.getRoot();
     	Scene scene = new Scene(parent);
@@ -440,14 +440,14 @@ public class EditAppointmentPage {
     	Stage stage = (Stage) this.currentUserLabel.getScene().getWindow();
     	stage.close();
     }
-    
-	/**
-	 * Sets the patient.
+	
+    /**
+     * Sets the patient.
      * 
      * @precondition patient != null
-	 * @postcondition true
-	 * @param patient the patient
-	 */
+	 * @postcondition none
+     * @param patient the patient
+     */
     public void setPatient(Patient patient) {
     	if (patient == null) {
     		throw new IllegalArgumentException(ErrMsgs.NULL_PATIENT);
