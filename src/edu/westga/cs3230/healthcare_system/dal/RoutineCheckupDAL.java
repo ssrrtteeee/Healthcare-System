@@ -61,6 +61,46 @@ public class RoutineCheckupDAL {
 	 * @param doctorId the id for the doctor
 	 * @return true if a routine checkup exists, false otherwise
 	 */
+	public RoutineCheckup getRoutineCheckup(LocalDateTime appointmentTime, int doctorId) {
+		String query =
+				"SELECT * "
+			  + "FROM visit_details "
+			  + "WHERE doctor_id = ?  AND appointment_time = ?";
+		try (Connection con = DriverManager.getConnection(DBAccessor.getConnectionString()); 
+				PreparedStatement stmt = con.prepareStatement(query);
+		) {	
+			stmt.setInt(1, doctorId);
+			stmt.setTimestamp(2, Timestamp.valueOf(appointmentTime));
+			
+			ResultSet rs = stmt.executeQuery();
+			rs.next();
+			LocalDateTime time = rs.getTimestamp(1) == null ? null : rs.getTimestamp(1).toLocalDateTime();
+			int nurseId = rs.getInt(3);
+			Double height = rs.getDouble(4);
+			Double weight = rs.getDouble(5);
+			int systolicBP = rs.getInt(6);
+			int dastolicBP = rs.getInt(7);
+			int bodyTemperature = rs.getInt(8);
+			int pulse = rs.getInt(9);
+			String symptoms = rs.getString(10);
+			String initialDiagnosis = rs.getString(11);
+			String finalDiagnosis = rs.getString(12);
+			
+			RoutineCheckup checkup = new RoutineCheckup(time, doctorId, nurseId, height, weight, systolicBP, dastolicBP, bodyTemperature, pulse, symptoms, initialDiagnosis);
+			checkup.setFinalDiagnosis(finalDiagnosis);
+			return checkup;
+			
+		} catch (SQLException ex) {
+			return null;
+	    }
+	}
+	
+	/**
+	 * Checks if there is already a routine checkup for the given appointment time and doctor id.
+	 * @param appointmentTime the appointment time and date
+	 * @param doctorId the id for the doctor
+	 * @return true if a routine checkup exists, false otherwise
+	 */
 	public boolean hasRoutineCheckup(LocalDateTime appointmentTime, int doctorId) {
 		String query =
 				"SELECT 0 "

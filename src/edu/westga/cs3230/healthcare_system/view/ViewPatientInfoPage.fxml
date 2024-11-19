@@ -52,5 +52,6 @@
       <Button fx:id="addRoutineCheckupButton" disable="true" layoutX="344.0" layoutY="353.0" mnemonicParsing="false" onAction="#addRoutineCheckup" text="Add Routine Checkup" />
       <Separator layoutX="325.0" layoutY="313.0" prefHeight="3.0" prefWidth="246.0" />
       <Button fx:id="orderTestsButton" disable="true" layoutX="344.0" layoutY="388.0" mnemonicParsing="false" onAction="#orderTests" text="Order Tests" />
+      <Button fx:id="viewVisitDetailsButton" disable="true" layoutX="345.0" layoutY="423.0" mnemonicParsing="false" onAction="#viewVisitDetails" text="View Visit Details" />
    </children>
 </AnchorPane>
