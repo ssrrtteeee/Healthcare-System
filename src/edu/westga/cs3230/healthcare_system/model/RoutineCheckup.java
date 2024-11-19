@@ -65,10 +65,24 @@ public class RoutineCheckup {
         this.initialDiagnosis = initialDiagnosis;
     }
     
+    /**
+     * Sets the final diagnosis to the specified value.
+     * 
+     * @precondition finalDiagnosis != null && !finalDiagnosis.isBlank()
+     * @postcondition true
+     * @param finalDiagnosis the final diagnosis
+     */
     public void setFinalDiagnosis(String finalDiagnosis) {
     	this.finalDiagnosis = finalDiagnosis;
     }
     
+    /**
+     * Gets the final diagnosis.
+     * 
+     * @precondition true
+     * @postcondition true
+     * @return the final diagnosis
+     */
     public String getFinalDiagnosis() {
     	return this.finalDiagnosis;
     }

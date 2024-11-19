@@ -119,4 +119,32 @@ public class RoutineCheckupDAL {
 			return false;
 	    }
 	}
+	
+	public boolean updateFinalDiagnosis(LocalDateTime appointmentTime, int doctorId, String diagnosis) {
+		if (diagnosis == null) {
+			throw new IllegalArgumentException(ErrMsgs.NULL_FINAL_DIAGNOSIS);
+		}
+		if (diagnosis.isBlank()) {
+			throw new IllegalArgumentException(ErrMsgs.BLANK_FINAL_DIAGNOSIS);
+		}
+		
+		String query =
+				"UPDATE visit_details "
+			  + "SET final_diagnosis = ?"
+			  + "WHERE appointment_time = ? AND doctor_id = ?";
+		try (Connection con = DriverManager.getConnection(DBAccessor.getConnectionString()); 
+				PreparedStatement stmt = con.prepareStatement(query);
+		) {	
+			stmt.setString(1, diagnosis);
+			stmt.setTimestamp(2, Timestamp.valueOf(appointmentTime));
+			stmt.setInt(3, doctorId);
+			
+			stmt.execute();
+			
+			return true;
+			
+		} catch (SQLException e) {
+			return false;
+	    }
+	}
 }

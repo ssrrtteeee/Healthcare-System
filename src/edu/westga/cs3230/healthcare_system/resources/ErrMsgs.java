@@ -28,6 +28,7 @@ public class ErrMsgs {
 	public static final String NULL_APMT_REASON = "Appointment reason cannot be null.";
 	public static final String NULL_SYMPTOMS = "Symptoms cannot be null.";
 	public static final String NULL_INITIAL_DIAGNOSIS = "Initial diagnosis cannot be null.";
+	public static final String NULL_FINAL_DIAGNOSIS = "Final diagnosis cannot be null.";
 	public static final String NULL_TEST_TIME = "Test time cannot be null.";
 	public static final String NULL_TEST_RESULT = "Test result cannot be null.";
 	
@@ -43,4 +44,5 @@ public class ErrMsgs {
 	public static final String BLANK_ADDRESS = "Address should not be blank.";
 	public static final String BLANK_ZIPCODE = "Zipcode should not be blank.";
 	public static final String BLANK_INITIAL_DIAGNOSIS = "Initial diagnosis should not be blank.";
+	public static final String BLANK_FINAL_DIAGNOSIS = "Final diagnosis should not be blank.";
 }

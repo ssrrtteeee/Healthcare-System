@@ -48,7 +48,6 @@ import javafx.util.Callback;
  * Creates the view visit details page.
  * @author Stefan
  * @version Fall 2024
- *
  */
 public class ViewVisitDetailsPage {
 
@@ -74,6 +73,7 @@ public class ViewVisitDetailsPage {
     @FXML private TextArea performedTestsResults;
     
     @FXML private Button updateTestsButton;
+    @FXML private Button finalDiagnosisButton;
     
     private LocalDateTime appointmentTime;
     private int doctorId;
@@ -166,6 +166,9 @@ public class ViewVisitDetailsPage {
         	this.symptoms.setText(checkup.getSymptoms());
         	this.initialDiagnosis.setText(checkup.getInitialDiagnosis());
         	this.finalDiagnosis.setText(checkup.getFinalDiagnosis());
+        	if (checkup.getFinalDiagnosis() != null || !checkup.getFinalDiagnosis().isBlank()) {
+        		this.finalDiagnosisButton.visibleProperty().set(false);
+        	}
     	}
     }
     
@@ -309,6 +312,79 @@ public class ViewVisitDetailsPage {
 						Alert alert = new Alert(AlertType.INFORMATION);
 						alert.setTitle("Error");
 						alert.setHeaderText("Could not update the test.");
+						alert.setContentText("Please try again.");
+						alert.showAndWait();
+					}
+				}
+			}
+		});
+		
+	    cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+				stage.close();
+				dialog.resultProperty().set(true);
+			}
+		});
+	    
+	    dialog.showAndWait();
+    }
+    
+    @FXML
+    void updateFinalDiagnosis() {
+    	Dialog<Boolean> dialog = new Dialog<Boolean>();
+	    dialog.setTitle("Enter final diagnosis");
+	    dialog.setHeaderText("Enter the final diagnosis below.");
+	    dialog.setResizable(false);
+
+	    GridPane grid = new GridPane();
+	    grid.setHgap(10);
+	    grid.setVgap(10);
+	    grid.setPadding(new Insets(0, 10, 0, 10));
+	    
+	    TextArea diagnosisArea = new TextArea();
+	    Label errorLabel = new Label();
+	    errorLabel.setTextFill(Color.RED);
+	    
+	    GridPane.setColumnSpan(errorLabel, 2);
+	    GridPane.setColumnSpan(diagnosisArea, 2);
+
+	    Button confirmButton = new Button("Confirm");
+	    Button cancelButton = new Button("Cancel");
+	    confirmButton.setPrefSize(80, 30);
+	    cancelButton.setPrefSize(80, 30);
+	    
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);
+        closeButton.managedProperty().bind(closeButton.visibleProperty());
+        closeButton.setVisible(false);
+	    
+	    grid.addRow(1, diagnosisArea);
+        grid.addRow(2, confirmButton, cancelButton);
+	    grid.addRow(3, errorLabel);
+
+	    dialog.getDialogPane().setContent(grid);
+
+	    confirmButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				if (diagnosisArea.getText().isBlank()) {
+					errorLabel.textProperty().set("Please enter a diagnosis before proceeding.");
+				} else {
+					if (ViewVisitDetailsPage.this.viewModel.updateFinalDiagnosis(ViewVisitDetailsPage.this.appointmentTime, ViewVisitDetailsPage.this.doctorId, diagnosisArea.getText())) {
+						Alert alert = new Alert(AlertType.INFORMATION);
+						alert.setTitle("Success");
+						alert.setHeaderText("Updated final diagnosis successfully.");
+						alert.showAndWait();
+						ViewVisitDetailsPage.this.finalDiagnosis.setText(diagnosisArea.textProperty().get());
+						ViewVisitDetailsPage.this.finalDiagnosisButton.visibleProperty().set(false);
+						Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+						stage.close();
+					} else {
+						Alert alert = new Alert(AlertType.INFORMATION);
+						alert.setTitle("Error");
+						alert.setHeaderText("Could not update the final diagnosis.");
 						alert.setContentText("Please try again.");
 						alert.showAndWait();
 					}
