@@ -9,6 +9,7 @@ import edu.westga.cs3230.healthcare_system.dal.TestResultDAL;
 import edu.westga.cs3230.healthcare_system.model.Doctor;
 import edu.westga.cs3230.healthcare_system.model.Test;
 import edu.westga.cs3230.healthcare_system.model.TestResults;
+import edu.westga.cs3230.healthcare_system.resources.ErrMsgs;
 import edu.westga.cs3230.healthcare_system.view.CreateAppointmentPage;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -147,7 +148,30 @@ public class ViewVisitDetailsPageViewModel {
     	this.performedTests.setAll(testResultsList);
     }
 
+    /**
+     * Updates the results of the test having the specified appointment time, doctor id, and test code with the specified test date/time, result, and abnormality.
+     * 
+     * @precondition appointmentTime != null && testDateTime != null && testResult != null
+     * @postcondition true
+     * @param appointmentTime
+     * @param doctorId
+     * @param testCode
+     * @param testDateTime
+     * @param testResult
+     * @param abnormality
+     * @return true if successful, false otherwise.
+     */
 	public boolean updateTestResult(LocalDateTime appointmentTime, int doctorId, int testCode, LocalDateTime testDateTime, String testResult, boolean abnormality) {
+		if (appointmentTime == null) {
+			throw new IllegalArgumentException(ErrMsgs.NULL_APMT_TIME);
+		}
+		if (testDateTime == null) {
+			throw new IllegalArgumentException(ErrMsgs.NULL_TEST_TIME);
+		}
+		if (testResult == null) {
+			throw new IllegalArgumentException(ErrMsgs.NULL_TEST_RESULT);
+		}
+
 		boolean result = this.testDB.updateTestResults(appointmentTime, doctorId, testCode, testDateTime, testResult, abnormality);
 		this.loadAvailableTests(appointmentTime, doctorId);
 		return result;
