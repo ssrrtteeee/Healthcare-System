@@ -6,6 +6,7 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -41,7 +42,12 @@
             <TextField fx:id="pulse" editable="false" />
             <Label text="Initial Diagnosis:" />
             <TextArea fx:id="initialDiagnosis" editable="false" prefHeight="102.0" prefWidth="286.0" />
-            <Label text="Final Diagnosis" />
+            <HBox spacing="50.0">
+               <children>
+                  <Label text="Final Diagnosis" />
+                  <Button fx:id="finalDiagnosisButton" mnemonicParsing="false" onAction="#updateFinalDiagnosis" text="Enter final diagnosis" />
+               </children>
+            </HBox>
             <TextArea fx:id="finalDiagnosis" editable="false" prefHeight="102.0" prefWidth="286.0" />
          </children>
       </VBox>

@@ -1,34 +1,20 @@
 package edu.westga.cs3230.healthcare_system.view_model;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import edu.westga.cs3230.healthcare_system.dal.RoutineCheckupDAL;
 import edu.westga.cs3230.healthcare_system.dal.TestDAL;
 import edu.westga.cs3230.healthcare_system.dal.TestResultDAL;
-import edu.westga.cs3230.healthcare_system.model.Doctor;
 import edu.westga.cs3230.healthcare_system.model.Test;
 import edu.westga.cs3230.healthcare_system.model.TestResults;
 import edu.westga.cs3230.healthcare_system.resources.ErrMsgs;
-import edu.westga.cs3230.healthcare_system.view.CreateAppointmentPage;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 
 /**
  * Creates a new view visit details page view model.
@@ -175,6 +161,20 @@ public class ViewVisitDetailsPageViewModel {
 		boolean result = this.testDB.updateTestResults(appointmentTime, doctorId, testCode, testDateTime, testResult, abnormality);
 		this.loadAvailableTests(appointmentTime, doctorId);
 		return result;
+	}
+
+	/**
+	 * Updates the visit associated with the specified doctor id and time to have the specified final diagnosis.
+	 * 
+	 * @precondition appointmentTime != null && diagnosis != null && !diagnosis.isBlank()
+	 * @postcondition true
+	 * @param appointmentTime
+	 * @param doctorID
+	 * @param diagnosis
+	 * @return true if successful, false otherwise.
+	 */
+	public boolean updateFinalDiagnosis(LocalDateTime appointmentTime, int doctorID, String diagnosis) {
+		return new RoutineCheckupDAL().updateFinalDiagnosis(appointmentTime, doctorID, diagnosis);
 	}
     
     
