@@ -22,6 +22,7 @@ public class RoutineCheckup {
     private int pulse; 
     private String symptoms;
     private String initialDiagnosis;
+    private String finalDiagnosis;
 
     /**
      * Instantiates a new routine checkup with the specified values.
@@ -62,6 +63,14 @@ public class RoutineCheckup {
         this.pulse = pulse;
         this.symptoms = symptoms;
         this.initialDiagnosis = initialDiagnosis;
+    }
+    
+    public void setFinalDiagnosis(String finalDiagnosis) {
+    	this.finalDiagnosis = finalDiagnosis;
+    }
+    
+    public String getFinalDiagnosis() {
+    	return this.finalDiagnosis;
     }
 
     /**

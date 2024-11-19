@@ -27,36 +27,81 @@ public class TestDAL {
 	 * @return the available medical tests
 	 */
 	public static List<Test> getTests() {
-		 List<Test> tests = new ArrayList<Test>();
-	        String query = "SELECT test_code, name, low_value, high_value, name_unit_measurement FROM test";
+		List<Test> tests = new ArrayList<Test>();
+        String query = "SELECT test_code, name, low_value, high_value, name_unit_measurement FROM test";
 
-	        try (Connection con = DriverManager.getConnection(DBAccessor.getConnectionString());
-	        		PreparedStatement stmt = con.prepareStatement(query);
-	        		) {
-	        	
-	        	ResultSet rs = stmt.executeQuery();
+        try (Connection con = DriverManager.getConnection(DBAccessor.getConnectionString());
+        		PreparedStatement stmt = con.prepareStatement(query);
+        		) {
+        	
+        	ResultSet rs = stmt.executeQuery();
 
-	            while (rs.next()) {
-	                int testCode = rs.getInt("test_code");
-	                String name = rs.getString("name");
-	                Double lowValue = rs.getDouble("low_value");
-	                if (rs.wasNull()) {
-	                    lowValue = null;
-	                }
-	                Double highValue = rs.getDouble("high_value");
-	                if (rs.wasNull()) {
-	                    highValue = null;
-	                }
-	                String unitMeasurementName = rs.getString("name_unit_measurement");
+            while (rs.next()) {
+                int testCode = rs.getInt("test_code");
+                String name = rs.getString("name");
+                Double lowValue = rs.getDouble("low_value");
+                if (rs.wasNull()) {
+                    lowValue = null;
+                }
+                Double highValue = rs.getDouble("high_value");
+                if (rs.wasNull()) {
+                    highValue = null;
+                }
+                String unitMeasurementName = rs.getString("name_unit_measurement");
 
-	                Test test = new Test(testCode, name, lowValue, highValue, unitMeasurementName);
-	                tests.add(test);
-	            }
-	        } catch (SQLException ex) {
-	            ex.printStackTrace();
-	        }
+                Test test = new Test(testCode, name, lowValue, highValue, unitMeasurementName);
+                tests.add(test);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
 
+        return tests;
+	}
+	
+	/**
+	 * Gets the tests ordered for a given appointment
+	 * @param appointmentTime the time of the appointment
+	 * @param doctorId the id of the doctor for the appointment
+	 * @return all of the tests ordered for the appointment
+	 */
+	public List<Test> getTestsFor(LocalDateTime appointmentTime, int doctorId) {
+		List<Test> tests = new ArrayList<Test>();
+        String query = "SELECT test.test_code, name, low_value, high_value, name_unit_measurement "
+        		+ "FROM test, test_for_visit "
+        		+ "WHERE test.test_code = test_for_visit.test_code AND doctor_id = ?  AND appointment_time = ?";
+
+        try (Connection con = DriverManager.getConnection(DBAccessor.getConnectionString());
+        		PreparedStatement stmt = con.prepareStatement(query);
+        		) {
+        	
+	    	stmt.setInt(1, doctorId);
+        	stmt.setTimestamp(2, Timestamp.valueOf(appointmentTime));
+        	
+        	ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int testCode = rs.getInt("test_code");
+                String name = rs.getString("name");
+                Double lowValue = rs.getDouble("low_value");
+                if (rs.wasNull()) {
+                    lowValue = null;
+                }
+                Double highValue = rs.getDouble("high_value");
+                if (rs.wasNull()) {
+                    highValue = null;
+                }
+                String unitMeasurementName = rs.getString("name_unit_measurement");
+
+                Test test = new Test(testCode, name, lowValue, highValue, unitMeasurementName);
+                tests.add(test);
+            }
+            
 	        return tests;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return tests;
 	}
 	
 	/**
@@ -68,20 +113,20 @@ public class TestDAL {
 	 * @return returns true if successful, or false otherwise
 	 */
 	public boolean addTestsAndUpdateInitialDiagnosis(LocalDateTime appointmentTime, int doctorId, String initialDiagnosis, List<Integer> testCodes) {
-	        Connection conn = null;
-	        CallableStatement callableStmt = null;
-	        PreparedStatement updateStmt = null;
-	        String sqlCallQuery = "CALL add_test_for_visit(?, ?, ?)";
-	        String sqlUpdateQuery = "UPDATE visit_details SET initial_diagnosis = ? "
-	        		+ "WHERE appointment_time = ? "
-	        		+ "AND doctor_id = ?";
+        Connection conn = null;
+        CallableStatement callableStmt = null;
+        PreparedStatement updateStmt = null;
+        String sqlCallQuery = "CALL add_test_for_visit(?, ?, ?)";
+        String sqlUpdateQuery = "UPDATE visit_details SET initial_diagnosis = ? "
+        		+ "WHERE appointment_time = ? "
+        		+ "AND doctor_id = ?";
 
-	        try {
-	            conn = DriverManager.getConnection(DBAccessor.getConnectionString());
+        try {
+            conn = DriverManager.getConnection(DBAccessor.getConnectionString());
 
-	            conn.setAutoCommit(false);
-	            
-	            callableStmt = conn.prepareCall(sqlCallQuery);
+            conn.setAutoCommit(false);
+            
+            callableStmt = conn.prepareCall(sqlCallQuery);
 
 	            for (Integer testCode: testCodes) {
 		            callableStmt.setInt(1, doctorId);

@@ -48,6 +48,7 @@ public class ViewPatientInfoPage {
     @FXML private Button editAppointmentButton;
     @FXML private Button addRoutineCheckupButton;
     @FXML private Button orderTestsButton;
+    @FXML private Button viewVisitDetailsButton;
     
     private RoutineCheckupDAL routineCheckupDB;
     private ViewPatientInfoPageViewModel viewmodel;
@@ -116,6 +117,7 @@ public class ViewPatientInfoPage {
 			
 			this.addRoutineCheckupButton.disableProperty().set(newVal == null || hasRoutineCheckup);
 			this.orderTestsButton.disableProperty().set(newVal == null || !hasRoutineCheckup);
+			this.viewVisitDetailsButton.disableProperty().set(newVal == null);
 		});
 	}
 	
@@ -202,6 +204,30 @@ public class ViewPatientInfoPage {
     	loader.load();
     	
     	OrderTestsPage page = loader.getController();
+    	page.setDoctor(this.appointments.getSelectionModel().getSelectedItem().getValue().getDoctorId());
+    	page.setPatient(this.viewmodel.getPatient());
+    	page.setAppointmentTime(this.appointments.getSelectionModel().getSelectedItem().getValue().getAppointmentTime());
+    	
+    	Parent parent = loader.getRoot();
+    	Scene scene = new Scene(parent);
+    	Stage addTodoStage = new Stage();
+    	addTodoStage.setTitle(Main.TITLE);
+    	addTodoStage.setScene(scene);
+    	addTodoStage.initModality(Modality.APPLICATION_MODAL);
+    	        	
+    	addTodoStage.show();
+    	
+    	Stage stage = (Stage) this.currentUserLabel.getScene().getWindow();
+    	stage.close();
+	}
+	
+	@FXML
+	void viewVisitDetails() throws IOException {
+		FXMLLoader loader = new FXMLLoader();
+    	loader.setLocation(Main.class.getResource(Main.VIEW_VISIT_DETAILS_PAGE));
+    	loader.load();
+    	
+    	ViewVisitDetailsPage page = loader.getController();
     	page.setDoctor(this.appointments.getSelectionModel().getSelectedItem().getValue().getDoctorId());
     	page.setPatient(this.viewmodel.getPatient());
     	page.setAppointmentTime(this.appointments.getSelectionModel().getSelectedItem().getValue().getAppointmentTime());
