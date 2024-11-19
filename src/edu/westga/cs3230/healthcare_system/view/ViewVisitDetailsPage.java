@@ -165,8 +165,8 @@ public class ViewVisitDetailsPage {
         	this.pulse.setText(String.valueOf(checkup.getPulse()));
         	this.symptoms.setText(checkup.getSymptoms());
         	this.initialDiagnosis.setText(checkup.getInitialDiagnosis());
-        	this.finalDiagnosis.setText(checkup.getFinalDiagnosis());
-        	if (checkup.getFinalDiagnosis() != null || !checkup.getFinalDiagnosis().isBlank()) {
+        	if (checkup.getFinalDiagnosis() != null) {
+            	this.finalDiagnosis.setText(checkup.getFinalDiagnosis());
         		this.finalDiagnosisButton.visibleProperty().set(false);
         	}
     	}
