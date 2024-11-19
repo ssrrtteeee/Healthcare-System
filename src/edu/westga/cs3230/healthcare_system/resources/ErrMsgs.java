@@ -28,6 +28,8 @@ public class ErrMsgs {
 	public static final String NULL_APMT_REASON = "Appointment reason cannot be null.";
 	public static final String NULL_SYMPTOMS = "Symptoms cannot be null.";
 	public static final String NULL_INITIAL_DIAGNOSIS = "Initial diagnosis cannot be null.";
+	public static final String NULL_TEST_TIME = "Test time cannot be null.";
+	public static final String NULL_TEST_RESULT = "Test result cannot be null.";
 	
 	public static final String BLANK_USERNAME = "Username should not be blank.";
 	public static final String BLANK_PASSWORD = "Password should not be blank.";

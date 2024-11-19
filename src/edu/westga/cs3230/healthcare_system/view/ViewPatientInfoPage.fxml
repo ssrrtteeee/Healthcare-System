@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane minHeight="441.0" minWidth="425.0" prefHeight="500.0" prefWidth="570.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.westga.cs3230.healthcare_system.view.ViewPatientInfoPage">
+<AnchorPane minHeight="441.0" minWidth="425.0" prefHeight="500.0" prefWidth="570.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.westga.cs3230.healthcare_system.view.ViewPatientInfoPage">
    <children>
       <Button layoutX="494.0" layoutY="11.0" mnemonicParsing="false" onAction="#backToHomePage" text="Back">
          <font>

@@ -1,18 +1,33 @@
 package edu.westga.cs3230.healthcare_system.view_model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import edu.westga.cs3230.healthcare_system.dal.TestDAL;
 import edu.westga.cs3230.healthcare_system.dal.TestResultDAL;
+import edu.westga.cs3230.healthcare_system.model.Doctor;
 import edu.westga.cs3230.healthcare_system.model.Test;
 import edu.westga.cs3230.healthcare_system.model.TestResults;
+import edu.westga.cs3230.healthcare_system.view.CreateAppointmentPage;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 
 /**
  * Creates a new view visit details page view model.
@@ -43,8 +58,8 @@ public class ViewVisitDetailsPageViewModel {
         this.orderedTests = FXCollections.observableArrayList();
         this.performedTests = FXCollections.observableArrayList();
 
-        this.orderedTestsDetails = new SimpleStringProperty("Not test selected.");
-        this.performedTestsResults = new SimpleStringProperty("Not test selected.");
+        this.orderedTestsDetails = new SimpleStringProperty("No test selected.");
+        this.performedTestsResults = new SimpleStringProperty("No test selected.");
         
         this.selectedOrderedTests = new SimpleObjectProperty<Test>();
         this.selectedPerformedTests = new SimpleObjectProperty<TestResults>();
@@ -55,12 +70,12 @@ public class ViewVisitDetailsPageViewModel {
      */
     public void createSelectedElementBindings() {
         this.selectedOrderedTests.addListener((unused, oldVal, newVal) -> {
-        	String description = newVal == null ? "Not test selected." : newVal.toString();
+        	String description = newVal == null ? "No test selected." : newVal.toString();
 			this.orderedTestsDetails.set(description);
 		});
         
         this.selectedPerformedTests.addListener((unused, oldVal, newVal) -> {
-         	String description = newVal == null ? "Not test selected." : newVal.toString();
+         	String description = newVal == null ? "No test selected." : newVal.toString();
 			this.performedTestsResults.set(description);
 		});
     }
@@ -126,9 +141,17 @@ public class ViewVisitDetailsPageViewModel {
      */
     public void loadAvailableTests(LocalDateTime appointmentTime, int doctorId) {
     	List<Test> testList = this.testDB.getTestsFor(appointmentTime, doctorId);
-    	this.orderedTests.addAll(testList);
+    	this.orderedTests.setAll(testList);
     	
     	List<TestResults> testResultsList = this.testResultDB.getTestResultsFor(appointmentTime, doctorId);
-    	this.performedTests.addAll(testResultsList);
+    	this.performedTests.setAll(testResultsList);
     }
+
+	public boolean updateTestResult(LocalDateTime appointmentTime, int doctorId, int testCode, LocalDateTime testDateTime, String testResult, boolean abnormality) {
+		boolean result = this.testDB.updateTestResults(appointmentTime, doctorId, testCode, testDateTime, testResult, abnormality);
+		this.loadAvailableTests(appointmentTime, doctorId);
+		return result;
+	}
+    
+    
 }
