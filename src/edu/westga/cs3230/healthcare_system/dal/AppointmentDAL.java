@@ -137,14 +137,15 @@ public class AppointmentDAL {
 		String query =
 				"SELECT doctor_id, patient_id, appointment_time, reason, f_name, l_name "
 			  + "FROM appointment JOIN doctor ON doctor_id = id "
-			  + "WHERE patient_id = ?";
+			  + "WHERE patient_id = ? "
+			  + "ORDER BY appointment_time DESC";
 		try (Connection con = DriverManager.getConnection(DBAccessor.getConnectionString()); 
 				PreparedStatement stmt = con.prepareStatement(query);
 		) {
 			stmt.setInt(1, patient.getId());
 			ResultSet rs = stmt.executeQuery();
 
-			Collection<Pair<String, Appointment>> result = new HashSet<Pair<String, Appointment>>(); 
+			Collection<Pair<String, Appointment>> result = new ArrayList<Pair<String, Appointment>>(); 
 			
 			while (rs.next()) {
 				int doctorId = rs.getInt(1);

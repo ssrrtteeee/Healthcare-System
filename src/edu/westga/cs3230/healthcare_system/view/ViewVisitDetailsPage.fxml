@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxWidth="797.0" minHeight="441.0" minWidth="369.0" prefHeight="820.0" prefWidth="913.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.westga.cs3230.healthcare_system.view.ViewVisitDetailsPage">
+<AnchorPane maxWidth="797.0" minHeight="441.0" minWidth="369.0" prefHeight="820.0" prefWidth="913.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.westga.cs3230.healthcare_system.view.ViewVisitDetailsPage">
     <children>
       <Label layoutX="14.0" layoutY="22.0" text="Current User: " />
       <Label fx:id="currentUserLabel" layoutX="14.0" layoutY="38.0" maxHeight="1.7976931348623157E308" maxWidth="300.0" text="Error Message" wrapText="true" />
@@ -48,6 +48,7 @@
       <Label fx:id="currentPatientLabel" layoutX="178.0" layoutY="84.0" text="Patient Name" />
       <Label fx:id="currentDoctorLabel" layoutX="358.0" layoutY="84.0" text="Doctor Name" />
       <Label layoutX="28.0" layoutY="471.0" text="Ordered Tests" />
+      <Button fx:id="updateTestsButton" disable="true" layoutX="221.0" layoutY="494.0" mnemonicParsing="false" onAction="#updateTestResult" prefHeight="60.0" prefWidth="59.0" text="Update results" wrapText="true" />
       <ListView fx:id="orderedTests" layoutX="14.0" layoutY="494.0" prefHeight="110.0" prefWidth="200.0" />
       <ListView fx:id="performedTests" layoutX="319.0" layoutY="636.0" prefHeight="110.0" prefWidth="200.0" />
       <Label layoutX="324.0" layoutY="613.0" text="Tests Performed" />

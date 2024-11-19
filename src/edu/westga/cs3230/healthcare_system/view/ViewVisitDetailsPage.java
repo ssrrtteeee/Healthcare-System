@@ -2,6 +2,7 @@ package edu.westga.cs3230.healthcare_system.view;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 import edu.westga.cs3230.healthcare_system.Main;
@@ -16,16 +17,29 @@ import edu.westga.cs3230.healthcare_system.model.Test;
 import edu.westga.cs3230.healthcare_system.model.TestResults;
 import edu.westga.cs3230.healthcare_system.model.UserLogin;
 import edu.westga.cs3230.healthcare_system.resources.ErrMsgs;
+import javafx.scene.control.DatePicker;
 import edu.westga.cs3230.healthcare_system.view_model.ViewVisitDetailsPageViewModel;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -59,6 +73,8 @@ public class ViewVisitDetailsPage {
     @FXML private TextArea orderedTestsDetails;
     @FXML private TextArea performedTestsResults;
     
+    @FXML private Button updateTestsButton;
+    
     private LocalDateTime appointmentTime;
     private int doctorId;
     private Patient patient;
@@ -80,6 +96,10 @@ public class ViewVisitDetailsPage {
         this.nurseDB = new NurseDAL();
 	    this.bindElements();
 	    this.setupCellFactories();
+	    
+	    this.orderedTests.getSelectionModel().selectedItemProperty().addListener((unused, oldVal, newVal) -> {
+	    	this.updateTestsButton.disableProperty().set(newVal == null);
+	    });
     }
     
     private void setupCellFactories() {
@@ -137,15 +157,15 @@ public class ViewVisitDetailsPage {
     		this.viewModel.loadAvailableTests(this.appointmentTime, this.doctorId);
     		Nurse nurse = this.nurseDB.getNurse(checkup.getRecordingNurseId());
         	this.currentNurseLabel.setText("Recording nurse Name: " + nurse.getFirstName() + " " + nurse.getLastName());
-        	 this.patientHeight.setText(String.valueOf(checkup.getPatientHeight()));
-        	 this.patientWeight.setText(String.valueOf(checkup.getPatientWeight()));
-        	 this.systolicBP.setText(String.valueOf(checkup.getSystolicBP()));
-        	 this.diastolicBP.setText(String.valueOf(checkup.getDiastolicBP()));
-        	 this.bodyTemperature.setText(String.valueOf(checkup.getBodyTemperature()));
-        	 this.pulse.setText(String.valueOf(checkup.getPulse()));
-        	 this.symptoms.setText(checkup.getSymptoms());
-        	 this.initialDiagnosis.setText(checkup.getInitialDiagnosis());
-        	 this.finalDiagnosis.setText(checkup.getFinalDiagnosis());
+        	this.patientHeight.setText(String.valueOf(checkup.getPatientHeight()));
+        	this.patientWeight.setText(String.valueOf(checkup.getPatientWeight()));
+        	this.systolicBP.setText(String.valueOf(checkup.getSystolicBP()));
+        	this.diastolicBP.setText(String.valueOf(checkup.getDiastolicBP()));
+        	this.bodyTemperature.setText(String.valueOf(checkup.getBodyTemperature()));
+        	this.pulse.setText(String.valueOf(checkup.getPulse()));
+        	this.symptoms.setText(checkup.getSymptoms());
+        	this.initialDiagnosis.setText(checkup.getInitialDiagnosis());
+        	this.finalDiagnosis.setText(checkup.getFinalDiagnosis());
     	}
     }
     
@@ -195,6 +215,117 @@ public class ViewVisitDetailsPage {
     	this.currentPatientLabel.setText(
     			"Patient Name: " + patient.getFirstName() + " " + patient.getLastName() + System.lineSeparator()
     			+ "Patient Date of Birth: " + DateTimeFormatter.ofPattern("MM-dd-yyyy").format(patient.getDateOfBirth()));
+    }
+    
+    @FXML
+    void updateTestResult() {
+    	Test currTest = this.orderedTests.getSelectionModel().getSelectedItem();
+    	boolean manualAbnormalityInput = currTest.getLowValue() == null && currTest.getHighValue() == null;
+    	
+    	Dialog<Boolean> dialog = new Dialog<Boolean>();
+	    dialog.setTitle("Enter test results");
+	    dialog.setHeaderText("Enter the test result info below.");
+	    dialog.setResizable(false);
+
+	    GridPane grid = new GridPane();
+	    grid.setHgap(10);
+	    grid.setVgap(10);
+	    grid.setPadding(new Insets(0, 10, 0, 10));
+	    
+	    Label dateLabel = new Label("Test date and time: ");
+	    Label resultLabel = new Label("Results: ");
+	    Label abnormalityLabel = new Label("Result abnormality: ");
+	    Label errorLabel = new Label();
+	    errorLabel.setTextFill(Color.RED);
+	    
+	    TextField hourTextField = new TextField();
+	    TextField minuteTextField = new TextField();
+	    DatePicker testDatePicker = new DatePicker();
+	    TextArea resultTextArea = new TextArea();
+	    CheckBox abnormalityCheckBox = new CheckBox();
+	    abnormalityCheckBox.setVisible(manualAbnormalityInput);
+	    GridPane.setColumnSpan(errorLabel, 4);
+	    GridPane.setColumnSpan(resultTextArea, 3);
+
+	    Button confirmButton = new Button("Confirm");
+	    Button cancelButton = new Button("Cancel");
+	    confirmButton.setPrefSize(80, 30);
+	    cancelButton.setPrefSize(80, 30);
+	    
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);
+        closeButton.managedProperty().bind(closeButton.visibleProperty());
+        closeButton.setVisible(false);
+	    
+	    grid.addRow(1, dateLabel, testDatePicker, hourTextField, minuteTextField);
+	    grid.addRow(2, resultLabel, resultTextArea);
+	    if (manualAbnormalityInput) {
+	    	grid.addRow(3, abnormalityLabel, abnormalityCheckBox);
+		    grid.addRow(4, confirmButton, cancelButton);
+		    grid.addRow(5, errorLabel);
+    	} else {
+    		grid.addRow(3, confirmButton, cancelButton);
+    		grid.addRow(4, errorLabel);
+    	}
+	    
+	    dialog.getDialogPane().setContent(grid);
+
+	    confirmButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				if (testDatePicker.valueProperty().get() == null
+						|| hourTextField.textProperty().get().isBlank() || minuteTextField.textProperty().get().isBlank()
+						|| resultTextArea.textProperty().get().isBlank()
+				) {
+					errorLabel.textProperty().set("Please fill in all data before proceeding.");
+				} else {
+					LocalDateTime testCompletionDateTime;
+					try {
+						testCompletionDateTime = LocalDateTime.of(testDatePicker.getValue(), LocalTime.of(Integer.parseInt(hourTextField.getText()), Integer.parseInt(minuteTextField.getText())));
+					} catch (NumberFormatException ex) {
+						errorLabel.textProperty().set("Please input a valid time (0-23, 0-59).");
+						return;
+					}
+					boolean abnormal = abnormalityCheckBox.selectedProperty().get();
+					try {
+						if (currTest.getHighValue() != null && currTest.getHighValue() < Double.parseDouble(resultTextArea.getText().strip())) {
+							abnormal = true;
+						}
+						if (currTest.getLowValue() != null && currTest.getLowValue() > Double.parseDouble(resultTextArea.getText().strip())) {
+							abnormal = true;
+						}
+					} catch (Exception e) {
+						errorLabel.textProperty().set("Test result must be a number.");
+						return;
+					}
+					if (ViewVisitDetailsPage.this.viewModel.updateTestResult(ViewVisitDetailsPage.this.appointmentTime, ViewVisitDetailsPage.this.doctorId, currTest.getTestCode(), testCompletionDateTime, resultTextArea.getText().trim(), abnormal)) {
+						Alert alert = new Alert(AlertType.INFORMATION);
+						alert.setTitle("Success");
+						alert.setHeaderText("Updated test successfully.");
+						alert.showAndWait();
+						Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+						stage.close();
+					} else {
+						Alert alert = new Alert(AlertType.INFORMATION);
+						alert.setTitle("Error");
+						alert.setHeaderText("Could not update the test.");
+						alert.setContentText("Please try again.");
+						alert.showAndWait();
+					}
+				}
+			}
+		});
+		
+	    cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+				stage.close();
+				dialog.resultProperty().set(true);
+			}
+		});
+	    
+	    dialog.showAndWait();
     }
     
     @FXML
