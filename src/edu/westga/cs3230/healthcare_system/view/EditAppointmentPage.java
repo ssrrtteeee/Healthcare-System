@@ -47,7 +47,7 @@ import javafx.util.Callback;
  * @author Jacob Wilson
  * @version Fall 2024
  */
-public class EditAppointmentPage {
+public class EditAppointmentPage extends CommonFunctionality {
 	public static final String LOCATION = "view/EditAppointment.fxml";
 	
 	@FXML private Label oldDoctor;
@@ -84,6 +84,7 @@ public class EditAppointmentPage {
         this.currentUserLabel.setText(UserLogin.getUserlabel());
          
         this.setupCells();
+        this.initCommon();
     }
 
 	private void setupCells() {

@@ -11,11 +11,11 @@ import edu.westga.cs3230.healthcare_system.dal.DBLogin;
  */
 public class UserLogin {
 	
-	private static Nurse currentSessionUser;
+	private static User currentSessionUser;
 	private DBLogin dbLoginAcess;
 	
 	/** 
-	 * Creates a new UserDatabase.
+	 * Creates a new UserLogin.
 	 * 
 	 * @precondition none
 	 * @postcondition this.users contains all of the file data and the default user
@@ -49,7 +49,7 @@ public class UserLogin {
 	 * @return the user information
 	 * @throws IllegalArgumentException
 	 */
-	public Nurse getUserInformation(String username, String password) throws IllegalArgumentException {
+	public User getUserInformation(String username, String password) throws IllegalArgumentException {
 		return this.dbLoginAcess.getUserDetails(username, password);
 	}
 	
@@ -58,7 +58,7 @@ public class UserLogin {
 	 * 
 	 * @return the current session user
 	 */
-	public static Nurse getSessionUser() {
+	public static User getSessionUser() {
 		return currentSessionUser;
 	}
 	

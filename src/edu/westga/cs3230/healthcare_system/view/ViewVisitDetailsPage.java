@@ -49,7 +49,7 @@ import javafx.util.Callback;
  * @author Stefan
  * @version Fall 2024
  */
-public class ViewVisitDetailsPage {
+public class ViewVisitDetailsPage extends CommonFunctionality {
 
 	@FXML private Label currentUserLabel;
     @FXML private Label currentPatientLabel;
@@ -100,6 +100,7 @@ public class ViewVisitDetailsPage {
 	    this.orderedTests.getSelectionModel().selectedItemProperty().addListener((unused, oldVal, newVal) -> {
 	    	this.updateTestsButton.disableProperty().set(newVal == null);
 	    });
+	    this.initCommon();
     }
     
     private void setupCellFactories() {
@@ -155,6 +156,7 @@ public class ViewVisitDetailsPage {
     	RoutineCheckup checkup = this.routineCheckupDB.getRoutineCheckup(this.appointmentTime, this.doctorId);
     	if (checkup != null) {
     		this.viewModel.loadAvailableTests(this.appointmentTime, this.doctorId);
+    		System.out.println(checkup.getRecordingNurseId());
     		Nurse nurse = this.nurseDB.getNurse(checkup.getRecordingNurseId());
         	this.currentNurseLabel.setText("Recording nurse Name: " + nurse.getFirstName() + " " + nurse.getLastName());
         	this.patientHeight.setText(String.valueOf(checkup.getPatientHeight()));

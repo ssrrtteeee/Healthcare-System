@@ -2,7 +2,7 @@ package edu.westga.cs3230.healthcare_system.view_model;
 
 import java.io.IOException;
 
-import edu.westga.cs3230.healthcare_system.model.Nurse;
+import edu.westga.cs3230.healthcare_system.model.User;
 import edu.westga.cs3230.healthcare_system.model.UserLogin;
 
 /** View model class for login page.
@@ -51,7 +51,7 @@ public class LoginPageViewModel {
 	 * @param password
 	 * @return the nurse with the specified account information
 	 */
-	public Nurse getUserDetails(String username, String password) {
+	public User getUserDetails(String username, String password) {
 		return this.userLogin.getUserInformation(username, password);
 	}
 	

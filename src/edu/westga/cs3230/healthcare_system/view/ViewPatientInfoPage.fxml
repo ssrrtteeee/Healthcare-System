@@ -10,14 +10,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane minHeight="441.0" minWidth="425.0" prefHeight="500.0" prefWidth="570.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.westga.cs3230.healthcare_system.view.ViewPatientInfoPage">
+<AnchorPane fx:id="mainPane" minHeight="441.0" minWidth="425.0" prefHeight="500.0" prefWidth="570.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.westga.cs3230.healthcare_system.view.ViewPatientInfoPage">
    <children>
       <Button layoutX="494.0" layoutY="11.0" mnemonicParsing="false" onAction="#backToHomePage" text="Back">
          <font>
             <Font size="15.0" />
          </font>
       </Button>
-      <Label layoutX="14.0" layoutY="26.0" text="Current User: " />
+      <Label layoutX="16.0" layoutY="30.0" text="Current User: " />
       <Label fx:id="currentUserLabel" layoutX="14.0" layoutY="53.0" maxHeight="1.7976931348623157E308" maxWidth="300.0" text="Error Message" wrapText="true" />
       <Label layoutX="250.0" layoutY="70.0" text="View Patient">
          <font>

@@ -44,7 +44,7 @@ import javafx.util.Callback;
  * @author Stefan
  * @version Fall 2024
  */
-public class CreateAppointmentPage {
+public class CreateAppointmentPage extends CommonFunctionality {
     @FXML private Button createAppointment;
     @FXML private Button selectDoctor;
     @FXML private DatePicker appointmentDate;
@@ -99,6 +99,7 @@ public class CreateAppointmentPage {
 				}
 			}
 		});
+		this.initCommon();
     }
     
     @FXML

@@ -31,7 +31,7 @@ import javafx.stage.Stage;
  * @author Stefan
  * @version Spring 2024
  */
-public class AddRoutineCheckupPage {
+public class AddRoutineCheckupPage extends CommonFunctionality {
 
     @FXML private Label currentUserLabel;
     @FXML private Label currentPatientLabel;
@@ -66,6 +66,7 @@ public class AddRoutineCheckupPage {
         this.currentUserLabel.setText(UserLogin.getUserlabel());
         this.doctorDB = new DoctorDAL();
         this.routineCheckupDB = new RoutineCheckupDAL();
+        this.initCommon();
     }
     
     /**

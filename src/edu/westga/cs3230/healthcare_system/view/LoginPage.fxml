@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane minHeight="441.0" minWidth="457.0" prefHeight="441.0" prefWidth="457.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.westga.cs3230.healthcare_system.view.LoginPage">
+<AnchorPane fx:id="mainPane" minHeight="441.0" minWidth="457.0" prefHeight="441.0" prefWidth="457.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.westga.cs3230.healthcare_system.view.LoginPage">
    <children>
       <Label layoutX="114.0" layoutY="23.0" text="Healthcare System Login Page">
          <font>

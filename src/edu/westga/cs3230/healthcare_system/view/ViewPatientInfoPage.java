@@ -32,7 +32,7 @@ import javafx.util.Pair;
  * @author Jacob Wilson
  * @version Fall 2024
  */
-public class ViewPatientInfoPage {
+public class ViewPatientInfoPage extends CommonFunctionality {
     @FXML private Label currentUserLabel;
     @FXML private TextField fname;
     @FXML private TextField lname;
@@ -83,6 +83,7 @@ public class ViewPatientInfoPage {
 				};
 			};
 		});
+        this.initCommon();
     }
 	
     /**
