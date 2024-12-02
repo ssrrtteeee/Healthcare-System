@@ -44,17 +44,6 @@ public class LoginPageViewModel {
 		}
 	}
 	
-	/**
-	 * Gets the details of the user with the specified information.
-	 * 
-	 * @param username
-	 * @param password
-	 * @return the nurse with the specified account information
-	 */
-	public Nurse getUserDetails(String username, String password) {
-		return this.userLogin.getUserInformation(username, password);
-	}
-	
 	/** Gets the userDatabase.
 	 * 
 	 * @precondition none
