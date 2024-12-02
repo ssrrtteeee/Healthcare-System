@@ -53,9 +53,7 @@ public class DBLogin {
 		if (password.isBlank()) {
 			throw new IllegalArgumentException(ErrMsgs.BLANK_PASSWORD);
 		}
-		
-		boolean correctLogin = false;
-		
+				
         return this.checkUserInTable(username, password, "nurse") || this.checkUserInTable(username, password, "admin");
 	}
 
