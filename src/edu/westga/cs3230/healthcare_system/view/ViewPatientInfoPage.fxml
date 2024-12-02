@@ -53,5 +53,6 @@
       <Separator layoutX="325.0" layoutY="313.0" prefHeight="3.0" prefWidth="310.0" />
       <Button fx:id="orderTestsButton" disable="true" layoutX="344.0" layoutY="388.0" mnemonicParsing="false" onAction="#orderTests" text="Order Tests" />
       <Button fx:id="viewVisitDetailsButton" disable="true" layoutX="345.0" layoutY="423.0" mnemonicParsing="false" onAction="#viewVisitDetails" text="View Visit Details" />
+      <Button fx:id="viewAppointmentButton" disable="true" layoutX="532.0" layoutY="275.0" mnemonicParsing="false" onAction="#viewApppointment" text="View" />
    </children>
 </AnchorPane>

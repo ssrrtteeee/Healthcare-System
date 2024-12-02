@@ -3,6 +3,7 @@ package edu.westga.cs3230.healthcare_system.view_model;
 import java.time.LocalDate;
 
 import edu.westga.cs3230.healthcare_system.dal.AppointmentDAL;
+import edu.westga.cs3230.healthcare_system.dal.DoctorDAL;
 import edu.westga.cs3230.healthcare_system.model.Appointment;
 import edu.westga.cs3230.healthcare_system.model.Patient;
 import edu.westga.cs3230.healthcare_system.model.USStates;
@@ -39,12 +40,14 @@ public class ViewPatientInfoPageViewModel {
 	
 	private Patient patient;
 	private AppointmentDAL dbApmt;
+	private DoctorDAL doctorDB;
 	
 	/**
 	 * Instantiates a new edit patient info page view model.
 	 */
 	public ViewPatientInfoPageViewModel() {
 		this.dbApmt = new AppointmentDAL();
+		this.doctorDB =  new DoctorDAL();
 		this.fnameProperty = new SimpleStringProperty();
 		this.lnameProperty = new SimpleStringProperty();
 		this.genderProperty = new SimpleStringProperty();

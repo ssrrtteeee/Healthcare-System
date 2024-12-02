@@ -2,6 +2,7 @@ package edu.westga.cs3230.healthcare_system.view;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 import edu.westga.cs3230.healthcare_system.Main;
@@ -11,17 +12,28 @@ import edu.westga.cs3230.healthcare_system.model.Patient;
 import edu.westga.cs3230.healthcare_system.model.RoutineCheckup;
 import edu.westga.cs3230.healthcare_system.model.UserLogin;
 import edu.westga.cs3230.healthcare_system.view_model.ViewPatientInfoPageViewModel;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -47,6 +59,7 @@ public class ViewPatientInfoPage extends CommonFunctionality {
     @FXML private CheckBox isActive;
     @FXML private ListView<Pair<String, Appointment>> appointments;
     @FXML private Button editAppointmentButton;
+    @FXML private Button viewAppointmentButton;
     @FXML private Button addRoutineCheckupButton;
     @FXML private Button orderTestsButton;
     @FXML private Button viewVisitDetailsButton;
@@ -114,6 +127,7 @@ public class ViewPatientInfoPage extends CommonFunctionality {
 		
 		this.viewmodel.getSelectedAppointmentProperty().addListener((unused, oldVal, newVal) -> {
 			this.editAppointmentButton.disableProperty().set(newVal == null || newVal.getValue().getAppointmentTime().isBefore(LocalDateTime.now()));
+			this.viewAppointmentButton.disableProperty().set(newVal == null);
 			
 			RoutineCheckup visit = this.routineCheckupDB.getRoutineCheckup(newVal.getValue().getAppointmentTime(), newVal.getValue().getDoctorId());
 			
@@ -203,6 +217,60 @@ public class ViewPatientInfoPage extends CommonFunctionality {
     	
     	Stage stage = (Stage) this.currentUserLabel.getScene().getWindow();
     	stage.close();
+	}
+	
+	@FXML
+	void viewApppointment() {
+		Appointment currAppt = this.viewmodel.getSelectedAppointmentProperty().get().getValue();
+		
+		Dialog<Boolean> dialog = new Dialog<Boolean>();
+	    dialog.setTitle("View appointment");
+	    dialog.setResizable(false);
+
+	    GridPane grid = new GridPane();
+	    grid.setHgap(10);
+	    grid.setVgap(10);
+	    grid.setPadding(new Insets(0, 10, 0, 10));
+
+	    TextField apptTime = new TextField(DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a").format(currAppt.getAppointmentTime()));
+	    TextField patientName = new TextField(this.viewmodel.getPatient().getFirstName() + " " + this.viewmodel.getPatient().getLastName());
+	    TextField doctorName = new TextField(this.viewmodel.getSelectedAppointmentProperty().get().getKey());
+	    TextArea reason = new TextArea(currAppt.getReason());
+	    
+	    apptTime.editableProperty().set(false);
+	    patientName.editableProperty().set(false);
+	    doctorName.editableProperty().set(false);
+	    reason.editableProperty().set(false);
+	    
+	    GridPane.setColumnSpan(reason, 2);
+
+	    Button cancelButton = new Button("Close");
+	    cancelButton.setPrefSize(80, 30);
+	    
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);
+        closeButton.managedProperty().bind(closeButton.visibleProperty());
+        closeButton.setVisible(false);
+	    
+	    grid.addRow(1, new Label("Time: "), apptTime);
+	    grid.addRow(2, new Label("Patient name: "), patientName);
+	    grid.addRow(3, new Label("Doctor name: "), doctorName);
+	    grid.addRow(4, new Label("Reason:"));
+	    grid.addRow(5, reason);
+	    grid.addRow(6, cancelButton);
+		
+	    dialog.getDialogPane().setContent(grid);
+
+	    cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+				stage.close();
+				dialog.resultProperty().set(true);
+			}
+		});
+	    
+	    dialog.showAndWait();
 	}
 	
 	@FXML
