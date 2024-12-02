@@ -120,12 +120,11 @@ public class DBLogin {
 		
 		User result = this.getUserDetails(username, "nurse");
 		if (result == null) {
-			this.getUserDetails(username, "admin");
+			result = this.getUserDetails(username, "admin");
 		}
         if (result == null) {
         	throw new IllegalArgumentException("Couldn't find user details.");
         }
-        
 		return result;
 	}
 		
