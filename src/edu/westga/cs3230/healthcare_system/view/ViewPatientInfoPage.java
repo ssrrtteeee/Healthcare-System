@@ -139,6 +139,7 @@ public class ViewPatientInfoPage extends CommonFunctionality {
 			} else {
 				Boolean hasFinalDiagnosis = visit.getFinalDiagnosis() != null && !visit.getFinalDiagnosis().isBlank();
 				this.orderTestsButton.disableProperty().set(hasFinalDiagnosis);
+				this.editAppointmentButton.disableProperty().set(hasFinalDiagnosis);
 			}
 		});
 	}
