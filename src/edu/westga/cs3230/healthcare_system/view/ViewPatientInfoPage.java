@@ -8,6 +8,7 @@ import edu.westga.cs3230.healthcare_system.Main;
 import edu.westga.cs3230.healthcare_system.dal.RoutineCheckupDAL;
 import edu.westga.cs3230.healthcare_system.model.Appointment;
 import edu.westga.cs3230.healthcare_system.model.Patient;
+import edu.westga.cs3230.healthcare_system.model.RoutineCheckup;
 import edu.westga.cs3230.healthcare_system.model.UserLogin;
 import edu.westga.cs3230.healthcare_system.view_model.ViewPatientInfoPageViewModel;
 import javafx.fxml.FXML;
@@ -114,11 +115,17 @@ public class ViewPatientInfoPage extends CommonFunctionality {
 		this.viewmodel.getSelectedAppointmentProperty().addListener((unused, oldVal, newVal) -> {
 			this.editAppointmentButton.disableProperty().set(newVal == null || newVal.getValue().getAppointmentTime().isBefore(LocalDateTime.now()));
 			
-			boolean hasRoutineCheckup =  this.routineCheckupDB.hasRoutineCheckup(newVal.getValue().getAppointmentTime(), newVal.getValue().getDoctorId());
+			RoutineCheckup visit = this.routineCheckupDB.getRoutineCheckup(newVal.getValue().getAppointmentTime(), newVal.getValue().getDoctorId());
 			
-			this.addRoutineCheckupButton.disableProperty().set(newVal == null || hasRoutineCheckup);
-			this.orderTestsButton.disableProperty().set(newVal == null || !hasRoutineCheckup);
-			this.viewVisitDetailsButton.disableProperty().set(newVal == null);
+			this.addRoutineCheckupButton.disableProperty().set(visit != null);
+			this.viewVisitDetailsButton.disableProperty().set(visit == null);
+			
+			if (visit == null) {
+				this.orderTestsButton.disableProperty().set(true);
+			} else {
+				Boolean hasFinalDiagnosis = visit.getFinalDiagnosis() != null && !visit.getFinalDiagnosis().isBlank();
+				this.orderTestsButton.disableProperty().set(hasFinalDiagnosis);
+			}
 		});
 	}
 	

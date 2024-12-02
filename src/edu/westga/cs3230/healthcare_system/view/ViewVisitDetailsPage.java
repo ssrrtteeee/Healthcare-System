@@ -147,6 +147,22 @@ public class ViewVisitDetailsPage extends CommonFunctionality {
         this.viewModel.getSelectedOrderedTestsProperty().bind(this.orderedTests.getSelectionModel().selectedItemProperty());
         this.viewModel.getSelectedPerformedTestsProperty().bind(this.performedTests.getSelectionModel().selectedItemProperty());
         this.viewModel.createSelectedElementBindings();
+        
+        this.patientHeight.disableProperty().bind(this.viewModel.getDeactivateControlsProperty());
+        this.patientWeight.disableProperty().bind(this.viewModel.getDeactivateControlsProperty());
+        this.systolicBP.disableProperty().bind(this.viewModel.getDeactivateControlsProperty());
+        this.diastolicBP.disableProperty().bind(this.viewModel.getDeactivateControlsProperty());
+        this.bodyTemperature.disableProperty().bind(this.viewModel.getDeactivateControlsProperty());
+        this.pulse.disableProperty().bind(this.viewModel.getDeactivateControlsProperty());
+        this.symptoms.disableProperty().bind(this.viewModel.getDeactivateControlsProperty());
+        this.initialDiagnosis.disableProperty().bind(this.viewModel.getDeactivateControlsProperty());
+        this.finalDiagnosis.disableProperty().bind(this.viewModel.getDeactivateControlsProperty());
+        this.orderedTests.disableProperty().bind(this.viewModel.getDeactivateControlsProperty());
+        this.performedTests.disableProperty().bind(this.viewModel.getDeactivateControlsProperty());
+        this.orderedTestsDetails.disableProperty().bind(this.viewModel.getDeactivateControlsProperty());
+        this.performedTestsResults.disableProperty().bind(this.viewModel.getDeactivateControlsProperty());
+        this.updateTestsButton.disableProperty().bind(this.viewModel.getDeactivateControlsProperty());
+        this.finalDiagnosisButton.visibleProperty().bind(this.viewModel.getDeactivateControlsProperty().not());
     }
     
     private void loadCheckupDetails() {
@@ -156,7 +172,6 @@ public class ViewVisitDetailsPage extends CommonFunctionality {
     	RoutineCheckup checkup = this.routineCheckupDB.getRoutineCheckup(this.appointmentTime, this.doctorId);
     	if (checkup != null) {
     		this.viewModel.loadAvailableTests(this.appointmentTime, this.doctorId);
-    		System.out.println(checkup.getRecordingNurseId());
     		Nurse nurse = this.nurseDB.getNurse(checkup.getRecordingNurseId());
         	this.currentNurseLabel.setText("Recording nurse Name: " + nurse.getFirstName() + " " + nurse.getLastName());
         	this.patientHeight.setText(String.valueOf(checkup.getPatientHeight()));
@@ -168,9 +183,7 @@ public class ViewVisitDetailsPage extends CommonFunctionality {
         	this.symptoms.setText(checkup.getSymptoms());
         	this.initialDiagnosis.setText(checkup.getInitialDiagnosis());
         	this.finalDiagnosis.setText(checkup.getFinalDiagnosis());
-        	if (checkup.getFinalDiagnosis() != null) {
-        		this.finalDiagnosisButton.visibleProperty().set(false);
-        	}
+        	this.viewModel.getDeactivateControlsProperty().set(checkup.getFinalDiagnosis() != null && !checkup.getFinalDiagnosis().isBlank());
     	}
     }
     
@@ -380,7 +393,7 @@ public class ViewVisitDetailsPage extends CommonFunctionality {
 						alert.setHeaderText("Updated final diagnosis successfully.");
 						alert.showAndWait();
 						ViewVisitDetailsPage.this.finalDiagnosis.setText(diagnosisArea.textProperty().get());
-						ViewVisitDetailsPage.this.finalDiagnosisButton.visibleProperty().set(false);
+						ViewVisitDetailsPage.this.viewModel.getDeactivateControlsProperty().set(true);
 						Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
 						stage.close();
 					} else {

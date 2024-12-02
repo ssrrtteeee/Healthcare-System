@@ -9,7 +9,9 @@ import edu.westga.cs3230.healthcare_system.dal.TestResultDAL;
 import edu.westga.cs3230.healthcare_system.model.Test;
 import edu.westga.cs3230.healthcare_system.model.TestResults;
 import edu.westga.cs3230.healthcare_system.resources.ErrMsgs;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -32,6 +34,8 @@ public class ViewVisitDetailsPageViewModel {
     private StringProperty orderedTestsDetails;
     private StringProperty performedTestsResults;
     
+    private BooleanProperty deactivateControlsProperty;
+    
     private TestDAL testDB;
     private TestResultDAL testResultDB;
 
@@ -50,6 +54,8 @@ public class ViewVisitDetailsPageViewModel {
         
         this.selectedOrderedTests = new SimpleObjectProperty<Test>();
         this.selectedPerformedTests = new SimpleObjectProperty<TestResults>();
+        
+		this.deactivateControlsProperty = new SimpleBooleanProperty();
     }
     
     /**
@@ -120,6 +126,17 @@ public class ViewVisitDetailsPageViewModel {
     public StringProperty getPerformedTestDescriptionProperty() {
         return this.performedTestsResults;
     }
+    
+    /**
+	 * Gets the deactivate controls property.
+	 * 
+	 * @precondition true
+	 * @postcondition true
+	 * @return the deactivated controls property
+	 */
+	public BooleanProperty getDeactivateControlsProperty() {
+		return this.deactivateControlsProperty;
+	}
 
     /**
      * Loads the ordered and performed tests for a specific visit.

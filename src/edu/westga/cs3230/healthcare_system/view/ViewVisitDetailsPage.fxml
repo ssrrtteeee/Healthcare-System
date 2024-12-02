@@ -52,7 +52,7 @@
          </children>
       </VBox>
       <Label fx:id="currentPatientLabel" layoutX="178.0" layoutY="84.0" text="Patient Name" />
-      <Label fx:id="currentDoctorLabel" layoutX="358.0" layoutY="84.0" text="Doctor Name" />
+      <Label fx:id="currentDoctorLabel" layoutX="410.0" layoutY="84.0" text="Doctor Name" />
       <Label layoutX="28.0" layoutY="471.0" text="Ordered Tests" />
       <Button fx:id="updateTestsButton" disable="true" layoutX="221.0" layoutY="494.0" mnemonicParsing="false" onAction="#updateTestResult" prefHeight="60.0" prefWidth="59.0" text="Update results" wrapText="true" />
       <ListView fx:id="orderedTests" layoutX="14.0" layoutY="494.0" prefHeight="110.0" prefWidth="200.0" />
@@ -60,7 +60,7 @@
       <Label layoutX="324.0" layoutY="613.0" text="Tests Performed" />
       <TextArea fx:id="performedTestsResults" editable="false" focusTraversable="false" layoutX="541.0" layoutY="636.0" prefHeight="110.0" prefWidth="236.0" />
       <Label layoutX="617.0" layoutY="613.0" text="Test Results" />
-      <Label fx:id="currentNurseLabel" layoutX="515.0" layoutY="84.0" text="Nurse name" />
+      <Label fx:id="currentNurseLabel" layoutX="410.0" layoutY="101.0" text="Nurse name" />
       <Label layoutX="23.0" layoutY="613.0" text="Ordered Test Details" />
       <TextArea fx:id="orderedTestsDetails" editable="false" focusTraversable="false" layoutX="14.0" layoutY="637.0" prefHeight="110.0" prefWidth="236.0" />
     </children>
