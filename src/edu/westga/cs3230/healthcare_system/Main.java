@@ -1,5 +1,6 @@
 package edu.westga.cs3230.healthcare_system;
 
+import edu.westga.cs3230.healthcare_system.dal.DBLogin;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -34,6 +35,9 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+//		DBLogin login = new DBLogin();
+//		String hashedPassword = login.hashPassword("newPassword");
+//		System.out.println(hashedPassword);
 		try {
 			Scene scene = new Scene(FXMLLoader.load(getClass().getResource(Main.LOGIN_PAGE_FXML)));
 			primaryStage.setScene(scene);

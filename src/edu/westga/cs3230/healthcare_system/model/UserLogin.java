@@ -36,21 +36,10 @@ public class UserLogin {
 	public boolean login(String username, String password) throws IllegalArgumentException {
 		boolean isValid = this.dbLoginAcess.checkIfLoginIsValid(username, password);
 		if (isValid) {
-			currentSessionUser = this.dbLoginAcess.getUserDetails(username, password);
+			currentSessionUser = this.dbLoginAcess.getUserDetails(username);
 		}
 		
 		return isValid;
-	}
-	
-	/**
-	 * Gets the information for the specified user.
-	 * @param username
-	 * @param password
-	 * @return the user information
-	 * @throws IllegalArgumentException
-	 */
-	public User getUserInformation(String username, String password) throws IllegalArgumentException {
-		return this.dbLoginAcess.getUserDetails(username, password);
 	}
 	
 	/**

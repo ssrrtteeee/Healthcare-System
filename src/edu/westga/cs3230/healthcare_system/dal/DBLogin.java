@@ -1,11 +1,15 @@
 package edu.westga.cs3230.healthcare_system.dal;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import edu.westga.cs3230.healthcare_system.model.Admin;
+import edu.westga.cs3230.healthcare_system.model.Nurse;
 import edu.westga.cs3230.healthcare_system.model.User;
 import edu.westga.cs3230.healthcare_system.resources.ErrMsgs;
 
@@ -17,21 +21,60 @@ import edu.westga.cs3230.healthcare_system.resources.ErrMsgs;
  * @version Fall 2024
  */
 public class DBLogin {
-	private NurseDAL nurseDB;
-	private AdminDAL adminDB;
-	
 	/**
-	 * Instantiates a new DBLogin.
-	 * 
-	 * @precondition true
-	 * @postcondition true
+	 * Hashes a given password
+	 * @param password the password to be hashed
+	 * @return hashed password
 	 */
-	public DBLogin() {
-		this.nurseDB = new NurseDAL();
-		this.adminDB = new AdminDAL();
+	public String hashPassword(String password) {
+		return BCrypt.hashpw(password, BCrypt.gensalt());
 	}
 	
 	/**
+	 * Returns the hashed password for the given username.
+	 * @param username the users username
+	 * @return the users hashed password
+	 */
+	public String getPassword(String username) {
+		if (username == null) {
+			throw new IllegalArgumentException(ErrMsgs.NULL_USERNAME);
+		}
+		if (username.isBlank()) {
+			throw new IllegalArgumentException(ErrMsgs.BLANK_USERNAME);
+		}
+		
+		String password = this.getPassword(username, "nurse");
+		if (password == null) {
+			password = this.getPassword(username, "admin");
+		}
+		if (password == null) {
+        	throw new IllegalArgumentException("Couldn't check password.");
+        }
+		
+		return password;
+	}
+	
+	private String getPassword(String username, String tableName) {
+		String query = "select password from " + tableName + " where username=? ";
+		String password = null;
+        try (Connection connection = DriverManager.getConnection(DBAccessor.getConnectionString());
+				PreparedStatement stmt = connection.prepareStatement(query)) {
+		    
+			stmt.setString(1, username);
+	
+			ResultSet rs = stmt.executeQuery();
+			rs.next();
+			password = rs.getString(1);
+        } catch (SQLException ex) {
+			System.out.println("SQLException: "	+ ex.getMessage());
+			System.out.println("SQLState: "		+ ex.getSQLState());
+			System.out.println("VendorError: "	+ ex.getErrorCode());
+        }
+        
+        return password;
+	}
+	
+	/** 
 	 * Checks if the login credentials are valid.
 	 * 
 	 * @precondition username != null && !username.isBlank() && password != null && !password.isBlank()
@@ -53,47 +96,59 @@ public class DBLogin {
 		if (password.isBlank()) {
 			throw new IllegalArgumentException(ErrMsgs.BLANK_PASSWORD);
 		}
-				
-        return this.checkUserInTable(username, password, "nurse") || this.checkUserInTable(username, password, "admin");
+		
+		String dbPassword = this.getPassword(username);
+		return BCrypt.checkpw(password, dbPassword);
 	}
-
-	private boolean checkUserInTable(String username, String password, String tableName) {
-		String query = String.format("select count(*) from %s where username=? and password=?", tableName);
-		try (Connection connection = DriverManager.getConnection(DBAccessor.getConnectionString());
+				
+	/**
+	 * Returns a user with the given username
+	 * 
+	 * @precondition username != null && !username.isBlank()
+	 * @postcondition none
+	 * @param username the user's username
+	 * @return the user corresponding to the given username
+	 */
+	public User getUserDetails(String username) {
+		if (username == null) {
+			throw new IllegalArgumentException(ErrMsgs.NULL_USERNAME);
+		}
+		if (username.isBlank()) {
+			throw new IllegalArgumentException(ErrMsgs.BLANK_USERNAME);
+		}
+		
+		
+		User result = this.getUserDetails(username, "nurse");
+		if (result == null) {
+			this.getUserDetails(username, "admin");
+		}
+        if (result == null) {
+        	throw new IllegalArgumentException("Couldn't find user details.");
+        }
+        
+		return result;
+	}
+		
+	private User getUserDetails(String username, String tableName) {
+		User result = null;
+		String query = "select f_name, l_name, id from " + tableName + " where username=?";
+        try (Connection connection = DriverManager.getConnection(DBAccessor.getConnectionString());
 				PreparedStatement stmt = connection.prepareStatement(query)) {
 		    
 			stmt.setString(1, username);
-			stmt.setString(2, password);
 	
 			ResultSet rs = stmt.executeQuery();
-			if (rs.isBeforeFirst()) {
-				rs.next();
-				int number = rs.getInt(1);
-				return number >= 1;
-            }
+			rs.next();
+			String fname = rs.getString(1);
+			String lname = rs.getString(2);
+			int id = rs.getInt(3);
+			result = tableName.equals("nurse") ? new Nurse(fname, lname, username, id) : new Admin(fname, lname, username, id);
         } catch (SQLException ex) {
 			System.out.println("SQLException: "	+ ex.getMessage());
 			System.out.println("SQLState: "		+ ex.getSQLState());
 			System.out.println("VendorError: "	+ ex.getErrorCode());
-		}
-
-        return false;
-	}
-	
-	/**
-	 * Returns a user with the given login credential
-	 * 
-	 * @precondition username != null && password != null && !username.isBlank() && !password.isBlank()
-	 * @postcondition true
-	 * @param username the user's username
-	 * @param password the user's password
-	 * @return the user corresponding to the given login credentials
-	 */
-	public User getUserDetails(String username, String password) {
-		User result = this.nurseDB.getNurse(username, password);
-		if (result == null) {
-			result = this.adminDB.getAdmin(username, password);
-		}
-		return result;
+        }
+        
+        return result;
 	}
 }
