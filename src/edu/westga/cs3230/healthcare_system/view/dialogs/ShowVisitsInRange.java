@@ -24,16 +24,17 @@ import javafx.util.Callback;
  * @version Fall 2024
  */
 public class ShowVisitsInRange {
-    @FXML private TextArea diagnosisTextArea;
+    @FXML private ListView<Dictionary<String, Object>> visitsListView;
+    @FXML private DatePicker visitDatePicker;
     @FXML private TextField pidTextField;
     @FXML private TextField pnameTextField;
     @FXML private TextField dnameTextField;
     @FXML private TextField nnameTextField;
-    @FXML private CheckBox testAbnormalityCheckbox;
-    @FXML private DatePicker testDatePicker;
+	@FXML private TextArea diagnosisTextArea;
     @FXML private ListView<TestResults> testsListView;
-    @FXML private DatePicker visitDatePicker;
-    @FXML private ListView<Dictionary<String, Object>> visitsListView;
+    @FXML private DatePicker testDatePicker;
+    @FXML private CheckBox testAbnormalityCheckbox;
+    @FXML private TextArea testResultsTextArea;
 
     private ShowVisitsInRangeViewModel viewmodel;
     
@@ -100,6 +101,7 @@ public class ShowVisitsInRange {
 		this.dnameTextField.textProperty().bindBidirectional(this.viewmodel.getDoctorNameProperty());
 		this.nnameTextField.textProperty().bindBidirectional(this.viewmodel.getNurseNameProperty());
 		this.diagnosisTextArea.textProperty().bindBidirectional(this.viewmodel.getDiagnosisProperty());
+		this.testResultsTextArea.textProperty().bindBidirectional(this.viewmodel.getTestResultsProperty());
 		
 		this.testsListView.itemsProperty().bindBidirectional(this.viewmodel.getTestsProperty());
 		this.testDatePicker.valueProperty().bindBidirectional(this.viewmodel.getTestDateProperty());

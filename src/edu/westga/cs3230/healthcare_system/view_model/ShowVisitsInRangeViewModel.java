@@ -35,6 +35,7 @@ public class ShowVisitsInRangeViewModel {
 	private ListProperty<TestResults> testsListProperty;
 	private ObjectProperty<LocalDate> testDateProperty;
 	private BooleanProperty testAbnormalityProperty;
+	private StringProperty testResultsProperty;
 	
 	private AdminDAL adminDB;
 	private TestResultDAL testResultsDB;
@@ -151,6 +152,17 @@ public class ShowVisitsInRangeViewModel {
 	}
 
 	/**
+	 * Gets the test results property
+	 * 
+	 * @precondition true
+	 * @postcondition true
+	 * @return the testResultsProperty
+	 */
+	public StringProperty getTestResultsProperty() {
+		return this.testResultsProperty;
+	}
+
+	/**
 	 * Instantiates a new ShowVisitsInRangeViewModel
 	 * 
 	 * @precondition true
@@ -168,6 +180,7 @@ public class ShowVisitsInRangeViewModel {
 		this.testsListProperty = new SimpleListProperty<TestResults>();
 		this.testAbnormalityProperty = new SimpleBooleanProperty();
 		this.diagnosisProperty = new SimpleStringProperty();
+		this.testResultsProperty = new SimpleStringProperty();
 		
 		this.adminDB = new AdminDAL();
 		this.testResultsDB = new TestResultDAL();
@@ -216,9 +229,11 @@ public class ShowVisitsInRangeViewModel {
 		if (newTest == null) {
 			this.testDateProperty.set(null);
 			this.testAbnormalityProperty.set(false);
+			this.testResultsProperty.set("");
 		} else {
 			this.testDateProperty.set(newTest.getTestDateTime().toLocalDate());
 			this.testAbnormalityProperty.set(newTest.isTestAbnormal());
+			this.testResultsProperty.set(newTest.getTestResults());
 		}
 	}
 }
