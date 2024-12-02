@@ -2,11 +2,12 @@ package edu.westga.cs3230.healthcare_system.view.dialogs;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Dictionary;
 
-import edu.westga.cs3230.healthcare_system.model.Test;
-import edu.westga.cs3230.healthcare_system.viewmodel.ShowVisitsInRangeViewModel;
+import edu.westga.cs3230.healthcare_system.model.TestResults;
+import edu.westga.cs3230.healthcare_system.view_model.ShowVisitsInRangeViewModel;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
@@ -30,7 +31,7 @@ public class ShowVisitsInRange {
     @FXML private TextField nnameTextField;
     @FXML private CheckBox testAbnormalityCheckbox;
     @FXML private DatePicker testDatePicker;
-    @FXML private ListView<Test> testsListView;
+    @FXML private ListView<TestResults> testsListView;
     @FXML private DatePicker visitDatePicker;
     @FXML private ListView<Dictionary<String, Object>> visitsListView;
 
@@ -60,7 +61,23 @@ public class ShowVisitsInRange {
 						if (item == null || empty) {
 							setText("");
 						} else {
-							setText(DateTimeFormatter.ofPattern("MM/dd/yyyy").format((LocalDate) item.get("visitDate")));
+							setText(DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss").format((LocalDateTime) item.get("visitDate")) + ", " + item.get("patientName"));
+						}
+					}
+				};
+			};
+    	});
+    	this.testsListView.setCellFactory(new Callback<ListView<TestResults>, ListCell<TestResults>>() {
+			@Override
+			public ListCell<TestResults> call(ListView<TestResults> appointmentsListView) {
+				return new ListCell<TestResults>() {
+					@Override
+					protected void updateItem(TestResults item, boolean empty) {
+						super.updateItem(item, empty);
+						if (item == null || empty) {
+							setText("");
+						} else {
+							setText(item.getTestName());
 						}
 					}
 				};
@@ -69,6 +86,9 @@ public class ShowVisitsInRange {
     	
     	this.visitsListView.getSelectionModel().selectedItemProperty().addListener((unused, oldVal, newVal) -> {
     		this.viewmodel.changeSelectedVisit(newVal);
+    	});
+    	this.testsListView.getSelectionModel().selectedItemProperty().addListener((unused, oldVal, newVal) -> {
+    		this.viewmodel.changeSelectedTest(newVal);
     	});
     }
     
@@ -80,6 +100,10 @@ public class ShowVisitsInRange {
 		this.dnameTextField.textProperty().bindBidirectional(this.viewmodel.getDoctorNameProperty());
 		this.nnameTextField.textProperty().bindBidirectional(this.viewmodel.getNurseNameProperty());
 		this.diagnosisTextArea.textProperty().bindBidirectional(this.viewmodel.getDiagnosisProperty());
+		
+		this.testsListView.itemsProperty().bindBidirectional(this.viewmodel.getTestsProperty());
+		this.testDatePicker.valueProperty().bindBidirectional(this.viewmodel.getTestDateProperty());
+		this.testAbnormalityCheckbox.selectedProperty().bindBidirectional(this.viewmodel.getTestAbnormalityProperty());
 	}
 
 	/**

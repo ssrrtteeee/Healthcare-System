@@ -91,7 +91,7 @@ public class AdminDAL {
 		
 		Collection<Dictionary<String, Object>> result = new LinkedList<Dictionary<String, Object>>(); 
 		String query =
-				  "SELECT v.appointment_time, p.id, CONCAT(p.f_name, \" \", p.l_name), CONCAT(d.f_name, \" \", d.l_name), CONCAT(n.f_name, \" \", n.l_name), v.final_diagnosis "
+				  "SELECT v.appointment_time, p.id, CONCAT(p.f_name, \" \", p.l_name), CONCAT(d.f_name, \" \", d.l_name), CONCAT(n.f_name, \" \", n.l_name), v.final_diagnosis, d.id "
 				+ "FROM visit_details v JOIN appointment a ON (v.appointment_time = a.appointment_time AND v.doctor_id = a.doctor_id) JOIN patient p ON a.patient_id = p.id JOIN nurse n ON v.recording_nurse_id = n.id JOIN doctor d ON v.doctor_id = d.id "
 				+ "WHERE (NOT v.final_diagnosis IS NULL) AND DATE(v.appointment_time) >= ? AND DATE(v.appointment_time) <= ? "
 				+ "ORDER BY v.appointment_time DESC, p.l_name DESC";
@@ -105,12 +105,13 @@ public class AdminDAL {
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				Dictionary<String, Object> row = new Hashtable<String, Object>();
-				row.put("visitDate", rs.getDate(1).toLocalDate());
+				row.put("visitDate", rs.getTimestamp(1).toLocalDateTime());
 				row.put("patientID", rs.getInt(2));
 				row.put("patientName", rs.getString(3));
 				row.put("doctorName", rs.getString(4));
 				row.put("nurseName", rs.getString(5));
 				row.put("diagnosis", rs.getString(6));
+				row.put("doctorID", rs.getInt(7));
 				result.add(row);
 			}
         }

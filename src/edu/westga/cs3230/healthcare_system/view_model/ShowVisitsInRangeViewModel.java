@@ -1,12 +1,17 @@
-package edu.westga.cs3230.healthcare_system.viewmodel;
+package edu.westga.cs3230.healthcare_system.view_model;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Dictionary;
 
 import edu.westga.cs3230.healthcare_system.dal.AdminDAL;
+import edu.westga.cs3230.healthcare_system.dal.TestResultDAL;
+import edu.westga.cs3230.healthcare_system.model.TestResults;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -27,9 +32,12 @@ public class ShowVisitsInRangeViewModel {
 	private StringProperty doctorNameProperty;
 	private StringProperty nurseNameProperty;
 	private StringProperty diagnosisProperty;
+	private ListProperty<TestResults> testsListProperty;
 	private ObjectProperty<LocalDate> testDateProperty;
+	private BooleanProperty testAbnormalityProperty;
 	
 	private AdminDAL adminDB;
+	private TestResultDAL testResultsDB;
 	
 	/**
 	 * Gets the visits list property
@@ -109,6 +117,18 @@ public class ShowVisitsInRangeViewModel {
 	}
 	
 	/**
+	 * Gets the test results property
+	 * 
+	 * @precondition true
+	 * @postcondition true
+	 * @return the testListProperty
+	 */
+	public ListProperty<TestResults> getTestsProperty() {
+		return this.testsListProperty;
+	}
+	
+	
+	/**
 	 * Gets the test date property
 	 * 
 	 * @precondition true
@@ -117,6 +137,17 @@ public class ShowVisitsInRangeViewModel {
 	 */
 	public ObjectProperty<LocalDate> getTestDateProperty() {
 		return this.testDateProperty;
+	}
+	
+	/**
+	 * Gets the test abnormality property
+	 * 
+	 * @precondition true
+	 * @postcondition true
+	 * @return the testAbnormalityProperty
+	 */
+	public BooleanProperty getTestAbnormalityProperty() {
+		return this.testAbnormalityProperty;
 	}
 
 	/**
@@ -133,8 +164,13 @@ public class ShowVisitsInRangeViewModel {
 		this.doctorNameProperty = new SimpleStringProperty();
 		this.nurseNameProperty = new SimpleStringProperty();
 		this.diagnosisProperty = new SimpleStringProperty();
+		this.testDateProperty = new SimpleObjectProperty<LocalDate>();
+		this.testsListProperty = new SimpleListProperty<TestResults>();
+		this.testAbnormalityProperty = new SimpleBooleanProperty();
+		this.diagnosisProperty = new SimpleStringProperty();
 		
 		this.adminDB = new AdminDAL();
+		this.testResultsDB = new TestResultDAL();
 	}
 
 	/**
@@ -158,13 +194,31 @@ public class ShowVisitsInRangeViewModel {
 	 * @param newVisit the new visit
 	 */
 	public void changeSelectedVisit(Dictionary<String, Object> newVisit) {
-		this.visitDateProperty.set((LocalDate) newVisit.get("visitDate"));
+		this.visitDateProperty.set(((LocalDateTime) newVisit.get("visitDate")).toLocalDate());
 		this.patientIDProperty.set(((Integer) newVisit.get("patientID")).toString());
 		this.patientNameProperty.set((String) newVisit.get("patientName"));
 		this.doctorNameProperty.set((String) newVisit.get("doctorName"));
 		this.nurseNameProperty.set((String) newVisit.get("nurseName"));
 		this.diagnosisProperty.set((String) newVisit.get("diagnosis"));
 		
-		//TODO add test updates
+		this.testsListProperty.set(FXCollections.observableArrayList(this.testResultsDB.getTestResultsFor((LocalDateTime) newVisit.get("visitDate"), (Integer) newVisit.get("doctorID"))));
+	}
+
+
+	/**
+	 * Changes the test whose infor is being displayed to the specified test.
+	 * 
+	 * @precondition newTest != null
+	 * @postcondition true
+	 * @param newTest the new test
+	 */
+	public void changeSelectedTest(TestResults newTest) {
+		if (newTest == null) {
+			this.testDateProperty.set(null);
+			this.testAbnormalityProperty.set(false);
+		} else {
+			this.testDateProperty.set(newTest.getTestDateTime().toLocalDate());
+			this.testAbnormalityProperty.set(newTest.isTestAbnormal());
+		}
 	}
 }

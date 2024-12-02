@@ -45,7 +45,7 @@ public class TestResults {
      * Gets the test abnormality.
      * @return returns true if abnormal, false otherwise.
      */
-    public boolean isTestAbnormality() {
+    public boolean isTestAbnormal() {
         return this.testAbnormality;
     }
     
