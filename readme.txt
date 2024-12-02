@@ -1,20 +1,41 @@
-Nurses
-Format is Number, Username, Password
-1, test, test
-2, username, password
-3, AlbC, goodPassword
-4, Myk, newPassword
+Employees/Nurses (Username, Password)
+test, test
+username, password
+AlbC, goodPassword
+Myk, newPassword
+TrainQuest, wasdwasd123
 
+Admin (Username, Password)
+adminJW, adminJW
+adminSR, adminSR
+adminRS, adminRS
+adminAK, adminAK
+adminLR, adminLR
 
-Jacob Wilson stored procedure:
-USE cs3230f24h;
-
-DROP PROCEDURE IF EXISTS update_test_result;
-DELIMITER $
-CREATE PROCEDURE update_test_result(IN appointment_time DATETIME, IN doctor_id INT, IN test_code INT, IN test_datetime DATETIME, IN test_result VARCHAR(50), IN test_abnormality TINYINT(1))
-BEGIN
-	UPDATE test_for_visit tr
-    SET tr.test_datetime = test_datetime, tr.test_result = test_result, tr.test_abnormality = test_abnormality
-    WHERE tr.appointment_time = appointment_time AND tr.doctor_id = doctor_id AND tr.test_code = test_code;
-END$
-DELIMITER ;
+Test Query 1
+SELECT 
+    a.appointment_time, 
+    a.doctor_id, 
+    CONCAT(d.f_name, " ", d.l_name) AS doctor_name, 
+    v.recording_nurse_id, 
+    CONCAT(n.f_name, " ", n.l_name) AS nurse_name, 
+    v.systolic_bp, 
+    v.diastolic_bp,
+    t.name,
+    tv.test_result,
+    v.initial_diagnosis,
+    v.final_diagnosis
+FROM 
+    appointment a
+JOIN 
+    visit_details v ON a.appointment_time = v.appointment_time AND a.doctor_id = v.doctor_id
+JOIN 
+    doctor d ON a.doctor_id = d.id
+JOIN 
+    nurse n ON v.recording_nurse_id = n.id
+LEFT OUTER JOIN
+	test_for_visit tv ON a.appointment_time = tv.appointment_time AND a.doctor_id = tv.doctor_id
+LEFT OUTER JOIN
+	test t ON tv.test_code = t.test_code
+WHERE 
+    patient_id = 1;
