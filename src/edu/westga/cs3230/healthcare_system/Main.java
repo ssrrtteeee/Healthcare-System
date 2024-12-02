@@ -1,6 +1,5 @@
 package edu.westga.cs3230.healthcare_system;
 
-import edu.westga.cs3230.healthcare_system.dal.DBLogin;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

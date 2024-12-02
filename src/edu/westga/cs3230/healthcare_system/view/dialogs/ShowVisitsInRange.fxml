@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="460.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.westga.cs3230.healthcare_system.view.dialogs.ShowVisitsInRange">
+   <children>
+      <ListView fx:id="visitsListView" layoutX="10.0" layoutY="28.0" prefHeight="205.0" prefWidth="240.0" />
+      <ListView fx:id="testsListView" layoutX="10.0" layoutY="259.0" prefHeight="205.0" prefWidth="240.0" />
+      <Label layoutX="270.0" layoutY="10.0" text="Visit date" />
+      <DatePicker fx:id="visitDatePicker" editable="false" layoutX="270.0" layoutY="26.0" />
+      <Label layoutX="270.0" layoutY="51.0" text="Patient ID" />
+      <TextField fx:id="pidTextField" editable="false" layoutX="270.0" layoutY="68.0" prefHeight="25.0" prefWidth="176.0" />
+      <Label layoutX="270.0" layoutY="93.0" text="Patient name" />
+      <TextField fx:id="pnameTextField" editable="false" layoutX="270.0" layoutY="110.0" prefHeight="25.0" prefWidth="176.0" />
+      <Label layoutX="270.0" layoutY="135.0" text="Doctor name" />
+      <TextField fx:id="dnameTextField" editable="false" layoutX="270.0" layoutY="152.0" prefHeight="25.0" prefWidth="176.0" />
+      <Label layoutX="272.0" layoutY="320.0" text="Test date" />
+      <DatePicker fx:id="testDatePicker" editable="false" layoutX="270.0" layoutY="337.0" />
+      <CheckBox fx:id="testAbnormalityCheckbox" disable="true" focusTraversable="false" layoutX="270.0" layoutY="443.0" mnemonicParsing="false" text="Result abnormality" />
+      <Label layoutX="270.0" layoutY="219.0" text="Diagnosis" />
+      <TextArea fx:id="diagnosisTextArea" editable="false" layoutX="271.0" layoutY="236.0" prefHeight="64.0" prefWidth="176.0" />
+      <Label layoutX="270.0" layoutY="177.0" text="Recording nurse name" />
+      <TextField fx:id="nnameTextField" editable="false" layoutX="270.0" layoutY="194.0" prefHeight="25.0" prefWidth="176.0" />
+      <TextArea fx:id="testResultsTextArea" editable="false" layoutX="270.0" layoutY="379.0" prefHeight="64.0" prefWidth="176.0" />
+      <Label layoutX="270.0" layoutY="362.0" text="Test results" />
+      <Label layoutX="10.0" layoutY="10.0" text="Visits" />
+      <Label layoutX="11.0" layoutY="242.0" text="Tests" />
+   </children>
+</AnchorPane>

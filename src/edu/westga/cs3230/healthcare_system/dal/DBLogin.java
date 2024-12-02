@@ -8,7 +8,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import edu.westga.cs3230.healthcare_system.model.Admin;
 import edu.westga.cs3230.healthcare_system.model.Nurse;
+import edu.westga.cs3230.healthcare_system.model.User;
 import edu.westga.cs3230.healthcare_system.resources.ErrMsgs;
 
 /**
@@ -19,7 +21,6 @@ import edu.westga.cs3230.healthcare_system.resources.ErrMsgs;
  * @version Fall 2024
  */
 public class DBLogin {
-	
 	/**
 	 * Hashes a given password
 	 * @param password the password to be hashed
@@ -42,7 +43,19 @@ public class DBLogin {
 			throw new IllegalArgumentException(ErrMsgs.BLANK_USERNAME);
 		}
 		
-		String query = "select password from nurse where username=?";
+		String password = this.getPassword(username, "nurse");
+		if (password == null) {
+			password = this.getPassword(username, "admin");
+		}
+		if (password == null) {
+        	throw new IllegalArgumentException("Couldn't check password.");
+        }
+		
+		return password;
+	}
+	
+	private String getPassword(String username, String tableName) {
+		String query = "select password from " + tableName + " where username=? ";
 		String password = null;
         try (Connection connection = DriverManager.getConnection(DBAccessor.getConnectionString());
 				PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -57,10 +70,7 @@ public class DBLogin {
 			System.out.println("SQLState: "		+ ex.getSQLState());
 			System.out.println("VendorError: "	+ ex.getErrorCode());
         }
-
-        if (password == null) {
-        	throw new IllegalArgumentException("Couldn't check password.");
-        }
+        
         return password;
 	}
 	
@@ -90,16 +100,16 @@ public class DBLogin {
 		String dbPassword = this.getPassword(username);
 		return BCrypt.checkpw(password, dbPassword);
 	}
-	
+				
 	/**
-	 * Returns a nurse with the given username
+	 * Returns a user with the given username
 	 * 
 	 * @precondition username != null && !username.isBlank()
 	 * @postcondition none
-	 * @param username the nurse's username
-	 * @return the nurse corresponding to the given username
+	 * @param username the user's username
+	 * @return the user corresponding to the given username
 	 */
-	public Nurse getUserDetails(String username) {
+	public User getUserDetails(String username) {
 		if (username == null) {
 			throw new IllegalArgumentException(ErrMsgs.NULL_USERNAME);
 		}
@@ -107,8 +117,20 @@ public class DBLogin {
 			throw new IllegalArgumentException(ErrMsgs.BLANK_USERNAME);
 		}
 		
-		Nurse nurse = null;
-		String query = "select f_name, l_name, id from nurse where username=?";
+		
+		User result = this.getUserDetails(username, "nurse");
+		if (result == null) {
+			result = this.getUserDetails(username, "admin");
+		}
+        if (result == null) {
+        	throw new IllegalArgumentException("Couldn't find user details.");
+        }
+		return result;
+	}
+		
+	private User getUserDetails(String username, String tableName) {
+		User result = null;
+		String query = "select f_name, l_name, id from " + tableName + " where username=?";
         try (Connection connection = DriverManager.getConnection(DBAccessor.getConnectionString());
 				PreparedStatement stmt = connection.prepareStatement(query)) {
 		    
@@ -119,17 +141,13 @@ public class DBLogin {
 			String fname = rs.getString(1);
 			String lname = rs.getString(2);
 			int id = rs.getInt(3);
-			nurse = new Nurse(fname, lname, username, id);
+			result = tableName.equals("nurse") ? new Nurse(fname, lname, username, id) : new Admin(fname, lname, username, id);
         } catch (SQLException ex) {
 			System.out.println("SQLException: "	+ ex.getMessage());
 			System.out.println("SQLState: "		+ ex.getSQLState());
 			System.out.println("VendorError: "	+ ex.getErrorCode());
         }
-
-        if (nurse == null) {
-        	throw new IllegalArgumentException("Couldn't find user details.");
-        }
         
-        return nurse;
+        return result;
 	}
 }

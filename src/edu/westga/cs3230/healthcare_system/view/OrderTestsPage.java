@@ -33,7 +33,7 @@ import javafx.util.Callback;
  * @version Fall 2024
  *
  */
-public class OrderTestsPage {
+public class OrderTestsPage extends CommonFunctionality {
     @FXML private Button backButton;
     @FXML private Button addTestButton;
     @FXML private Button confirmButton;
@@ -72,6 +72,7 @@ public class OrderTestsPage {
    		this.bindElements();
         this.currentUserLabel.setText(UserLogin.getUserlabel());
         this.setupCellFactories();
+        this.initCommon();
     }
     
     /**

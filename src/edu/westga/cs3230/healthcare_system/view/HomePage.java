@@ -34,7 +34,7 @@ import javafx.stage.Stage;
  * @version Fall 2024
  */
 
-public class HomePage {
+public class HomePage extends CommonFunctionality {
     @FXML private ResourceBundle resources;
     @FXML private URL location;
     
@@ -48,7 +48,7 @@ public class HomePage {
         
 		this.currentUserLabel.setVisible(true);
 		this.currentUserLabel.setText(UserLogin.getUserlabel());
-
+		this.initCommon();
     }
     
     @FXML

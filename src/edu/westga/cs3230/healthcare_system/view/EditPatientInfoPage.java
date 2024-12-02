@@ -27,7 +27,7 @@ import javafx.stage.Stage;
  * @author Jacob Wilson
  * @version Fall 2024
  */
-public class EditPatientInfoPage {
+public class EditPatientInfoPage extends CommonFunctionality {
 	@FXML private TextField address;
     @FXML private Label addressErrMsg;
     @FXML private TextField city;
@@ -64,6 +64,7 @@ public class EditPatientInfoPage {
     void initialize() {
         this.bindElements();
         this.currentUserLabel.setText(UserLogin.getUserlabel());
+        this.initCommon();
     }
 	
     /**

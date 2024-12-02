@@ -16,6 +16,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -28,7 +29,7 @@ import javafx.stage.Stage;
  * @author Stefan
  * @version Fall 2024
  */
-public class RegisterPatient {
+public class RegisterPatient extends CommonFunctionality {
     @FXML private ResourceBundle resources;
     @FXML private URL location;
     
@@ -168,7 +169,9 @@ public class RegisterPatient {
         		Patient patient = new Patient(fname, lname, city, address, zip, phoneNumber, gender, state, dateOfBirth, true);
         		PatientDAL patientRegister = new PatientDAL();
         		patientRegister.registerPatient(patient);
-        		
+        		Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
+        		confirmation.setTitle("Success");
+        		confirmation.setHeaderText("Successfully registered patient.");
         		this.backToHomePage(event);
     		}
     	} catch (Exception e) {
@@ -216,6 +219,6 @@ public class RegisterPatient {
         	    "Female",
         	    "Male"));
         this.state.getItems().addAll(USStates.values());
-
+        this.initCommon();
     }
 }

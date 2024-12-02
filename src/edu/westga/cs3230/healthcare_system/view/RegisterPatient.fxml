@@ -8,14 +8,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane minHeight="441.0" minWidth="457.0" prefHeight="602.0" prefWidth="513.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.westga.cs3230.healthcare_system.view.RegisterPatient">
+<AnchorPane fx:id="mainPane" minHeight="441.0" minWidth="457.0" prefHeight="602.0" prefWidth="513.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.westga.cs3230.healthcare_system.view.RegisterPatient">
    <children>
       <Button fx:id="back" layoutX="447.0" layoutY="19.0" mnemonicParsing="false" onAction="#backToHomePage" text="Back">
          <font>
             <Font size="15.0" />
          </font>
       </Button>
-      <Label layoutX="14.0" layoutY="26.0" text="Current User: " />
+      <Label layoutX="14.0" layoutY="30.0" text="Current User: " />
       <Label fx:id="currentUserLabel" layoutX="14.0" layoutY="52.0" maxHeight="1.7976931348623157E308" maxWidth="300.0" text="User" wrapText="true" />
       <Label layoutX="172.0" layoutY="69.0" text="Patient Registration">
          <font>
