@@ -220,15 +220,9 @@ public abstract class CommonFunctionality {
 	private void showFreeQueryResultsDialog(String query) throws SQLException {
 		Dialog<Boolean> dialog = new Dialog<Boolean>();
 	    dialog.setTitle("Query results");
-	    dialog.setResizable(false);
-
-	    GridPane grid = new GridPane();
-	    grid.setHgap(10);
-	    grid.setVgap(10);
-	    grid.setPadding(new Insets(0, 10, 0, 10));
+	    dialog.setResizable(true);
 	    
-	    TableView<ObservableList<String>> resultTableView = new TableView<ObservableList<String>>();
-	    GridPane.setColumnSpan(resultTableView, 2);
+	    TableView<ObservableList<String>> resultTableView = new TableView<>();
 	    try (Connection connection = DriverManager.getConnection(DBAccessor.getConnectionString());
 				PreparedStatement stmt = connection.prepareStatement(query)
 	    ) {
@@ -256,6 +250,7 @@ public abstract class CommonFunctionality {
 			resultTableView.setItems(data);
 		}
 	    
+	    GridPane.setColumnSpan(resultTableView, 2);
 	    Button confirmButton = new Button("Close");
 	    confirmButton.setPrefSize(80, 30);
 	    
@@ -263,11 +258,11 @@ public abstract class CommonFunctionality {
         Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);
         closeButton.managedProperty().bind(closeButton.visibleProperty());
         closeButton.setVisible(false);
-	    
-        grid.addRow(1, resultTableView);
-		grid.addRow(2, confirmButton);
-	    
-	    dialog.getDialogPane().setContent(grid);
+        
+        dialog.setWidth(resultTableView.getWidth());
+        dialog.setHeight(resultTableView.getHeight());
+        
+        dialog.getDialogPane().setContent(resultTableView);
 
 	    confirmButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
